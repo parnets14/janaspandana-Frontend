@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { MdPhone, MdArrowForward, MdOutlineLock, MdOutlineTrackChanges, MdPerson, MdCreditCard, MdHome, MdCameraAlt, MdImage } from 'react-icons/md'
@@ -35,6 +35,46 @@ export default function LandingPage() {
 
   // const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isMobile, setIsMobile] = useState(false)
+  const [cameraModal, setCameraModal] = useState(null) // 'photo' | 'aadhaarPhoto' | null
+  const videoRef = useRef(null)
+  const streamRef = useRef(null)
+
+  const openCamera = useCallback(async (field) => {
+    setCameraModal(field)
+  }, [])
+
+  const stopCamera = useCallback(() => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(t => t.stop())
+      streamRef.current = null
+    }
+    setCameraModal(null)
+  }, [])
+
+  useEffect(() => {
+    if (cameraModal && videoRef.current) {
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: cameraModal === 'photo' ? 'user' : 'environment' } })
+        .then(stream => {
+          streamRef.current = stream
+          videoRef.current.srcObject = stream
+        })
+        .catch(() => stopCamera())
+    }
+  }, [cameraModal, stopCamera])
+
+  const capturePhoto = useCallback(() => {
+    const video = videoRef.current
+    if (!video) return
+    const canvas = document.createElement('canvas')
+    canvas.width = video.videoWidth
+    canvas.height = video.videoHeight
+    canvas.getContext('2d').drawImage(video, 0, 0)
+    canvas.toBlob(blob => {
+      const file = new File([blob], `${cameraModal}.jpg`, { type: 'image/jpeg' })
+      setFormData(prev => ({ ...prev, [cameraModal]: file }))
+      stopCamera()
+    }, 'image/jpeg', 0.9)
+  }, [cameraModal, stopCamera])
 
   const headlineWords = ['Resolution', 'is', 'a', 'promise,', 'not', 'just', 'a', 'process.']
   const subtextWords = 'Your voice matters. Access the Integrated Grievance Management System to track, resolve, and escalate your concerns with full transparency.'.split(' ')
@@ -110,7 +150,8 @@ export default function LandingPage() {
       
       if (response.success) {
         const role = response.data.user.role
-        
+        // Cache user profile for persistent display
+        localStorage.setItem('_userProfile', JSON.stringify(response.data.user))
         // Redirect based on role
         if (role === 'citizen') {
           navigate('/user/dashboard')
@@ -202,6 +243,7 @@ export default function LandingPage() {
       const response = await authAPI.verifyOTP(formData.phone, otpString)
       
       if (response.success) {
+        if (response.data?.user) localStorage.setItem('_userProfile', JSON.stringify(response.data.user))
         navigate('/user/dashboard')
       }
     } catch (err) {
@@ -1092,27 +1134,23 @@ export default function LandingPage() {
                     <MdCameraAlt size={16} color="#2596be" /> Profile Picture *
                   </label>
                   <div style={{ display: 'flex', gap: '10px' }}>
-                    <label style={{ 
-                      flex: 1, padding: '14px', fontSize: '13px', fontWeight: '600', 
-                      border: '1.5px solid #e0d5c8', borderRadius: '10px', 
-                      backgroundColor: formData.photo ? '#edf7f1' : '#faf6f0', 
-                      cursor: loading ? 'not-allowed' : 'pointer', 
-                      textAlign: 'center', 
-                      color: formData.photo ? '#41A465' : '#555', 
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-                      transition: 'all 0.2s'
-                    }}>
+                    <button
+                      type="button"
+                      onClick={() => openCamera('photo')}
+                      disabled={loading}
+                      style={{ 
+                        flex: 1, padding: '14px', fontSize: '13px', fontWeight: '600', 
+                        border: '1.5px solid #e0d5c8', borderRadius: '10px', 
+                        backgroundColor: formData.photo ? '#edf7f1' : '#faf6f0', 
+                        cursor: loading ? 'not-allowed' : 'pointer', 
+                        textAlign: 'center', 
+                        color: formData.photo ? '#41A465' : '#555', 
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                        transition: 'all 0.2s'
+                      }}>
                       <MdCameraAlt size={18} /> 
                       {formData.photo ? '✓ Camera' : 'Camera'}
-                      <input 
-                        type="file" 
-                        accept="image/*" 
-                        capture="user"
-                        onChange={e => setFormData({...formData, photo: e.target.files[0]})}
-                        disabled={loading}
-                        style={{ display: 'none' }}
-                      />
-                    </label>
+                    </button>
                     <label style={{ 
                       flex: 1, padding: '14px', fontSize: '13px', fontWeight: '600', 
                       border: '1.5px solid #e0d5c8', borderRadius: '10px', 
@@ -1198,27 +1236,23 @@ export default function LandingPage() {
                     <MdCreditCard size={16} color="#2596be" /> Aadhaar Card Photo (Optional)
                   </label>
                   <div style={{ display: 'flex', gap: '10px' }}>
-                    <label style={{ 
-                      flex: 1, padding: '14px', fontSize: '13px', fontWeight: '600', 
-                      border: '1.5px dashed #e0d5c8', borderRadius: '10px', 
-                      backgroundColor: formData.aadhaarPhoto ? '#fef0e6' : '#faf6f0', 
-                      cursor: loading ? 'not-allowed' : 'pointer', 
-                      textAlign: 'center', 
-                      color: formData.aadhaarPhoto ? '#2596be' : '#9e8e80', 
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-                      transition: 'all 0.2s'
-                    }}>
+                    <button
+                      type="button"
+                      onClick={() => openCamera('aadhaarPhoto')}
+                      disabled={loading}
+                      style={{ 
+                        flex: 1, padding: '14px', fontSize: '13px', fontWeight: '600', 
+                        border: '1.5px dashed #e0d5c8', borderRadius: '10px', 
+                        backgroundColor: formData.aadhaarPhoto ? '#fef0e6' : '#faf6f0', 
+                        cursor: loading ? 'not-allowed' : 'pointer', 
+                        textAlign: 'center', 
+                        color: formData.aadhaarPhoto ? '#2596be' : '#9e8e80', 
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                        transition: 'all 0.2s'
+                      }}>
                       <MdCameraAlt size={18} /> 
                       {formData.aadhaarPhoto ? '✓ Camera' : 'Camera'}
-                      <input 
-                        type="file" 
-                        accept="image/*" 
-                        capture="environment"
-                        onChange={e => setFormData({...formData, aadhaarPhoto: e.target.files[0]})}
-                        disabled={loading}
-                        style={{ display: 'none' }}
-                      />
-                    </label>
+                    </button>
                     <label style={{ 
                       flex: 1, padding: '14px', fontSize: '13px', fontWeight: '600', 
                       border: '1.5px dashed #e0d5c8', borderRadius: '10px', 
@@ -1393,7 +1427,7 @@ export default function LandingPage() {
                   whileTap={{ scale: loading ? 1 : 0.98 }}
                   style={{
                   width: '100%', padding: '14px', borderRadius: '12px',
-                  backgroundColor: loading ? '#9e8e80' : '#41A465', 
+                  backgroundColor: loading ? '#9e8e80' : '#2596be', 
                   color: '#fff', fontSize: '16px',
                   fontWeight: '600', border: 'none', 
                   cursor: loading ? 'not-allowed' : 'pointer',
@@ -1494,6 +1528,51 @@ export default function LandingPage() {
           </motion.a>
         </div>
       </motion.footer>
+
+      {/* Camera Modal */}
+      {cameraModal && (
+        <div style={{
+          position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.85)',
+          zIndex: 9999, display: 'flex', flexDirection: 'column',
+          alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '20px'
+        }}>
+          <p style={{ color: '#fff', fontSize: '14px', fontWeight: '600', margin: 0 }}>
+            {cameraModal === 'photo' ? 'Take Profile Picture' : 'Scan Aadhaar Card'}
+          </p>
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+            style={{ width: '100%', maxWidth: '480px', borderRadius: '12px', background: '#000' }}
+          />
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <button
+              type="button"
+              onClick={capturePhoto}
+              style={{
+                padding: '12px 28px', borderRadius: '50px', border: 'none',
+                backgroundColor: '#2596be', color: '#fff', fontSize: '15px',
+                fontWeight: '700', cursor: 'pointer', display: 'flex',
+                alignItems: 'center', gap: '8px'
+              }}
+            >
+              <MdCameraAlt size={20} /> Capture
+            </button>
+            <button
+              type="button"
+              onClick={stopCamera}
+              style={{
+                padding: '12px 28px', borderRadius: '50px', border: '1.5px solid #fff',
+                backgroundColor: 'transparent', color: '#fff', fontSize: '15px',
+                fontWeight: '600', cursor: 'pointer'
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
 
     </div>
   )

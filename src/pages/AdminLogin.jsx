@@ -25,9 +25,8 @@ export default function AdminLogin() {
       console.log('Login response:', response)
       
       if (response.success) {
-        // Store tokens
-        localStorage.setItem('token', response.data.accessToken)
-        localStorage.setItem('refreshToken', response.data.refreshToken)
+        // Store tokens using secureApi keys
+        api.setTokens(response.data.accessToken, response.data.refreshToken)
         localStorage.setItem('userRole', 'admin')
         
         // Show success toast

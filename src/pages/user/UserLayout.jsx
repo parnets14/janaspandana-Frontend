@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { MdHome, MdNotifications, MdEdit, MdLogout, MdKeyboardArrowDown, MdHelp, MdLanguage, MdInfo } from 'react-icons/md'
 import { RiFileList3Line } from 'react-icons/ri'
+import api from '../../utils/secureApi'
 
 const navItems = [
   { key: 'dashboard', label: 'Home', icon: <MdHome size={20} />, path: '/user/dashboard' },
@@ -11,11 +12,42 @@ const navItems = [
   { key: 'help', label: 'Help', icon: <MdHelp size={20} />, path: '/user/help' },
 ]
 
-export default function UserLayout({ children, active }) {
+export default function UserLayout({ children, active, user: userProp }) {
   const navigate = useNavigate()
   const [showDropdown, setShowDropdown] = useState(false)
 
+  // Cache user in sessionStorage to avoid flicker on navigation
+  const getCachedUser = () => {
+    try {
+      const cached = sessionStorage.getItem('_usr')
+      return cached ? JSON.parse(cached) : null
+    } catch { return null }
+  }
+
+  const [user, setUser] = useState(userProp || getCachedUser())
+
+  useEffect(() => {
+    if (userProp) {
+      setUser(userProp)
+      try { sessionStorage.setItem('_usr', JSON.stringify(userProp)) } catch {}
+      return
+    }
+    // Only fetch if no cached data
+    if (!getCachedUser()) {
+      api.get('/auth/me').then(res => {
+        if (res.success) {
+          setUser(res.data)
+          try { sessionStorage.setItem('_usr', JSON.stringify(res.data)) } catch {}
+        }
+      }).catch(() => {})
+    }
+  }, [userProp])
+
+  const initials = user?.name?.charAt(0)?.toUpperCase() || '?'
+
   const handleLogout = () => {
+    api.clearTokens()
+    try { sessionStorage.removeItem('_usr') } catch {}
     navigate('/')
   }
 
@@ -73,13 +105,17 @@ export default function UserLayout({ children, active }) {
                 cursor: 'pointer',
               }}
             >
-              <div style={{
-                width: '32px', height: '32px', borderRadius: '50%',
-                backgroundColor: '#2596be', display: 'flex', alignItems: 'center',
-                justifyContent: 'center', fontSize: '16px', color: '#fff', fontWeight: '700',
-              }}>
-                K
-              </div>
+              {user?.photo ? (
+                <img src={user.photo} alt={user.name} style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }} />
+              ) : (
+                <div style={{
+                  width: '32px', height: '32px', borderRadius: '50%',
+                  backgroundColor: '#2596be', display: 'flex', alignItems: 'center',
+                  justifyContent: 'center', fontSize: '16px', color: '#fff', fontWeight: '700',
+                }}>
+                  {initials}
+                </div>
+              )}
               <MdKeyboardArrowDown size={18} color="#6b5e52" />
             </button>
 
@@ -88,10 +124,7 @@ export default function UserLayout({ children, active }) {
               <>
                 <div 
                   onClick={() => setShowDropdown(false)}
-                  style={{
-                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-                    zIndex: 999,
-                  }}
+                  style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 999 }}
                 />
                 <div style={{
                   position: 'absolute', top: '50px', right: 0,
@@ -100,8 +133,8 @@ export default function UserLayout({ children, active }) {
                   minWidth: '200px', zIndex: 1000,
                 }}>
                   <div style={{ padding: '12px 16px', borderBottom: '1px solid #ede5d8' }}>
-                    <p style={{ fontSize: '14px', fontWeight: '700', color: '#1a1a1a', margin: 0 }}>Kiran</p>
-                    <p style={{ fontSize: '12px', color: '#6b5e52', margin: '2px 0 0' }}>+91 9876543210</p>
+                    <p style={{ fontSize: '14px', fontWeight: '700', color: '#1a1a1a', margin: 0 }}>{user?.name || 'User'}</p>
+                    <p style={{ fontSize: '12px', color: '#6b5e52', margin: '2px 0 0' }}>+91 {user?.phone || ''}</p>
                   </div>
                   <button 
                     onClick={() => { setShowDropdown(false); navigate('/user/profile'); }}

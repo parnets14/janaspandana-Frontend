@@ -16,3 +16,7 @@ body {
   width: 100%;
   min-height: 100svh;
 }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

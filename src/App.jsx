@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import LandingPage from './pages/LandingPage'
 import About from './pages/About'
 import TrackComplaint from './pages/TrackComplaint'
@@ -24,6 +24,8 @@ import Reports from './pages/operator/Reports'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import UserManagement from './pages/admin/UserManagement'
 import AdminComplaintManagement from './pages/admin/ComplaintManagement'
+import DepartmentManagement from './pages/admin/DepartmentManagement'
+import AdminComplaintDetail from './pages/admin/ComplaintDetail'
 import './App.css'
 
 export default function App() {
@@ -60,9 +62,12 @@ export default function App() {
         <Route path="/operator/reports" element={<Reports />} />
         
         {/* Admin Routes */}
+        <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/users" element={<UserManagement />} />
         <Route path="/admin/complaints" element={<AdminComplaintManagement />} />
+        <Route path="/admin/complaint/:id" element={<AdminComplaintDetail />} />
+        <Route path="/admin/departments" element={<DepartmentManagement />} />
       </Routes>
     </BrowserRouter>
   )

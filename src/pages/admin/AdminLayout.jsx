@@ -12,7 +12,8 @@ import {
   MdClose,
   MdNotifications,
   MdSearch,
-  MdPerson
+  MdPerson,
+  MdBusiness
 } from 'react-icons/md'
 import { RiGovernmentLine } from 'react-icons/ri'
 
@@ -20,8 +21,7 @@ const menuItems = [
   { id: 'dashboard', label: 'Dashboard', icon: MdDashboard, path: '/admin/dashboard' },
   { id: 'users', label: 'User Management', icon: MdPeople, path: '/admin/users' },
   { id: 'complaints', label: 'All Complaints', icon: MdAssignment, path: '/admin/complaints' },
-  { id: 'analytics', label: 'Analytics', icon: MdBarChart, path: '/admin/analytics' },
-  { id: 'settings', label: 'Settings', icon: MdSettings, path: '/admin/settings' },
+  { id: 'departments', label: 'Departments', icon: MdBusiness, path: '/admin/departments' },
 ]
 
 export default function AdminLayout({ children, active }) {

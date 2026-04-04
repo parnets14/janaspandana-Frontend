@@ -85,16 +85,27 @@ class SecureApiClient {
       const data = await response.json();
 
       // Handle token expiration
-      if (response.status === 401 && data.message?.includes('token')) {
-        const refreshed = await this.refreshAccessToken();
+      if (response.status === 401) {
+        const role = localStorage.getItem('userRole');
+        const refreshed = await this.refreshAccessToken(role);
         if (refreshed) {
-          // Retry original request with new token
           return this.request(endpoint, options);
         } else {
           this.clearTokens();
-          window.location.href = '/';
+          window.location.href = role === 'admin' ? '/admin-login' : '/';
           throw new Error('Session expired');
         }
+      }
+
+      // Handle forbidden — only redirect if not an admin page API call
+      if (response.status === 403) {
+        const role = localStorage.getItem('userRole');
+        // Don't redirect admin — they may just lack permission for a specific resource
+        if (role !== 'admin') {
+          this.clearTokens();
+          window.location.href = '/';
+        }
+        throw new Error(data.message || 'Access denied');
       }
 
       if (!response.ok) {
@@ -112,12 +123,14 @@ class SecureApiClient {
   }
 
   // Refresh access token
-  async refreshAccessToken() {
+  async refreshAccessToken(role) {
     const refreshToken = this.getRefreshToken();
     if (!refreshToken) return false;
 
+    const endpoint = role === 'admin' ? '/admin/refresh-token' : '/auth/refresh-token';
+
     try {
-      const response = await fetch(`${this.baseURL}/auth/refresh-token`, {
+      const response = await fetch(`${this.baseURL}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ refreshToken }),
@@ -224,3 +237,39 @@ export const authAPI = {
 };
 
 export default api;
+
+// Department API methods
+export const departmentAPI = {
+  getAll: () => api.get('/departments'),
+  getAllAdmin: () => api.get('/departments/all'),
+  create: (data) => api.post('/departments', data),
+  update: (id, data) => api.put(`/departments/${id}`, data),
+  delete: (id) => api.delete(`/departments/${id}`),
+};
+
+// Complaint API methods
+export const complaintAPI = {
+  submit: (data) => api.post('/complaints', data),
+  getMy: () => api.get('/complaints/my'),
+  getOne: (id) => api.get(`/complaints/${id}`),
+  getAll: (params = {}) => {
+    const q = new URLSearchParams(params).toString();
+    return api.get(`/complaints${q ? '?' + q : ''}`);
+  },
+  updateStatus: (id, data) => api.patch(`/complaints/${id}/status`, data),
+  deleteOne: (id) => api.delete(`/complaints/${id}`),
+  reopen: (id, reason) => api.post(`/complaints/${id}/reopen`, { reason }),
+  uploadPhotos: async (id, files) => {
+    const token = api.getToken();
+    const formData = new FormData();
+    files.forEach(f => formData.append('photos', f));
+    const res = await fetch(`${api.baseURL}/complaints/${id}/photos`, {
+      method: 'POST',
+      headers: { ...(token && { Authorization: `Bearer ${token}` }) },
+      body: formData
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Upload failed');
+    return data;
+  }
+};

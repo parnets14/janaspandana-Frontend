@@ -1,0 +1,297 @@
+/* ── Global resets ── */
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; }
+.hero-layout {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 64px;
+  padding: 40px 0;
+}
+@media (max-width: 900px) {
+  .hero-layout { flex-direction: column; gap: 32px; padding: 32px 0 40px; }
+}
+@media (max-width: 600px) {
+  .hero-layout { padding: 24px 0 32px; }
+}
+.login-main {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+}
+.login-left {
+  flex: 1;
+  padding: 64px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+.login-right {
+  width: 100%;
+  max-width: 560px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 40px;
+  background: #FFF7EC;
+}
+@media (max-width: 860px) {
+  .login-main { flex-direction: column; }
+  .login-left { padding: 40px 24px 32px; }
+  .login-right { max-width: 100%; padding: 32px 24px 40px; }
+}
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 1024px) {
+  .dashboard-grid { grid-template-columns: 1fr; }
+}
+.officer-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 28px;
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .officer-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Case detail grid ── */
+.case-grid {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 28px;
+  align-items: start;
+}
+@media (max-width: 1024px) {
+  .case-grid { grid-template-columns: 1fr; }
+}
+.submit-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+.submit-three-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+@media (max-width: 768px) {
+  .submit-two-col { grid-template-columns: 1fr; }
+  .submit-three-col { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 500px) {
+  .submit-three-col { grid-template-columns: 1fr; }
+}
+.stat-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.stats-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+}
+@media (max-width: 768px) {
+  .stats-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .stats-divider {
+    display: none !important;
+  }
+}
+
+.navbar-container {
+  padding: 0 32px !important;
+}
+
+.mobile-menu-btn {
+  display: none;
+}
+
+.mobile-menu {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .navbar-container {
+    padding: 0 16px !important;
+  }
+  /* Reduce logo and text size on mobile */
+  .navbar-container img {
+    width: 32px !important;
+    height: 32px !important;
+  }
+  
+  .logo-title {
+    font-size: 13px !important;
+  }
+  
+  .logo-subtitle {
+    font-size: 8px !important;
+  }
+  
+  .navbar-container button {
+    padding: 8px 14px !important;
+    font-size: 12px !important;
+  }
+  
+  .track-text,
+  .back-text {
+    font-size: 12px !important;
+  }
+  
+  /* Officer/Operator Layout mobile menu */
+  .nav-links {
+    display: none !important;
+  }
+  
+  .mobile-menu-btn {
+    display: flex !important;
+  }
+  
+  .desktop-actions {
+    display: none !important;
+  }
+  
+  .mobile-menu {
+    display: block !important;
+  }
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+}
+
+/* ── Page padding ── */
+.page-pad {
+  padding: 40px 32px;
+}
+@media (max-width: 768px) {
+  .page-pad { padding: 24px 16px; }
+}
+.nav-pad {
+  padding: 0 32px;
+}
+@media (max-width: 600px) {
+  .nav-pad { padding: 0 16px; }
+}
+
+/* ── Prevent animation overflow and breaking ── */
+* {
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Optimize animations ── */
+[style*="position: absolute"] {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+/* ── Responsive animation adjustments ── */
+@media (max-width: 768px) {
+  /* Ensure no horizontal overflow */
+  body, html {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    position: relative;
+  }
+  
+  /* Contain animations within viewport */
+  .hero-layout > * {
+    max-width: 100%;
+    overflow: visible;
+  }
+  
+  /* Disable complex animations on mobile for performance */
+  [style*="filter: blur"] {
+    filter: blur(30px) !important;
+  }
+
+  /* Track modal responsive */
+  .track-modal {
+    padding: 24px !important;
+    width: 95% !important;
+    border-radius: 16px !important;
+  }
+
+  /* Track form responsive */
+  .track-form-container {
+    flex-direction: column !important;
+  }
+  .track-form-container button {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Further optimize on very small screens */
+  h1 {
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  /* Reduce blur for better performance */
+  [style*="filter: blur"] {
+    filter: blur(20px) !important;
+  }
+
+  /* Track modal on very small screens */
+  .track-modal {
+    padding: 20px !important;
+    width: 95% !important;
+    max-height: 85vh !important;
+  }
+
+  /* Submit form card responsive */
+  .submit-form-card {
+    padding: 24px !important;
+    border-radius: 16px !important;
+  }
+
+  /* Submit footer responsive */
+  .submit-footer {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  
+  .submit-footer button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  
+  /* OTP inputs responsive */
+  .otp-inputs input {
+    width: 36px !important;
+    height: 44px !important;
+    font-size: 18px !important;
+  }
+  
+  .otp-inputs {
+    gap: 6px !important;
+  }
+}

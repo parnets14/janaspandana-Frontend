@@ -13,7 +13,8 @@ import {
   MdNotifications,
   MdSearch,
   MdPerson,
-  MdBusiness
+  MdBusiness,
+  MdOutlineEngineering
 } from 'react-icons/md'
 import { RiGovernmentLine } from 'react-icons/ri'
 
@@ -22,6 +23,7 @@ const menuItems = [
   { id: 'users', label: 'User Management', icon: MdPeople, path: '/admin/users' },
   { id: 'complaints', label: 'All Complaints', icon: MdAssignment, path: '/admin/complaints' },
   { id: 'departments', label: 'Departments', icon: MdBusiness, path: '/admin/departments' },
+  { id: 'officers', label: 'Officers', icon: MdOutlineEngineering, path: '/admin/officers' },
 ]
 
 export default function AdminLayout({ children, active }) {
@@ -35,7 +37,7 @@ export default function AdminLayout({ children, active }) {
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#fef0e6' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#ffffff' }}>
       
       {/* Sidebar - Desktop */}
       <motion.aside
@@ -62,20 +64,9 @@ export default function AdminLayout({ children, active }) {
           alignItems: 'center',
           gap: '12px'
         }}>
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '10px',
-            background: 'linear-gradient(135deg, #2596be, #1a7a9e)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#fff'
-          }}>
-            <RiGovernmentLine size={24} />
-          </div>
+          <img src="/logo.jpeg" alt="JanaSpandana" style={{ width: '40px', height: '40px', borderRadius: '10px', objectFit: 'cover' }} />
           <div>
-            <h1 style={{ fontSize: '18px', fontWeight: '800', margin: 0, color: '#1a1a1a' }}>JanaSpandana</h1>
+            <h1 style={{ fontSize: '18px', fontWeight: '800', margin: 0, color: '#1a1a1a' }}>Janoni</h1>
             <p style={{ fontSize: '11px', color: '#666', margin: 0 }}>Admin Portal</p>
           </div>
         </div>
@@ -100,12 +91,12 @@ export default function AdminLayout({ children, active }) {
                   gap: '12px',
                   border: 'none',
                   backgroundColor: isActive ? 'rgba(37, 150, 190, 0.1)' : 'transparent',
-                  color: isActive ? '#2596be' : '#666',
+                  color: isActive ? '#151A40' : '#666',
                   fontSize: '14px',
                   fontWeight: isActive ? '700' : '500',
                   cursor: 'pointer',
                   transition: 'all 0.2s',
-                  borderLeft: isActive ? '3px solid #2596be' : '3px solid transparent',
+                  borderLeft: isActive ? '3px solid #151A40' : '3px solid transparent',
                   textAlign: 'left'
                 }}
               >
@@ -191,20 +182,9 @@ export default function AdminLayout({ children, active }) {
                 justifyContent: 'space-between'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <div style={{
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '10px',
-                    background: 'linear-gradient(135deg, #2596be, #1a7a9e)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#fff'
-                  }}>
-                    <RiGovernmentLine size={24} />
-                  </div>
+                  <img src="/logo.jpeg" alt="JanaSpandana" style={{ width: '40px', height: '40px', borderRadius: '10px', objectFit: 'cover' }} />
                   <div>
-                    <h1 style={{ fontSize: '18px', fontWeight: '800', margin: 0, color: '#1a1a1a' }}>JanaSpandana</h1>
+                    <h1 style={{ fontSize: '18px', fontWeight: '800', margin: 0, color: '#1a1a1a' }}>Janoni</h1>
                     <p style={{ fontSize: '11px', color: '#666', margin: 0 }}>Admin Portal</p>
                   </div>
                 </div>
@@ -243,12 +223,12 @@ export default function AdminLayout({ children, active }) {
                         gap: '12px',
                         border: 'none',
                         backgroundColor: isActive ? 'rgba(37, 150, 190, 0.1)' : 'transparent',
-                        color: isActive ? '#2596be' : '#666',
+                        color: isActive ? '#151A40' : '#666',
                         fontSize: '14px',
                         fontWeight: isActive ? '700' : '500',
                         cursor: 'pointer',
                         transition: 'all 0.2s',
-                        borderLeft: isActive ? '3px solid #2596be' : '3px solid transparent',
+                        borderLeft: isActive ? '3px solid #151A40' : '3px solid transparent',
                         textAlign: 'left'
                       }}
                     >
@@ -298,89 +278,6 @@ export default function AdminLayout({ children, active }) {
       }}
       className="main-content-admin"
       >
-        {/* Top Bar */}
-        <header style={{
-          backgroundColor: '#fff',
-          borderBottom: '1px solid #e5e7eb',
-          padding: '16px 32px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          position: 'sticky',
-          top: 0,
-          zIndex: 50
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <button
-              onClick={() => setSidebarOpen(true)}
-              style={{
-                display: 'none',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: '8px',
-                color: '#1a1a1a'
-              }}
-              className="mobile-menu-btn"
-            >
-              <MdMenu size={24} />
-            </button>
-            
-            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-              <MdSearch style={{ position: 'absolute', left: '12px', color: '#9ca3af' }} size={20} />
-              <input
-                type="text"
-                placeholder="Search..."
-                style={{
-                  padding: '10px 12px 10px 40px',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '8px',
-                  fontSize: '14px',
-                  width: '300px',
-                  outline: 'none'
-                }}
-              />
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            <button style={{
-              position: 'relative',
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              padding: '8px',
-              color: '#1a1a1a'
-            }}>
-              <MdNotifications size={24} />
-              <span style={{
-                position: 'absolute',
-                top: '6px',
-                right: '6px',
-                width: '8px',
-                height: '8px',
-                backgroundColor: '#2596be',
-                borderRadius: '50%'
-              }} />
-            </button>
-
-            <div style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #2596be, #1a7a9e)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#fff',
-              fontWeight: '600',
-              cursor: 'pointer'
-            }}>
-              <MdPerson size={24} />
-            </div>
-          </div>
-        </header>
-
         {/* Page Content */}
         <main style={{ flex: 1, padding: '32px' }}>
           {children}

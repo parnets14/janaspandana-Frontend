@@ -95,7 +95,7 @@ export default function AdminComplaintDetail() {
             style={{ backgroundColor: '#fff', borderRadius: '14px', padding: '28px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
               <div>
-                <span style={{ fontSize: '12px', fontWeight: '700', color: '#2596be', fontFamily: 'monospace' }}>#{complaint.complaintId}</span>
+                <span style={{ fontSize: '12px', fontWeight: '700', color: '#151A40', fontFamily: 'monospace' }}>#{complaint.complaintId}</span>
                 <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#1a1a1a', margin: '6px 0 0' }}>{complaint.title}</h1>
               </div>
               <div style={{ display: 'flex', gap: '8px' }}>
@@ -113,8 +113,10 @@ export default function AdminComplaintDetail() {
                 {[
                   ['Department', complaint.department],
                   ['Submitted By', `${complaint.user?.name || '—'} (${complaint.user?.phone || '—'})`],
+                  ...(complaint.location?.city ? [['City', complaint.location.city]] : []),
+                  ...(complaint.location?.ward ? [['Ward', complaint.location.ward]] : []),
                   ['Location', complaint.location?.address || '—'],
-                  ['Assigned To', complaint.assignedTo],
+                  ...(complaint.assignedTo && complaint.assignedTo !== 'Unassigned' ? [['Assigned To', complaint.assignedTo]] : []),
                   ['Submitted On', new Date(complaint.createdAt).toLocaleString('en-IN')],
                 ].map(([label, value]) => (
                   <tr key={label} style={{ borderBottom: '1px solid #f3f4f6' }}>
@@ -211,7 +213,7 @@ export default function AdminComplaintDetail() {
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                 padding: '12px', borderRadius: '10px', border: 'none',
-                backgroundColor: saving ? '#93c5fd' : '#2596be', color: '#fff',
+                backgroundColor: saving ? '#93c5fd' : '#151A40', color: '#fff',
                 fontSize: '14px', fontWeight: '700', cursor: saving ? 'wait' : 'pointer'
               }}>
               <MdSave size={16} /> {saving ? 'Saving...' : 'Save Changes'}

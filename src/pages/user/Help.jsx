@@ -70,14 +70,14 @@ export default function Help() {
                 transition={{ delay: i * 0.05 }}
                 style={{
                   backgroundColor: '#fff', borderRadius: '16px',
-                  border: '1px solid #ede5d8', overflow: 'hidden',
+                  border: '1px solid #E5E7EB', overflow: 'hidden',
                 }}
               >
                 <button
                   onClick={() => setOpenIndex(openIndex === i ? null : i)}
                   style={{
                     width: '100%', padding: '20px', border: 'none',
-                    backgroundColor: openIndex === i ? '#faf6f0' : 'transparent',
+                    backgroundColor: openIndex === i ? '#F8F9FA' : 'transparent',
                     cursor: 'pointer', display: 'flex',
                     justifyContent: 'space-between', alignItems: 'center',
                     gap: '16px', textAlign: 'left',
@@ -102,7 +102,7 @@ export default function Help() {
                       transition={{ duration: 0.3 }}
                       style={{ overflow: 'hidden' }}
                     >
-                      <div style={{ padding: '0 20px 20px', borderTop: '1px solid #ede5d8' }}>
+                      <div style={{ padding: '0 20px 20px', borderTop: '1px solid #E5E7EB' }}>
                         <p style={{ fontSize: '14px', color: '#6b5e52', margin: '16px 0 0', lineHeight: 1.7 }}>
                           {faq.a}
                         </p>
@@ -116,7 +116,7 @@ export default function Help() {
         </div>
 
         {/* Contact Info */}
-        <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '28px', border: '1px solid #ede5d8' }}>
+        <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '28px', border: '1px solid #E5E7EB' }}>
           <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#1a1a1a', margin: '0 0 20px' }}>
             Contact Support
           </h2>
@@ -147,17 +147,17 @@ export default function Help() {
               <div>
                 <p style={{ fontSize: '13px', color: '#9e8e80', margin: '0 0 4px' }}>Email Support</p>
                 <p style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a', margin: 0 }}>
-                  support@janaspandana.gov.in
+                  support@Janoni.gov.in
                 </p>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
               <div style={{
                 width: '44px', height: '44px', borderRadius: '12px',
-                backgroundColor: '#fef0e6', display: 'flex',
+                backgroundColor: '#EEF2FF', display: 'flex',
                 alignItems: 'center', justifyContent: 'center',
               }}>
-                <MdLocationOn size={20} color="#2596be" />
+                <MdLocationOn size={20} color="#151A40" />
               </div>
               <div>
                 <p style={{ fontSize: '13px', color: '#9e8e80', margin: '0 0 4px' }}>Office Address</p>

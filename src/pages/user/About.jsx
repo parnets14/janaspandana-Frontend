@@ -1,293 +1,106 @@
 import { motion } from 'framer-motion'
 import { MdCheckCircle, MdArrowForward } from 'react-icons/md'
-import { RiGovernmentLine } from 'react-icons/ri'
 import UserLayout from './UserLayout'
 
-const departments = [
-  { name: 'Agriculture', icon: '🌾', desc: 'Crop issues, irrigation, subsidies' },
-  { name: 'Education', icon: '📚', desc: 'Schools, scholarships, infrastructure' },
-  { name: 'Healthcare', icon: '🏥', desc: 'Hospitals, medicines, sanitation' },
-  { name: 'Police', icon: '👮', desc: 'Law & order, safety concerns' },
-  { name: 'Revenue', icon: '📋', desc: 'Land records, certificates, taxes' },
-  { name: 'Infrastructure', icon: '🏗️', desc: 'Roads, water supply, electricity' },
-  { name: 'Public Utilities', icon: '💡', desc: 'Street lights, waste management' },
-  { name: 'Environment', icon: '🌳', desc: 'Pollution, parks, green initiatives' },
+const mission = [
+  { icon: '🌐', title: 'Digital Inclusion', desc: 'Providing an accessible, multilingual, and intuitive platform for all sections of society to report issues.' },
+  { icon: '⚙️', title: 'Operational Excellence', desc: 'Automating grievance routing to ensure the right department receives the right information at the right time.' },
+  { icon: '⏱️', title: 'Time-Bound Resolution', desc: 'Enforcing strict timelines for service delivery through automated escalation and monitoring.' },
+  { icon: '🔒', title: 'Integrity & Trust', desc: 'Building public confidence by maintaining a transparent, "no-tamper" record of every grievance and its resolution.' },
 ]
 
-const howItWorks = [
-  {
-    step: '1',
-    title: 'Register & Login',
-    desc: 'Create your account using mobile OTP verification. Your Aadhaar details are encrypted and secure.',
-    icon: '📱'
-  },
-  {
-    step: '2',
-    title: 'Submit Complaint',
-    desc: 'Select the relevant department, describe your issue, attach photos/documents, and pin your location.',
-    icon: '📝'
-  },
-  {
-    step: '3',
-    title: 'Auto Assignment',
-    desc: 'Your complaint is automatically assigned to the concerned department officer based on location and category.',
-    icon: '🎯'
-  },
-  {
-    step: '4',
-    title: 'Track Progress',
-    desc: 'Monitor real-time status updates, view officer remarks, and receive SMS/app notifications at every stage.',
-    icon: '📊'
-  },
-  {
-    step: '5',
-    title: 'Resolution',
-    desc: 'Once resolved, verify the solution. If unsatisfied, you can reopen or escalate the complaint.',
-    icon: '✅'
-  }
+const objectives = [
+  { num: '01', icon: '🏛️', title: 'Centralized Accessibility', desc: 'A single, unified portal for multiple government departments, eliminating the need for citizens to visit various offices physically.' },
+  { num: '02', icon: '📡', title: 'Real-Time Tracking', desc: 'A unique tracking ID for every grievance, offering 24/7 visibility into the status of their request — from submission to final sign-off.' },
+  { num: '03', icon: '📊', title: 'Data-Driven Governance', desc: 'Analytical dashboards that identify recurring systemic issues, allowing for proactive policy changes.' },
+  { num: '04', icon: '🔄', title: 'Feedback-Loop Integration', desc: 'Citizens can rate the resolution, ensuring that a "closed" ticket truly means a "satisfied" citizen.' },
+  { num: '05', icon: '🚨', title: 'Automated Escalation', desc: 'Automatically notifying senior-level officials if a grievance is not addressed within the stipulated SLA.' },
 ]
 
 export default function About() {
   return (
     <UserLayout active="about">
-      <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-        
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          style={{ marginBottom: '48px', textAlign: 'center' }}
-        >
-          <div style={{
-            width: '80px',
-            height: '80px',
-            margin: '0 auto 24px',
-            borderRadius: '20px',
-            background: 'linear-gradient(135deg, #2596be, #ff6b1a)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#fff'
-          }}>
-            <RiGovernmentLine size={40} />
-          </div>
-          <h1 style={{ fontSize: '36px', fontWeight: '900', color: '#1a1a1a', margin: '0 0 16px 0' }}>
-            About IGMS
-          </h1>
-          <p style={{ fontSize: '18px', color: '#6b5e52', lineHeight: 1.7, maxWidth: '700px', margin: '0 auto' }}>
-            The Integrated Grievance Management System is a digital platform designed to empower citizens 
-            by providing a transparent, efficient, and accountable mechanism for addressing public grievances.
+      <div style={{ maxWidth: '860px', margin: '0 auto' }}>
+
+        {/* Page Header */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
+          style={{ marginBottom: '48px' }}>
+          <span style={{ fontSize: '11px', fontWeight: '800', color: '#3b82f6', letterSpacing: '2px', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>About the Platform</span>
+          <h1 style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: '900', color: '#0f172a', margin: '0 0 16px', lineHeight: 1.2 }}>About JaNoNi</h1>
+          <p style={{ fontSize: '16px', color: '#475569', lineHeight: 1.8, maxWidth: '680px', margin: '0 0 12px' }}>
+            A state-of-the-art digital bridge transforming public administration and citizen engagement —
+            built on <strong style={{ color: '#0f172a' }}>transparency</strong>, <strong style={{ color: '#0f172a' }}>accountability</strong>, and <strong style={{ color: '#0f172a' }}>rapid response</strong>.
+          </p>
+          <p style={{ fontSize: '15px', color: '#64748b', lineHeight: 1.8, maxWidth: '680px', margin: 0 }}>
+            The name reflects our core philosophy: <strong style={{ color: '#151A40' }}>Knowledge (Jana)</strong>, <strong style={{ color: '#151A40' }}>Innovation</strong>, and <strong style={{ color: '#151A40' }}>Resolution</strong>.
+            Whether it is infrastructure, public services, or administrative hurdles, JaNoNi empowers the common man to participate in the betterment of their community with just a few clicks.
           </p>
         </motion.div>
 
-        {/* Objective Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          style={{
-            backgroundColor: '#fff',
-            borderRadius: '20px',
-            padding: '32px',
-            border: '1px solid #ede5d8',
-            marginBottom: '32px'
-          }}
-        >
-          <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#1a1a1a', margin: '0 0 20px 0', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '10px',
-              background: '#fef0e6',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '20px'
-            }}>🎯</span>
-            Our Objective
-          </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {[
-              'Provide a single-window platform for citizens to register complaints across all government departments',
-              'Ensure timely resolution through automated assignment and tracking mechanisms',
-              'Maintain transparency with real-time status updates and officer accountability',
-              'Enable data-driven decision making for administrative improvements',
-              'Bridge the gap between citizens and government services through technology'
-            ].map((objective, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 + i * 0.1 }}
-                style={{ display: 'flex', alignItems: 'start', gap: '12px' }}
-              >
-                <MdCheckCircle size={24} color="#41A465" style={{ flexShrink: 0, marginTop: '2px' }} />
-                <p style={{ fontSize: '15px', color: '#3a3a3a', lineHeight: 1.7, margin: 0 }}>
-                  {objective}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Departments Covered */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          style={{ marginBottom: '32px' }}
-        >
-          <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#1a1a1a', margin: '0 0 24px 0' }}>
-            Departments Covered
-          </h2>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-            gap: '16px'
-          }}>
-            {departments.map((dept, i) => (
-              <motion.div
-                key={dept.name}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 + i * 0.05 }}
-                whileHover={{ y: -5, scale: 1.02 }}
-                style={{
-                  backgroundColor: '#fff',
-                  borderRadius: '16px',
-                  padding: '24px',
-                  border: '1px solid #ede5d8',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s'
-                }}
-              >
-                <div style={{ fontSize: '36px', marginBottom: '12px' }}>{dept.icon}</div>
-                <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a', margin: '0 0 8px 0' }}>
-                  {dept.name}
-                </h3>
-                <p style={{ fontSize: '13px', color: '#6b5e52', lineHeight: 1.5, margin: 0 }}>
-                  {dept.desc}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* How It Works */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          style={{ marginBottom: '48px' }}
-        >
-          <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#1a1a1a', margin: '0 0 24px 0' }}>
-            How It Works
-          </h2>
-          <div style={{ position: 'relative' }}>
-            {howItWorks.map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.7 + i * 0.1 }}
-                style={{
-                  display: 'flex',
-                  gap: '20px',
-                  marginBottom: i < howItWorks.length - 1 ? '32px' : '0'
-                }}
-              >
-                {/* Step Number */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <div style={{
-                    width: '56px',
-                    height: '56px',
-                    borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #2596be, #ff6b1a)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#fff',
-                    fontSize: '24px',
-                    fontWeight: '800',
-                    flexShrink: 0
-                  }}>
-                    {item.step}
-                  </div>
-                  {i < howItWorks.length - 1 && (
-                    <div style={{
-                      width: '2px',
-                      flex: 1,
-                      minHeight: '40px',
-                      background: 'linear-gradient(to bottom, #2596be, #ede5d8)',
-                      marginTop: '8px'
-                    }} />
-                  )}
-                </div>
-
-                {/* Content */}
-                <div style={{
-                  flex: 1,
-                  backgroundColor: '#fff',
-                  borderRadius: '16px',
-                  padding: '24px',
-                  border: '1px solid #ede5d8'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                    <span style={{ fontSize: '32px' }}>{item.icon}</span>
-                    <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', margin: 0 }}>
-                      {item.title}
-                    </h3>
-                  </div>
-                  <p style={{ fontSize: '15px', color: '#6b5e52', lineHeight: 1.7, margin: 0 }}>
-                    {item.desc}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.2 }}
-          style={{
-            backgroundColor: '#fef0e6',
-            borderRadius: '20px',
-            padding: '40px',
-            border: '2px solid #2596be',
-            textAlign: 'center',
-            marginBottom: '32px'
-          }}
-        >
-          <h3 style={{ fontSize: '24px', fontWeight: '800', color: '#1a1a1a', margin: '0 0 16px 0' }}>
-            Ready to Submit Your Complaint?
-          </h3>
-          <p style={{ fontSize: '16px', color: '#6b5e52', margin: '0 0 24px 0', lineHeight: 1.7 }}>
-            Join thousands of citizens who have successfully resolved their grievances through IGMS
+        {/* Vision */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
+          style={{ position: 'relative', overflow: 'hidden', backgroundColor: '#0f172a', borderRadius: '20px', padding: '40px 44px', marginBottom: '48px' }}>
+          <div style={{ position: 'absolute', top: '-50px', right: '-50px', width: '200px', height: '200px', borderRadius: '50%', backgroundColor: 'rgba(96,165,250,0.06)' }} />
+          <span style={{ fontSize: '11px', fontWeight: '800', color: '#60a5fa', letterSpacing: '2px', textTransform: 'uppercase', display: 'block', marginBottom: '16px' }}>Our Vision</span>
+          <p style={{ fontSize: 'clamp(16px, 2vw, 20px)', fontWeight: '600', color: '#f8fafc', lineHeight: 1.75, margin: 0, fontStyle: 'italic', position: 'relative', zIndex: 1 }}>
+            "To redefine the relationship between the public and the government by fostering a culture of absolute accountability,
+            where technology ensures that no citizen's concern goes unheard or unresolved."
           </p>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+        </motion.div>
+
+        {/* Mission */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
+          style={{ marginBottom: '48px' }}>
+          <span style={{ fontSize: '11px', fontWeight: '800', color: '#3b82f6', letterSpacing: '2px', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>Mission</span>
+          <h2 style={{ fontSize: '24px', fontWeight: '900', color: '#0f172a', margin: '0 0 8px' }}>What We Stand For</h2>
+          <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 24px' }}>Our mission is to empower citizens and streamline governance by:</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+            {mission.map((m, i) => (
+              <motion.div key={m.title} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 + i * 0.08 }}
+                style={{ backgroundColor: '#fff', borderRadius: '14px', padding: '24px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', textAlign: 'center' }}>
+                <div style={{ width: '52px', height: '52px', borderRadius: '14px', backgroundColor: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px', fontSize: '24px' }}>{m.icon}</div>
+                <h3 style={{ fontSize: '14px', fontWeight: '800', color: '#0f172a', margin: '0 0 6px' }}>{m.title}</h3>
+                <p style={{ fontSize: '13px', color: '#64748b', lineHeight: 1.6, margin: 0 }}>{m.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Objectives */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
+          style={{ marginBottom: '48px' }}>
+          <span style={{ fontSize: '11px', fontWeight: '800', color: '#3b82f6', letterSpacing: '2px', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>Objectives</span>
+          <h2 style={{ fontSize: '24px', fontWeight: '900', color: '#0f172a', margin: '0 0 8px' }}>Five Key Pillars</h2>
+          <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 20px' }}>The JaNoNi application is built around these core objectives:</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {objectives.map((o, i) => (
+              <motion.div key={o.title} initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 + i * 0.07 }}
+                style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', backgroundColor: '#fff', borderRadius: '14px', padding: '20px 22px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                <div style={{ width: '44px', height: '44px', borderRadius: '12px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '20px' }}>{o.icon}</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                    <span style={{ fontSize: '10px', fontWeight: '800', color: '#cbd5e1', letterSpacing: '1px' }}>{o.num}</span>
+                    <h3 style={{ fontSize: '14px', fontWeight: '800', color: '#0f172a', margin: 0 }}>{o.title}</h3>
+                  </div>
+                  <p style={{ fontSize: '13px', color: '#64748b', lineHeight: 1.6, margin: 0 }}>{o.desc}</p>
+                </div>
+                <MdCheckCircle size={20} color="#22c55e" style={{ flexShrink: 0, marginTop: '2px' }} />
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* CTA */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55 }}
+          style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '44px', border: '1px solid #e2e8f0', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', textAlign: 'center' }}>
+          <h3 style={{ fontSize: '24px', fontWeight: '900', color: '#0f172a', margin: '0 0 10px' }}>Ready to Submit Your Complaint?</h3>
+          <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 24px', lineHeight: 1.7 }}>
+            Join thousands of citizens who have successfully resolved their grievances through JaNoNi.
+          </p>
+          <motion.button whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.97 }}
             onClick={() => window.location.href = '/user/submit'}
-            style={{
-              padding: '16px 32px',
-              borderRadius: '12px',
-              backgroundColor: '#2596be',
-              color: '#fff',
-              fontSize: '16px',
-              fontWeight: '700',
-              border: 'none',
-              cursor: 'pointer',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              boxShadow: '0 4px 14px rgba(231, 83, 0, 0.3)'
-            }}
-          >
-            Submit Complaint <MdArrowForward size={20} />
+            style={{ padding: '13px 36px', borderRadius: '12px', backgroundColor: '#0f172a', color: '#fff', fontSize: '14px', fontWeight: '700', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 14px rgba(15,23,42,0.2)' }}>
+            Submit Complaint <MdArrowForward size={16} />
           </motion.button>
         </motion.div>
 

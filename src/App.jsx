@@ -26,6 +26,7 @@ import UserManagement from './pages/admin/UserManagement'
 import AdminComplaintManagement from './pages/admin/ComplaintManagement'
 import DepartmentManagement from './pages/admin/DepartmentManagement'
 import AdminComplaintDetail from './pages/admin/ComplaintDetail'
+import OfficerManagement from './pages/admin/OfficerManagement'
 import './App.css'
 
 export default function App() {
@@ -68,6 +69,7 @@ export default function App() {
         <Route path="/admin/complaints" element={<AdminComplaintManagement />} />
         <Route path="/admin/complaint/:id" element={<AdminComplaintDetail />} />
         <Route path="/admin/departments" element={<DepartmentManagement />} />
+        <Route path="/admin/officers" element={<OfficerManagement />} />
       </Routes>
     </BrowserRouter>
   )

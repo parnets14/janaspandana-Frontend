@@ -177,7 +177,7 @@ export default function OperatorLogin() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', flexWrap: 'wrap' }}>
           <MdOutlineVerifiedUser size={14} color="#41A465" />
           <span style={{ fontSize: '12px', color: '#9e8e80' }}>Protected by National Informatics Centre.</span>
-          <RiGovernmentLine size={14} color="#2596be" />
+          <RiGovernmentLine size={14} color="#151A40" />
           <span style={{ fontSize: '12px', color: '#9e8e80' }}>© 2024 IGMS.</span>
         </div>
       </footer>

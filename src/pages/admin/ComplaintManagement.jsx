@@ -6,7 +6,7 @@ import { complaintAPI } from '../../utils/secureApi'
 
 const STATUS_STYLES = {
   'Awaiting Review':           { color: '#6b7280', bg: '#f3f4f6' },
-  'Complaint Registered':      { color: '#2596be', bg: '#e0f2fe' },
+  'Complaint Registered':      { color: '#151A40', bg: '#e0f2fe' },
   'Assigned to Field Officer': { color: '#1d4ed8', bg: '#dbeafe' },
   'Inspection Completed':      { color: '#b45309', bg: '#fef3c7' },
   'Work in Progress':          { color: '#7c3aed', bg: '#ede9fe' },
@@ -23,7 +23,7 @@ const PRIORITY_STYLES = {
   'Medium': { color: '#b45309', bg: '#fef3c7' },
   'Low':    { color: '#15803d', bg: '#dcfce7' },
 }
-const statuses = ['All Status', 'Awaiting Review', 'Complaint Registered', 'Assigned to Field Officer', 'Inspection Completed', 'Work in Progress', 'Issue Resolved', 'Rejected']
+const statuses = ['All Status', 'Awaiting Review', 'Complaint Registered', 'Assigned to Field Officer', 'Issue Resolved', 'Rejected']
 
 const DEFAULT_STATUS_STYLE = { color: '#6b7280', bg: '#f3f4f6' }
 const DEFAULT_PRIORITY_STYLE = { color: '#b45309', bg: '#fef3c7' }
@@ -32,6 +32,7 @@ export default function ComplaintManagement() {
   const [complaints, setComplaints] = useState([])
   const [stats, setStats] = useState({ total: 0, pending: 0, inProgress: 0, resolved: 0 })
   const [loading, setLoading] = useState(true)
+  const [fetchError, setFetchError] = useState('')
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('All Status')
   const [dateFilter, setDateFilter] = useState('')
@@ -44,6 +45,14 @@ export default function ComplaintManagement() {
   const [editAssigned, setEditAssigned] = useState('')
   const [editNote, setEditNote] = useState('')
   const [editPhotos, setEditPhotos] = useState([])
+  const [officers, setOfficers] = useState([])
+
+  useEffect(() => {
+    fetch((import.meta.env.VITE_API_URL || 'http://localhost:5001/api') + '/admin/officers')
+      .then(r => r.json())
+      .then(res => { if (res.success) setOfficers(res.data) })
+      .catch(() => {})
+  }, [])
   const [showAdminCamera, setShowAdminCamera] = useState(false)
   const [adminFacing, setAdminFacing] = useState('environment')
   const [adminCamError, setAdminCamError] = useState('')
@@ -86,15 +95,20 @@ export default function ComplaintManagement() {
 
   const fetchComplaints = useCallback(async () => {
     setLoading(true)
+    setFetchError('')
     try {
       const params = {}
       if (statusFilter !== 'All Status') params.status = statusFilter
       if (dateFilter) params.date = dateFilter
       if (search) params.search = search
       const res = await complaintAPI.getAll(params)
-      setComplaints(res.data)
-      setStats(res.stats)
-    } catch { /* silent */ }
+      setComplaints(res.data || [])
+      setStats(res.stats || { total: 0, pending: 0, inProgress: 0, resolved: 0 })
+    } catch (err) {
+      console.error('Failed to fetch complaints:', err)
+      setFetchError(err.message || 'Failed to load complaints')
+      setComplaints([])
+    }
     finally { setLoading(false) }
   }, [statusFilter, dateFilter, search])
 
@@ -110,7 +124,7 @@ export default function ComplaintManagement() {
     try {
       const res = await complaintAPI.getOne(id)
       setSelected(res.data)
-      setEditStatus(res.data.status)
+      setEditStatus('Complaint Registered')
       setEditPriority(res.data.priority)
       setEditAssigned(res.data.assignedTo)
       setEditNote('')
@@ -186,7 +200,7 @@ export default function ComplaintManagement() {
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '16px', marginBottom: '28px' }}>
         {[
-          { label: 'Total', value: stats.total, color: '#2596be', border: '#2596be' },
+          { label: 'Total', value: stats.total, color: '#151A40', border: '#151A40' },
           { label: 'Registered', value: stats.pending, color: '#6b7280', border: '#9ca3af' },
           { label: 'In Progress', value: stats.inProgress, color: '#7c3aed', border: '#8b5cf6' },
           { label: 'Resolved', value: stats.resolved, color: '#15803d', border: '#22c55e' },
@@ -201,7 +215,7 @@ export default function ComplaintManagement() {
       {/* Filters */}
       <div style={{ backgroundColor: '#fff', borderRadius: '12px', padding: '20px', marginBottom: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-          <MdFilterList size={18} color="#2596be" />
+          <MdFilterList size={18} color="#151A40" />
           <span style={{ fontSize: '15px', fontWeight: '700', color: '#1a1a1a' }}>Filters</span>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px', marginBottom: '12px' }}>
@@ -230,6 +244,13 @@ export default function ComplaintManagement() {
       <div style={{ backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', overflow: 'hidden' }}>
         {loading ? (
           <div style={{ padding: '60px', textAlign: 'center', color: '#9ca3af' }}>Loading...</div>
+        ) : fetchError ? (
+          <div style={{ padding: '60px', textAlign: 'center' }}>
+            <p style={{ color: '#dc2626', fontSize: '14px', fontWeight: '600', margin: '0 0 12px' }}>{fetchError}</p>
+            <button onClick={fetchComplaints} style={{ padding: '10px 20px', borderRadius: '8px', border: '1px solid #e5e7eb', backgroundColor: '#fff', fontSize: '13px', fontWeight: '600', cursor: 'pointer', color: '#374151' }}>
+              Try Again
+            </button>
+          </div>
         ) : complaints.length === 0 ? (
           <div style={{ padding: '60px', textAlign: 'center', color: '#6b7280' }}>No complaints found</div>
         ) : (
@@ -255,7 +276,7 @@ export default function ComplaintManagement() {
                       onMouseEnter={e => e.currentTarget.style.backgroundColor = '#fafafa'}
                       onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}>
                       <td style={{ padding: '14px 16px', whiteSpace: 'nowrap' }}>
-                        <span style={{ fontSize: '12px', fontWeight: '700', color: '#2596be', fontFamily: 'monospace' }}>#{c.complaintId}</span>
+                        <span style={{ fontSize: '12px', fontWeight: '700', color: '#151A40', fontFamily: 'monospace' }}>#{c.complaintId}</span>
                       </td>
                       <td style={{ padding: '14px 16px', maxWidth: '200px' }}>
                         <p style={{ margin: 0, fontSize: '13px', fontWeight: '600', color: '#1a1a1a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.title}</p>
@@ -264,7 +285,7 @@ export default function ComplaintManagement() {
                       <td style={{ padding: '14px 16px', whiteSpace: 'nowrap', fontSize: '13px', color: '#374151', fontWeight: '500' }}>{c.department}</td>
                       <td style={{ padding: '14px 16px', maxWidth: '160px' }}>
                         <span style={{ fontSize: '12px', color: '#6b7280', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>
-                          {c.location?.address || '—'}
+                          {[c.location?.city, c.location?.ward].filter(Boolean).join(' · ') || c.location?.address || '—'}
                         </span>
                       </td>
                       <td style={{ padding: '14px 16px', whiteSpace: 'nowrap' }}>
@@ -290,7 +311,7 @@ export default function ComplaintManagement() {
                             </>
                           )}
                           <button onClick={() => openModal(c._id)}
-                            style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '6px 12px', borderRadius: '8px', border: '1px solid #e5e7eb', backgroundColor: '#f9fafb', fontSize: '12px', fontWeight: '600', color: '#2596be', cursor: 'pointer' }}>
+                            style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '6px 12px', borderRadius: '8px', border: '1px solid #e5e7eb', backgroundColor: '#f9fafb', fontSize: '12px', fontWeight: '600', color: '#151A40', cursor: 'pointer' }}>
                             <MdRemoveRedEye size={14} /> View
                           </button>
                           <button onClick={() => setDeleteConfirm(c)}
@@ -337,7 +358,7 @@ export default function ComplaintManagement() {
                   {/* Modal Header */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', padding: '24px 28px', borderBottom: '1px solid #f3f4f6' }}>
                     <div>
-                      <span style={{ fontSize: '12px', fontWeight: '700', color: '#2596be', fontFamily: 'monospace' }}>#{selected.complaintId}</span>
+                      <span style={{ fontSize: '12px', fontWeight: '700', color: '#151A40', fontFamily: 'monospace' }}>#{selected.complaintId}</span>
                       <h2 style={{ margin: '6px 0 0', fontSize: '20px', fontWeight: '800', color: '#1a1a1a' }}>{selected.title}</h2>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -360,8 +381,10 @@ export default function ComplaintManagement() {
                           <tbody>
                             {[
                               ['Department', selected.department],
+                              ...(selected.location?.city ? [['City', selected.location.city]] : []),
+                              ...(selected.location?.ward ? [['Ward', selected.location.ward]] : []),
                               ['Location', selected.location?.address || '—'],
-                              ['Assigned To', selected.assignedTo],
+                              ...(selected.assignedTo && selected.assignedTo !== 'Unassigned' ? [['Assigned To', selected.assignedTo]] : []),
                               ['Submitted On', new Date(selected.createdAt).toLocaleString('en-IN')],
                             ].map(([label, value]) => (
                               <tr key={label} style={{ borderBottom: '1px solid #f3f4f6' }}>
@@ -381,30 +404,33 @@ export default function ComplaintManagement() {
                         </p>
                       </div>
 
-                      {/* Attachments: note + photos */}
-                      {(selected.proofFiles?.length > 0 || selected.statusHistory?.some(h => h.note)) && (
+                      {/* Citizen Uploads */}
+                      {selected.proofFiles?.length > 0 && (
                         <div>
-                          <p style={{ margin: '0 0 10px', fontSize: '11px', fontWeight: '700', color: '#9ca3af', letterSpacing: '0.6px' }}>ATTACHMENTS</p>
-                          {/* Notes from history */}
-                          {selected.statusHistory?.filter(h => h.note && h.status !== 'Awaiting Review').map((h, i) => (
+                          <p style={{ margin: '0 0 10px', fontSize: '11px', fontWeight: '700', color: '#9ca3af', letterSpacing: '0.6px' }}>CITIZEN UPLOADS</p>
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', gap: '8px' }}>
+                            {selected.proofFiles.map((f, i) => (
+                              <div key={i} onClick={() => window.open(`${import.meta.env.VITE_API_URL?.replace('/api','')||'http://localhost:5001'}${f}`, '_blank')}
+                                style={{ cursor: 'pointer', borderRadius: '8px', overflow: 'hidden', border: '1px solid #e5e7eb', aspectRatio: '1', backgroundColor: '#f9fafb' }}>
+                                <img src={`${import.meta.env.VITE_API_URL?.replace('/api','')||'http://localhost:5001'}${f}`} alt={`proof-${i}`}
+                                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                                  onError={e => { e.target.style.display = 'none' }} />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Status notes */}
+                      {selected.statusHistory?.some(h => h.note && h.status !== 'Awaiting Review') && (
+                        <div>
+                          <p style={{ margin: '0 0 10px', fontSize: '11px', fontWeight: '700', color: '#9ca3af', letterSpacing: '0.6px' }}>NOTES</p>
+                          {selected.statusHistory.filter(h => h.note && h.status !== 'Awaiting Review').map((h, i) => (
                             <div key={i} style={{ padding: '10px 12px', borderRadius: '8px', backgroundColor: '#f9fafb', border: '1px solid #e5e7eb', marginBottom: '8px', fontSize: '13px', color: '#374151' }}>
                               <span style={{ fontSize: '11px', fontWeight: '700', color: '#9ca3af', display: 'block', marginBottom: '3px' }}>{h.status}</span>
                               {h.note}
                             </div>
                           ))}
-                          {/* Photos */}
-                          {selected.proofFiles?.length > 0 && (
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', gap: '8px', marginTop: '8px' }}>
-                              {selected.proofFiles.map((f, i) => (
-                                <div key={i} onClick={() => window.open(`http://localhost:5001${f}`, '_blank')}
-                                  style={{ cursor: 'pointer', borderRadius: '8px', overflow: 'hidden', border: '1px solid #e5e7eb', aspectRatio: '1', backgroundColor: '#f9fafb' }}>
-                                  <img src={`http://localhost:5001${f}`} alt={`proof-${i}`}
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                                    onError={e => { e.target.style.display = 'none' }} />
-                                </div>
-                              ))}
-                            </div>
-                          )}
                         </div>
                       )}
 
@@ -440,15 +466,19 @@ export default function ComplaintManagement() {
                         <label style={{ fontSize: '11px', fontWeight: '700', color: '#6b7280', display: 'block', marginBottom: '5px' }}>STATUS</label>
                         <select value={editStatus} onChange={e => setEditStatus(e.target.value)}
                           style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #e5e7eb', fontSize: '13px', outline: 'none', backgroundColor: '#fff' }}>
-                          {['Complaint Registered', 'Assigned to Field Officer', 'Inspection Completed', 'Work in Progress', 'Issue Resolved', 'Rejected'].map(s => <option key={s}>{s}</option>)}
+                          {['Complaint Registered', 'Assigned to Field Officer'].map(s => <option key={s}>{s}</option>)}
                         </select>
                       </div>
 
                       <div>
                         <label style={{ fontSize: '11px', fontWeight: '700', color: '#6b7280', display: 'block', marginBottom: '5px' }}>ASSIGNED TO</label>
-                        <input value={editAssigned === 'Unassigned' ? '' : editAssigned} onChange={e => setEditAssigned(e.target.value)}
-                          placeholder="Enter officer or department name"
-                          style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #e5e7eb', fontSize: '13px', outline: 'none', boxSizing: 'border-box', backgroundColor: '#fff' }} />
+                        <select value={editAssigned === 'Unassigned' ? '' : editAssigned} onChange={e => { setEditAssigned(e.target.value); if (e.target.value) setEditStatus('Assigned to Field Officer') }}
+                          style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #e5e7eb', fontSize: '13px', outline: 'none', boxSizing: 'border-box', backgroundColor: '#fff', cursor: 'pointer' }}>
+                          <option value="">— Select Officer —</option>
+                          {officers.map(o => (
+                            <option key={o._id} value={o.name}>{o.name} ({o.department?.name || 'No dept'})</option>
+                          ))}
+                        </select>
                       </div>
 
                       <div>
@@ -464,11 +494,11 @@ export default function ComplaintManagement() {
                         <div style={{ display: 'flex', gap: '8px' }}>
                           <button type="button" onClick={openAdminCamera}
                             style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '9px', borderRadius: '8px', border: '1.5px solid #e5e7eb', backgroundColor: '#fff', fontSize: '12px', fontWeight: '600', color: '#374151', cursor: 'pointer' }}>
-                            <MdCameraAlt size={15} color="#2596be" /> Take Photo
+                            <MdCameraAlt size={15} color="#151A40" /> Take Photo
                           </button>
                           <button type="button" onClick={() => photoInputRef.current.click()}
                             style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '9px', borderRadius: '8px', border: '1.5px solid #e5e7eb', backgroundColor: '#fff', fontSize: '12px', fontWeight: '600', color: '#374151', cursor: 'pointer' }}>
-                            <MdUpload size={15} color="#2596be" /> Upload
+                            <MdUpload size={15} color="#151A40" /> Upload
                           </button>
                           <input ref={photoInputRef} type="file" accept="image/*" multiple style={{ display: 'none' }}
                             onChange={e => setEditPhotos(p => [...p, ...Array.from(e.target.files)])} />
@@ -493,7 +523,7 @@ export default function ComplaintManagement() {
                       )}
 
                       <button onClick={handleSave} disabled={saving}
-                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px', padding: '11px', borderRadius: '10px', border: 'none', backgroundColor: saving ? '#93c5fd' : '#2596be', color: '#fff', fontSize: '13px', fontWeight: '700', cursor: saving ? 'wait' : 'pointer' }}>
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px', padding: '11px', borderRadius: '10px', border: 'none', backgroundColor: saving ? '#93c5fd' : '#151A40', color: '#fff', fontSize: '13px', fontWeight: '700', cursor: saving ? 'wait' : 'pointer' }}>
                         <MdSave size={15} /> {saving ? 'Saving...' : 'Save Changes'}
                       </button>
                     </div>
@@ -618,7 +648,7 @@ export default function ComplaintManagement() {
                   <MdFlipCameraAndroid size={20} color="#374151" />
                 </button>
                 <button onClick={captureAdminPhoto} disabled={!!adminCamError}
-                  style={{ width: '64px', height: '64px', borderRadius: '50%', border: '4px solid rgba(37,150,190,0.25)', backgroundColor: adminCamError ? '#e5e7eb' : '#2596be', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: adminCamError ? 'not-allowed' : 'pointer', boxShadow: '0 4px 14px rgba(37,150,190,0.35)' }}>
+                  style={{ width: '64px', height: '64px', borderRadius: '50%', border: '4px solid rgba(37,150,190,0.25)', backgroundColor: adminCamError ? '#e5e7eb' : '#151A40', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: adminCamError ? 'not-allowed' : 'pointer', boxShadow: '0 4px 14px rgba(37,150,190,0.35)' }}>
                   <MdCameraAlt size={28} color="#fff" />
                 </button>
                 <div style={{ width: '44px' }} />

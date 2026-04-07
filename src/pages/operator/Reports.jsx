@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import OperatorLayout from './OperatorLayout'
 
 const reportTypes = [
-  { id: 'daily', label: 'Daily Report', desc: 'Today\'s complaint summary and resolution status', icon: '📅', color: '#2596be' },
+  { id: 'daily', label: 'Daily Report', desc: 'Today\'s complaint summary and resolution status', icon: '📅', color: '#151A40' },
   { id: 'weekly', label: 'Weekly Report', desc: 'Last 7 days performance metrics and trends', icon: '📊', color: '#2563eb' },
   { id: 'monthly', label: 'Monthly Report', desc: 'Complete monthly analysis and department statistics', icon: '📈', color: '#41A465' },
 ]
@@ -146,7 +146,7 @@ export default function Reports() {
           {[
             { label: 'Total', value: data.total, color: '#1a1a1a', bg: '#f0f0ee' },
             { label: 'Resolved', value: data.resolved, color: '#41A465', bg: '#edf7f1' },
-            { label: 'Pending', value: data.pending, color: '#2596be', bg: '#fef0e6' },
+            { label: 'Pending', value: data.pending, color: '#151A40', bg: '#fef0e6' },
             { label: 'In Progress', value: data.inProgress, color: '#2563eb', bg: '#eff6ff' },
             { label: 'Escalated', value: data.escalated, color: '#dc2626', bg: '#fef2f2' },
           ].map((stat, i) => (

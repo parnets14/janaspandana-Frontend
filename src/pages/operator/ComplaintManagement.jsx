@@ -5,9 +5,9 @@ import { motion } from 'framer-motion'
 import OperatorLayout from './OperatorLayout'
 
 const complaints = [
-  { id: '#IGMS-2024-9234', title: 'Water Supply Disruption - Ward 12', sector: 'Infrastructure', status: 'Pending', statusColor: '#2596be', statusBg: '#fef0e6', date: '2024-03-28', priority: 'High', assignedTo: 'Unassigned' },
+  { id: '#IGMS-2024-9234', title: 'Water Supply Disruption - Ward 12', sector: 'Infrastructure', status: 'Pending', statusColor: '#151A40', statusBg: '#fef0e6', date: '2024-03-28', priority: 'High', assignedTo: 'Unassigned' },
   { id: '#IGMS-2024-9233', title: 'Street Light Not Working - MG Road', sector: 'Public Utilities', status: 'In Progress', statusColor: '#2563eb', statusBg: '#eff6ff', date: '2024-03-28', priority: 'Medium', assignedTo: 'Officer Ramesh' },
-  { id: '#IGMS-2024-9232', title: 'Garbage Collection Delay - Block C', sector: 'Sanitation', status: 'Pending', statusColor: '#2596be', statusBg: '#fef0e6', date: '2024-03-27', priority: 'Low', assignedTo: 'Unassigned' },
+  { id: '#IGMS-2024-9232', title: 'Garbage Collection Delay - Block C', sector: 'Sanitation', status: 'Pending', statusColor: '#151A40', statusBg: '#fef0e6', date: '2024-03-27', priority: 'Low', assignedTo: 'Unassigned' },
   { id: '#IGMS-2024-9231', title: 'Road Pothole Repair Request', sector: 'Infrastructure', status: 'Resolved', statusColor: '#41A465', statusBg: '#edf7f1', date: '2024-03-27', priority: 'Medium', assignedTo: 'Officer Priya' },
   { id: '#IGMS-2024-9230', title: 'Noise Pollution Complaint', sector: 'Environment', status: 'In Progress', statusColor: '#2563eb', statusBg: '#eff6ff', date: '2024-03-26', priority: 'Low', assignedTo: 'Officer Kumar' },
   { id: '#IGMS-2024-9229', title: 'Public Park Maintenance', sector: 'Environment', status: 'Escalated', statusColor: '#dc2626', statusBg: '#fef2f2', date: '2024-03-26', priority: 'High', assignedTo: 'Taluk Office' },
@@ -159,7 +159,7 @@ export default function ComplaintManagement() {
                 {complaint.priority === 'High' && (
                   <span style={{
                     padding: '3px 10px', borderRadius: '999px',
-                    backgroundColor: '#fef0e6', color: '#2596be',
+                    backgroundColor: '#fef0e6', color: '#151A40',
                     fontSize: '10px', fontWeight: '800',
                   }}>
                     HIGH

@@ -1,33 +1,41 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { MdOutlineEngineering, MdPhone, MdArrowForward, MdArrowBack, MdOutlineVerifiedUser, MdOutlineShield, MdLockOutline } from 'react-icons/md'
+import { motion } from 'framer-motion'
+import {
+  MdOutlineEngineering, MdEmail, MdLockOutline,
+  MdArrowForward, MdOutlineVerifiedUser, MdOutlineShield,
+} from 'react-icons/md'
 import { RiGovernmentLine } from 'react-icons/ri'
+import toast, { Toaster } from 'react-hot-toast'
 import Navbar from '../components/Navbar'
+import api from '../utils/secureApi'
 
 export default function OfficerLogin() {
-  const [mobile, setMobile] = useState('')
-  const [step, setStep] = useState('mobile') // 'mobile' | 'otp'
-  const [otp, setOtp] = useState(['', '', '', '', '', ''])
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-  const handleGetOTP = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault()
-    setStep('otp')
-  }
-
-  const handleOtpChange = (val, idx) => {
-    if (!/^\d?$/.test(val)) return
-    const next = [...otp]
-    next[idx] = val
-    setOtp(next)
-    if (val && idx < 5) {
-      document.getElementById(`officer-otp-${idx + 1}`)?.focus()
+    setLoading(true)
+    try {
+      const response = await api.post('/admin/officer-login', { email, password })
+      if (response.success) {
+        api.clearTokens()
+        localStorage.removeItem('userRole')
+        api.setTokens(response.data.accessToken, response.data.refreshToken)
+        localStorage.setItem('userRole', 'officer')
+        localStorage.setItem('officerDept', response.data.officer?.department?.name || '')
+        toast.success('Login successful!', { duration: 1500, position: 'top-center' })
+        setTimeout(() => navigate('/officer/dashboard'), 500)
+      }
+    } catch (err) {
+      const msg = err.response?.data?.message || err.message || 'Login failed'
+      toast.error(msg, { position: 'top-center' })
+    } finally {
+      setLoading(false)
     }
-  }
-
-  const handleVerify = (e) => {
-    e.preventDefault()
-    navigate('/officer/dashboard')
   }
 
   return (
@@ -36,13 +44,12 @@ export default function OfficerLogin() {
       display: 'flex', flexDirection: 'column',
       fontFamily: "system-ui, 'Segoe UI', Roboto, sans-serif",
     }}>
-
+      <Toaster />
       <Navbar variant="back" />
 
-      {/* Main — two column */}
       <main className="login-main">
         {/* Left panel */}
-        <div className="login-left" style={{ backgroundColor: '#2596be' }}>
+        <div className="login-left" style={{ backgroundColor: '#151A40' }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: '8px',
             backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: '999px',
@@ -54,7 +61,7 @@ export default function OfficerLogin() {
             </span>
           </div>
 
-          <h1 style={{ fontSize: 'clamp(32px, 3.5vw, 52px)', fontWeight: '900', color: '#fff', lineHeight: 1.15, marginBottom: '20px' }}>
+          <h1 style={{ fontSize: 'clamp(28px, 3.5vw, 48px)', fontWeight: '900', color: '#fff', lineHeight: 1.15, marginBottom: '20px' }}>
             The Digital Concierge for Resolution.
           </h1>
           <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.85)', lineHeight: 1.7, marginBottom: '48px', maxWidth: '440px' }}>
@@ -84,90 +91,58 @@ export default function OfficerLogin() {
         <div className="login-right">
           <div style={{ width: '100%', maxWidth: '420px' }}>
 
-            {step === 'mobile' ? (
-              <>
-                <div style={{ marginBottom: '32px' }}>
-                  <h2 style={{ fontSize: '28px', fontWeight: '900', color: '#1a1a1a', margin: '0 0 8px' }}>Officer Login</h2>
-                  <p style={{ fontSize: '15px', color: '#6b5e52', margin: 0 }}>Enter your registered mobile number to continue</p>
-                </div>
+            <div style={{ marginBottom: '32px' }}>
+              <h2 style={{ fontSize: '28px', fontWeight: '900', color: '#1a1a1a', margin: '0 0 8px' }}>Officer Login</h2>
+              <p style={{ fontSize: '14px', color: '#6b5e52', margin: 0 }}>
+                Use credentials provided by your administrator
+              </p>
+            </div>
 
-                <form onSubmit={handleGetOTP}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px', fontWeight: '600', color: '#3a3a3a', marginBottom: '10px' }}>
-                    <MdPhone size={15} color="#2596be" /> Mobile Number
-                  </label>
-                  <div style={{ display: 'flex', alignItems: 'center', border: '1.5px solid #e0d5c8', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#faf6f0', marginBottom: '8px' }}>
-                    <span style={{ padding: '14px 18px', fontSize: '14px', fontWeight: '600', color: '#555', backgroundColor: '#f0e8dc', borderRight: '1px solid #e0d5c8', whiteSpace: 'nowrap' }}>+91</span>
-                    <input type="tel" maxLength={10} value={mobile}
-                      onChange={e => setMobile(e.target.value.replace(/\D/g, ''))}
-                      placeholder="Enter 10 digit number" required
-                      style={{ flex: 1, padding: '14px 18px', fontSize: '14px', color: '#1a1a1a', backgroundColor: 'transparent', border: 'none', outline: 'none' }}
-                    />
-                  </div>
-                  <p style={{ fontSize: '12px', color: '#9e8e80', marginBottom: '24px' }}>We will send a secure 6-digit OTP to this number.</p>
-                  <button type="submit" style={{
-                    width: '100%', padding: '15px', borderRadius: '12px',
-                    backgroundColor: '#2596be', color: '#fff', fontSize: '16px',
-                    fontWeight: '700', border: 'none', cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                    boxShadow: '0 4px 14px rgba(231,83,0,0.3)',
-                  }}>
-                    Get OTP <MdArrowForward size={20} />
-                  </button>
-                </form>
-              </>
-            ) : (
-              <>
-                <button onClick={() => setStep('mobile')} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'none', border: 'none', color: '#6b5e52', fontSize: '14px', cursor: 'pointer', marginBottom: '28px', padding: 0 }}>
-                  <MdArrowBack size={16} /> Back
-                </button>
-                <div style={{ marginBottom: '32px' }}>
-                  <h2 style={{ fontSize: '28px', fontWeight: '900', color: '#1a1a1a', margin: '0 0 8px' }}>Enter OTP</h2>
-                  <p style={{ fontSize: '15px', color: '#6b5e52', margin: 0 }}>
-                    OTP sent to <strong>+91 {mobile}</strong>. Valid for 10 minutes.
-                  </p>
-                </div>
+            <form onSubmit={handleLogin}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '600', color: '#3a3a3a', marginBottom: '8px' }}>
+                <MdEmail size={14} color="#151A40" /> Email Address
+              </label>
+              <input
+                type="email" value={email} onChange={e => setEmail(e.target.value)}
+                placeholder="Enter your official email" required
+                style={{
+                  width: '100%', padding: '13px 16px', fontSize: '14px', color: '#1a1a1a',
+                  border: '1.5px solid #e0d5c8', borderRadius: '12px', backgroundColor: '#faf6f0',
+                  outline: 'none', marginBottom: '16px', boxSizing: 'border-box',
+                }}
+              />
 
-                <form onSubmit={handleVerify}>
-                  <div style={{ display: 'flex', gap: '10px', marginBottom: '24px', justifyContent: 'center' }}>
-                    {otp.map((d, i) => (
-                      <input key={i} id={`officer-otp-${i}`}
-                        type="text" inputMode="numeric" maxLength={1} value={d}
-                        onChange={e => handleOtpChange(e.target.value, i)}
-                        style={{
-                          width: '52px', height: '60px', textAlign: 'center',
-                          fontSize: '24px', fontWeight: '700', borderRadius: '12px',
-                          border: d ? '2px solid #2596be' : '1.5px solid #e0d5c8',
-                          backgroundColor: d ? '#fef0e6' : '#faf6f0',
-                          color: '#1a1a1a', outline: 'none',
-                        }}
-                      />
-                    ))}
-                  </div>
-                  <button type="submit" style={{
-                    width: '100%', padding: '15px', borderRadius: '12px',
-                    backgroundColor: '#2596be', color: '#fff', fontSize: '16px',
-                    fontWeight: '700', border: 'none', cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                    boxShadow: '0 4px 14px rgba(231,83,0,0.3)',
-                  }}>
-                    Verify & Login <MdArrowForward size={20} />
-                  </button>
-                  <p style={{ textAlign: 'center', fontSize: '13px', color: '#9e8e80', marginTop: '16px' }}>
-                    Didn't receive?{' '}
-                    <button type="button" onClick={() => {}} style={{ background: 'none', border: 'none', color: '#2596be', fontWeight: '600', cursor: 'pointer', fontSize: '13px' }}>
-                      Resend OTP
-                    </button>
-                  </p>
-                </form>
-              </>
-            )}
+              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '600', color: '#3a3a3a', marginBottom: '8px' }}>
+                <MdLockOutline size={14} color="#151A40" /> Password
+              </label>
+              <input
+                type="password" value={password} onChange={e => setPassword(e.target.value)}
+                placeholder="Enter your password" required
+                style={{
+                  width: '100%', padding: '13px 16px', fontSize: '14px', color: '#1a1a1a',
+                  border: '1.5px solid #e0d5c8', borderRadius: '12px', backgroundColor: '#faf6f0',
+                  outline: 'none', marginBottom: '24px', boxSizing: 'border-box',
+                }}
+              />
 
-            <p style={{ fontSize: '12px', color: '#9e8e80', marginTop: '28px', lineHeight: 1.6, textAlign: 'center' }}>
-              By logging in, you agree to the{' '}
-              <a href="#" style={{ color: '#2596be', fontWeight: '600' }}>Official Security Policy</a>
-              {' '}and{' '}
-              <a href="#" style={{ color: '#2596be', fontWeight: '600' }}>Terms of Service</a>.
-              Your IP address is being logged.
+              <motion.button
+                type="submit" disabled={loading}
+                whileTap={{ scale: 0.97 }}
+                style={{
+                  width: '100%', padding: '14px', borderRadius: '12px',
+                  backgroundColor: loading ? '#9e8e80' : '#151A40', color: '#fff',
+                  fontSize: '15px', fontWeight: '700', border: 'none',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                }}
+              >
+                {loading ? 'Signing in...' : <>Officer Login <MdArrowForward size={18} /></>}
+              </motion.button>
+            </form>
+
+            <p style={{ fontSize: '12px', color: '#9e8e80', marginTop: '24px', lineHeight: 1.6, textAlign: 'center' }}>
+              Credentials are issued by the system administrator only.
+              Your session is monitored and IP logged.
             </p>
           </div>
         </div>
@@ -177,7 +152,7 @@ export default function OfficerLogin() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', flexWrap: 'wrap' }}>
           <MdOutlineVerifiedUser size={14} color="#41A465" />
           <span style={{ fontSize: '12px', color: '#9e8e80' }}>Protected by National Informatics Centre.</span>
-          <RiGovernmentLine size={14} color="#2596be" />
+          <RiGovernmentLine size={14} color="#151A40" />
           <span style={{ fontSize: '12px', color: '#9e8e80' }}>© 2024 IGMS.</span>
         </div>
       </footer>

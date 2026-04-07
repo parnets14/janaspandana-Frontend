@@ -6,7 +6,7 @@ import UserLayout from './UserLayout'
 import { complaintAPI } from '../../utils/secureApi'
 
 const STATUS_CONFIG = {
-  'Complaint Registered':      { color: '#2596be', bg: '#e0f2fe', dot: '#2596be' },
+  'Complaint Registered':      { color: '#151A40', bg: '#e0f2fe', dot: '#151A40' },
   'Assigned to Field Officer': { color: '#1d4ed8', bg: '#dbeafe', dot: '#1d4ed8' },
   'Inspection Completed':      { color: '#b45309', bg: '#fef3c7', dot: '#b45309' },
   'Work in Progress':          { color: '#7c3aed', bg: '#ede9fe', dot: '#7c3aed' },
@@ -62,7 +62,7 @@ export default function ComplaintDetail() {
       <button onClick={() => navigate('/user/complaints')} style={{
         display: 'flex', alignItems: 'center', gap: '6px',
         padding: '8px 16px', borderRadius: '10px',
-        backgroundColor: '#fff', border: '1px solid #e0d5c8',
+        backgroundColor: '#fff', border: '1px solid #E5E7EB',
         color: '#555', fontSize: '14px', fontWeight: '600',
         cursor: 'pointer', marginBottom: '24px',
       }}>
@@ -87,10 +87,10 @@ export default function ComplaintDetail() {
         {/* Left — Timeline */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
-          <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '28px', border: '1px solid #ede5d8' }}>
+          <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '28px', border: '1px solid #E5E7EB' }}>
             <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', margin: '0 0 24px' }}>Status Timeline</h2>
             <div style={{ position: 'relative', paddingLeft: '32px' }}>
-              <div style={{ position: 'absolute', left: '11px', top: '8px', bottom: '8px', width: '2px', backgroundColor: '#e0d5c8' }} />
+              <div style={{ position: 'absolute', left: '11px', top: '8px', bottom: '8px', width: '2px', backgroundColor: '#E5E7EB' }} />
               {TIMELINE_STAGES.map((stage, i) => {
                 const historyEntry = complaint.statusHistory?.find(h => h.status === stage)
                 const currentStageIndex = TIMELINE_STAGES.indexOf(complaint.status)
@@ -107,9 +107,9 @@ export default function ComplaintDetail() {
                     <div style={{
                       position: 'absolute', left: '-32px', top: '4px',
                       width: '22px', height: '22px', borderRadius: '50%',
-                      backgroundColor: isDone ? '#15803d' : '#e0d5c8',
+                      backgroundColor: isDone ? '#15803d' : '#E5E7EB',
                       border: '3px solid #fff',
-                      boxShadow: '0 0 0 2px ' + (isDone ? '#15803d' : '#e0d5c8'),
+                      boxShadow: '0 0 0 2px ' + (isDone ? '#15803d' : '#E5E7EB'),
                     }} />
                     <p style={{ fontSize: '14px', fontWeight: '700', color: isDone ? '#1a1a1a' : '#9ca3af', margin: '0 0 4px' }}>{stage}</p>
                     {isDone && displayEntry && (
@@ -125,22 +125,22 @@ export default function ComplaintDetail() {
             </div>
           </div>
 
-          {/* Chat */}
-          <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '28px', border: '1px solid #ede5d8' }}>
+          {/* Chat
+          <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '28px', border: '1px solid #E5E7EB' }}>
             <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', margin: '0 0 16px' }}>Chat with Department</h2>
             <form onSubmit={e => { e.preventDefault(); setChatMessage('') }}>
-              <div style={{ display: 'flex', gap: '12px', alignItems: 'center', padding: '12px 16px', borderRadius: '12px', backgroundColor: '#faf6f0', border: '1.5px solid #e0d5c8' }}>
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'center', padding: '12px 16px', borderRadius: '12px', backgroundColor: '#F8F9FA', border: '1.5px solid #E5E7EB' }}>
                 <MdMessage size={18} color="#9e8e80" />
                 <input type="text" value={chatMessage} onChange={e => setChatMessage(e.target.value)}
                   placeholder="Type your message or query..."
                   style={{ flex: 1, border: 'none', outline: 'none', fontSize: '14px', color: '#1a1a1a', backgroundColor: 'transparent' }} />
                 <motion.button type="submit" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-                  style={{ width: '36px', height: '36px', borderRadius: '8px', backgroundColor: '#2596be', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                  style={{ width: '36px', height: '36px', borderRadius: '8px', backgroundColor: '#151A40', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                   <MdMessage size={18} color="#fff" />
                 </motion.button>
               </div>
             </form>
-          </div>
+          </div> */}
 
         </div>
 
@@ -148,13 +148,15 @@ export default function ComplaintDetail() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
           {/* Issue Details */}
-          <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '24px', border: '1px solid #ede5d8' }}>
+          <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '24px', border: '1px solid #E5E7EB' }}>
             <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a', margin: '0 0 16px' }}>Issue Details</h3>
             <p style={{ fontSize: '14px', color: '#6b5e52', margin: '0 0 16px', lineHeight: 1.6 }}>{complaint.description}</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {[
                 ['Department', complaint.department],
-                ['Assigned To', complaint.assignedTo || 'Unassigned'],
+                ...(complaint.location?.city ? [['City', complaint.location.city]] : []),
+                ...(complaint.location?.ward ? [['Ward', complaint.location.ward]] : []),
+                ...(complaint.assignedTo && complaint.assignedTo !== 'Unassigned' ? [['Assigned To', complaint.assignedTo]] : []),
               ].map(([label, value]) => (
                 <div key={label} style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span style={{ fontSize: '13px', color: '#9e8e80' }}>{label}</span>
@@ -166,21 +168,21 @@ export default function ComplaintDetail() {
 
           {/* Location */}
           {(complaint.location?.lat || complaint.location?.address) && (
-            <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '24px', border: '1px solid #ede5d8' }}>
+            <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '24px', border: '1px solid #E5E7EB', width: 'fit-content' }}>
               <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a', margin: '0 0 16px' }}>Location</h3>
               {complaint.location?.lat && complaint.location?.lng ? (
-                <div style={{ borderRadius: '12px', overflow: 'hidden', marginBottom: '12px' }}>
-                  <iframe title="map" width="100%" height="180" style={{ display: 'block', border: 'none' }}
+                <div style={{ width: '280px', borderRadius: '10px', overflow: 'hidden', border: '1px solid #E5E7EB', marginBottom: '12px' }}>
+                  <iframe title="map" width="280" height="160" style={{ display: 'block', border: 'none' }}
                     src={`https://www.google.com/maps?q=${complaint.location.lat},${complaint.location.lng}&z=15&output=embed`} />
                 </div>
               ) : (
-                <div style={{ height: '160px', borderRadius: '12px', backgroundColor: '#f0f0ee', border: '1px solid #e0d5c8', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
+                <div style={{ height: '160px', borderRadius: '12px', backgroundColor: '#f0f0ee', border: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
                   <p style={{ fontSize: '14px', color: '#9e8e80' }}>Map View</p>
                 </div>
               )}
               {complaint.location?.address && (
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                  <MdLocationOn size={18} color="#2596be" style={{ marginTop: '2px', flexShrink: 0 }} />
+                  <MdLocationOn size={18} color="#151A40" style={{ marginTop: '2px', flexShrink: 0 }} />
                   <p style={{ fontSize: '14px', color: '#6b5e52', margin: 0 }}>{complaint.location.address}</p>
                 </div>
               )}
@@ -189,12 +191,12 @@ export default function ComplaintDetail() {
 
           {/* Attachments */}
           {(complaint.proofFiles?.length > 0 || complaint.statusHistory?.some(h => h.note && h.status !== 'Awaiting Review' && h.status !== 'Pending')) && (
-            <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '24px', border: '1px solid #ede5d8' }}>
+            <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '24px', border: '1px solid #E5E7EB' }}>
               <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a', margin: '0 0 16px' }}>Attachments</h3>
 
               {/* Notes */}
               {complaint.statusHistory?.filter(h => h.note && h.status !== 'Awaiting Review' && h.status !== 'Pending').map((h, i) => (
-                <div key={i} style={{ padding: '10px 14px', borderRadius: '10px', backgroundColor: '#faf6f0', border: '1px solid #ede5d8', marginBottom: '10px' }}>
+                <div key={i} style={{ padding: '10px 14px', borderRadius: '10px', backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB', marginBottom: '10px' }}>
                   <span style={{ fontSize: '11px', fontWeight: '700', color: '#9e8e80', display: 'block', marginBottom: '4px' }}>{h.status}</span>
                   <p style={{ margin: 0, fontSize: '14px', color: '#374151', lineHeight: 1.5 }}>{h.note}</p>
                 </div>
@@ -205,7 +207,7 @@ export default function ComplaintDetail() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(90px, 1fr))', gap: '10px', marginTop: complaint.statusHistory?.some(h => h.note) ? '12px' : 0 }}>
                   {complaint.proofFiles.map((f, i) => (
                     <div key={i} onClick={() => setLightbox(`${API_BASE}${f}`)}
-                      style={{ cursor: 'pointer', borderRadius: '10px', overflow: 'hidden', border: '1px solid #e0d5c8', aspectRatio: '1', backgroundColor: '#f9fafb' }}>
+                      style={{ cursor: 'pointer', borderRadius: '10px', overflow: 'hidden', border: '1px solid #E5E7EB', aspectRatio: '1', backgroundColor: '#f9fafb' }}>
                       <img src={`${API_BASE}${f}`} alt={`attachment-${i + 1}`}
                         style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                         onError={e => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:24px">📷</div>' }} />
@@ -218,12 +220,12 @@ export default function ComplaintDetail() {
 
           {/* Not Satisfied / Reopen */}
           {complaint.status === 'Issue Resolved' && (
-            <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '24px', border: '1px solid #ede5d8' }}>
+            <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '24px', border: '1px solid #E5E7EB' }}>
               <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a', margin: '0 0 12px' }}>Not Satisfied?</h3>
               {!showReopen ? (
                 <motion.button whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }}
                   onClick={() => setShowReopen(true)}
-                  style={{ width: '100%', padding: '12px', borderRadius: '10px', backgroundColor: '#fef0e6', border: '1px solid #fcd9c0', color: '#2596be', fontSize: '14px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  style={{ width: '100%', padding: '12px', borderRadius: '10px', backgroundColor: '#EEF2FF', border: '1px solid #fcd9c0', color: '#151A40', fontSize: '14px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
                   <MdRefresh size={18} /> Request to Reopen
                 </motion.button>
               ) : (
@@ -241,14 +243,14 @@ export default function ComplaintDetail() {
                   <textarea value={reopenReason} onChange={e => setReopenReason(e.target.value)}
                     placeholder="Please explain why you want to reopen this complaint..."
                     rows={3} required
-                    style={{ width: '100%', padding: '12px', fontSize: '14px', border: '1.5px solid #e0d5c8', borderRadius: '10px', backgroundColor: '#faf6f0', outline: 'none', fontFamily: 'inherit', resize: 'vertical', marginBottom: '12px', boxSizing: 'border-box' }} />
+                    style={{ width: '100%', padding: '12px', fontSize: '14px', border: '1.5px solid #E5E7EB', borderRadius: '10px', backgroundColor: '#F8F9FA', outline: 'none', fontFamily: 'inherit', resize: 'vertical', marginBottom: '12px', boxSizing: 'border-box' }} />
                   <div style={{ display: 'flex', gap: '8px' }}>
                     <button type="button" onClick={() => setShowReopen(false)}
-                      style={{ flex: 1, padding: '10px', borderRadius: '8px', backgroundColor: '#f0e8dc', border: '1px solid #e0d5c8', color: '#555', fontSize: '13px', fontWeight: '600', cursor: 'pointer' }}>
+                      style={{ flex: 1, padding: '10px', borderRadius: '8px', backgroundColor: '#F0F0F0', border: '1px solid #E5E7EB', color: '#555', fontSize: '13px', fontWeight: '600', cursor: 'pointer' }}>
                       Cancel
                     </button>
                     <button type="submit"
-                      style={{ flex: 1, padding: '10px', borderRadius: '8px', backgroundColor: '#2596be', border: 'none', color: '#fff', fontSize: '13px', fontWeight: '600', cursor: 'pointer' }}>
+                      style={{ flex: 1, padding: '10px', borderRadius: '8px', backgroundColor: '#151A40', border: 'none', color: '#fff', fontSize: '13px', fontWeight: '600', cursor: 'pointer' }}>
                       Submit Request
                     </button>
                   </div>

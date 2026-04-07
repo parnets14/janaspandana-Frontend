@@ -30,8 +30,8 @@ const notifications = [
     id: 3,
     type: 'system',
     icon: <MdNotifications size={20} />,
-    iconBg: '#fef0e6',
-    iconColor: '#2596be',
+    iconBg: '#EEF2FF',
+    iconColor: '#151A40',
     title: 'System Maintenance Scheduled',
     message: 'The IGMS portal will undergo scheduled maintenance on Sunday, 2:00 AM - 4:00 AM.',
     time: 'Yesterday',
@@ -41,8 +41,8 @@ const notifications = [
     id: 4,
     type: 'warning',
     icon: <MdWarning size={20} />,
-    iconBg: '#fef0e6',
-    iconColor: '#2596be',
+    iconBg: '#EEF2FF',
+    iconColor: '#151A40',
     title: 'Action Required',
     message: 'Please upload additional photos for complaint #IGMS-9102 to help with the investigation.',
     time: '2 days ago',
@@ -82,7 +82,7 @@ export default function Notifications() {
           {unreadCount > 0 && (
             <span style={{
               padding: '6px 16px', borderRadius: '999px',
-              backgroundColor: '#fef0e6', color: '#2596be',
+              backgroundColor: '#EEF2FF', color: '#151A40',
               fontSize: '13px', fontWeight: '700',
             }}>
               {unreadCount} Unread
@@ -101,8 +101,8 @@ export default function Notifications() {
           style={{
             padding: '10px 24px', borderRadius: '10px',
             border: '1.5px solid',
-            borderColor: filter === 'all' ? '#2596be' : '#e0d5c8',
-            backgroundColor: filter === 'all' ? '#2596be' : '#fff',
+            borderColor: filter === 'all' ? '#151A40' : '#E5E7EB',
+            backgroundColor: filter === 'all' ? '#151A40' : '#fff',
             color: filter === 'all' ? '#fff' : '#555',
             fontSize: '14px', fontWeight: '700', cursor: 'pointer',
           }}
@@ -114,8 +114,8 @@ export default function Notifications() {
           style={{
             padding: '10px 24px', borderRadius: '10px',
             border: '1.5px solid',
-            borderColor: filter === 'unread' ? '#2596be' : '#e0d5c8',
-            backgroundColor: filter === 'unread' ? '#2596be' : '#fff',
+            borderColor: filter === 'unread' ? '#151A40' : '#E5E7EB',
+            backgroundColor: filter === 'unread' ? '#151A40' : '#fff',
             color: filter === 'unread' ? '#fff' : '#555',
             fontSize: '14px', fontWeight: '700', cursor: 'pointer',
           }}
@@ -133,9 +133,9 @@ export default function Notifications() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.05 }}
             style={{
-              backgroundColor: notif.read ? '#fff' : '#fef0e6',
+              backgroundColor: notif.read ? '#fff' : '#EEF2FF',
               borderRadius: '16px', padding: '20px',
-              border: notif.read ? '1px solid #ede5d8' : '1px solid #fcd9c0',
+              border: notif.read ? '1px solid #E5E7EB' : '1px solid #fcd9c0',
               display: 'flex', gap: '16px',
             }}
           >

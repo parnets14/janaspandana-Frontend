@@ -8,7 +8,7 @@ export default function Navbar({ variant = 'landing', onTrackClick }) {
     <nav style={{ 
       width: '100%', 
       backgroundColor: '#fff', 
-      borderBottom: '1px solid #ede5d8',
+      borderBottom: '1px solid #E5E7EB',
       position: 'sticky',
       top: 0,
       zIndex: 100,
@@ -51,11 +51,11 @@ export default function Navbar({ variant = 'landing', onTrackClick }) {
             <div className="logo-title" style={{ 
               fontSize: '16px', 
               fontWeight: '800', 
-              color: '#2596be', 
+              color: '#151A40', 
               lineHeight: '1.2',
               whiteSpace: 'nowrap',
             }}>
-              JanaSpandana
+              JaNoNi
             </div>
             <div className="logo-subtitle" style={{ 
               fontSize: '10px', 
@@ -63,7 +63,7 @@ export default function Navbar({ variant = 'landing', onTrackClick }) {
               color: '#41A465',
               whiteSpace: 'nowrap',
             }}>
-              ಜನರ ದನಿ, ಸರ್ಕಾರದ ಸ್ಪಂದನ
+              ಜನೋನಿ
             </div>
           </div>
         </div>
@@ -78,9 +78,9 @@ export default function Navbar({ variant = 'landing', onTrackClick }) {
               gap: '8px',
               padding: '10px 20px',
               borderRadius: '10px',
-              backgroundColor: '#fef0e6',
-              border: '1px solid #2596be',
-              color: '#2596be',
+              backgroundColor: '#EEF2FF',
+              border: '1px solid #151A40',
+              color: '#151A40',
               fontSize: '14px',
               fontWeight: '600',
               cursor: 'pointer',
@@ -89,16 +89,16 @@ export default function Navbar({ variant = 'landing', onTrackClick }) {
               flexShrink: 0,
             }}
             onMouseEnter={e => {
-              e.currentTarget.style.backgroundColor = '#2596be'
+              e.currentTarget.style.backgroundColor = '#151A40'
               e.currentTarget.style.color = '#fff'
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.backgroundColor = '#fef0e6'
-              e.currentTarget.style.color = '#2596be'
+              e.currentTarget.style.backgroundColor = '#EEF2FF'
+              e.currentTarget.style.color = '#151A40'
             }}
           >
             <MdInfo size={18} />
-            <span>About IGMS</span>
+            <span>About</span>
           </button>
         ) : (
           <button 
@@ -109,8 +109,8 @@ export default function Navbar({ variant = 'landing', onTrackClick }) {
               gap: '6px',
               padding: '10px 20px',
               borderRadius: '10px',
-              backgroundColor: '#f0e8dc',
-              border: '1px solid #e0d5c8',
+              backgroundColor: '#F0F0F0',
+              border: '1px solid #E5E7EB',
               color: '#555',
               fontSize: '14px',
               fontWeight: '600',
@@ -120,7 +120,7 @@ export default function Navbar({ variant = 'landing', onTrackClick }) {
               flexShrink: 0,
             }}
             onMouseEnter={e => e.currentTarget.style.backgroundColor = '#e8dfd0'}
-            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#f0e8dc'}
+            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#F0F0F0'}
           >
             <MdArrowBack size={16} /> 
             <span className="back-text">Back to Home</span>

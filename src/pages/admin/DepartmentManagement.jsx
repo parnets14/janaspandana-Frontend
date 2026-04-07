@@ -102,7 +102,7 @@ export default function DepartmentManagement() {
           <button onClick={openCreate} style={{
             display: 'flex', alignItems: 'center', gap: '8px',
             padding: '12px 24px', borderRadius: '12px',
-            backgroundColor: '#2596be', color: '#fff', border: 'none',
+            backgroundColor: '#151A40', color: '#fff', border: 'none',
             fontSize: '14px', fontWeight: '700', cursor: 'pointer'
           }}>
             <MdAdd size={20} /> Add Department
@@ -156,7 +156,7 @@ export default function DepartmentManagement() {
                       <div style={{ display: 'flex', gap: '8px' }}>
                         <button onClick={() => openEdit(dept)} style={{
                           padding: '7px', borderRadius: '8px', border: '1px solid #e5e7eb',
-                          backgroundColor: '#fff', cursor: 'pointer', color: '#2596be', display: 'flex'
+                          backgroundColor: '#fff', cursor: 'pointer', color: '#151A40', display: 'flex'
                         }}>
                           <MdEdit size={16} />
                         </button>
@@ -244,7 +244,7 @@ export default function DepartmentManagement() {
                 </button>
                 <button onClick={handleSave} disabled={saving} style={{
                   flex: 1, padding: '13px', borderRadius: '10px',
-                  border: 'none', backgroundColor: saving ? '#93c5fd' : '#2596be',
+                  border: 'none', backgroundColor: saving ? '#93c5fd' : '#151A40',
                   fontSize: '14px', fontWeight: '700', cursor: saving ? 'wait' : 'pointer', color: '#fff'
                 }}>
                   {saving ? 'Saving...' : editTarget ? 'Save Changes' : 'Create'}

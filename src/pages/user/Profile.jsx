@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { MdEdit, MdSave, MdCancel, MdPerson } from 'react-icons/md'
 import UserLayout from './UserLayout'
 import api from '../../utils/secureApi'
 
 export default function Profile() {
+  const navigate = useNavigate()
   const [isEditing, setIsEditing] = useState(false)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -85,13 +87,21 @@ export default function Profile() {
     <UserLayout active="profile" user={user}>
       <div style={{ maxWidth: '800px', margin: '0 auto', paddingTop: '20px' }}>
 
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'none', border: 'none', cursor: 'pointer', color: '#6b5e52', fontSize: '15px', fontWeight: '600', padding: '0 0 14px', marginLeft: '-4px' }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+          Back
+        </button>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px' }}>
           <h1 style={{ fontSize: '32px', fontWeight: '900', color: '#1a1a1a', margin: 0 }}>My Profile</h1>
           {!isEditing && (
             <button onClick={() => setIsEditing(true)} style={{
               display: 'flex', alignItems: 'center', gap: '8px',
               padding: '10px 20px', borderRadius: '10px',
-              backgroundColor: '#2596be', border: 'none',
+              backgroundColor: '#151A40', border: 'none',
               color: '#fff', fontSize: '14px', fontWeight: '600', cursor: 'pointer',
             }}>
               <MdEdit size={18} /> Edit Profile
@@ -99,19 +109,19 @@ export default function Profile() {
           )}
         </div>
 
-        <div style={{ backgroundColor: '#fff', border: '1px solid #ede5d8', borderRadius: '16px', padding: '32px' }}>
+        <div style={{ backgroundColor: '#fff', border: '1px solid #E5E7EB', borderRadius: '16px', padding: '32px' }}>
 
           {/* Profile Photo */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '32px', paddingBottom: '28px', borderBottom: '1px solid #ede5d8' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '32px', paddingBottom: '28px', borderBottom: '1px solid #E5E7EB' }}>
             {user?.photo ? (
               <img src={user.photo} alt={user.name} style={{
                 width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover',
-                border: '3px solid #2596be'
+                border: '3px solid #151A40'
               }} />
             ) : (
               <div style={{
                 width: '80px', height: '80px', borderRadius: '50%',
-                backgroundColor: '#2596be', display: 'flex',
+                backgroundColor: '#151A40', display: 'flex',
                 alignItems: 'center', justifyContent: 'center',
                 fontSize: '36px', color: '#fff', fontWeight: '700',
               }}>
@@ -173,15 +183,15 @@ export default function Profile() {
 
             {/* Aadhaar Photo */}
             {user?.aadhaarPhoto && (
-              <div style={{ marginBottom: '24px', paddingTop: '24px', borderTop: '1px solid #ede5d8' }}>
+              <div style={{ marginBottom: '24px', paddingTop: '24px', borderTop: '1px solid #E5E7EB' }}>
                 <label style={labelStyle}>Aadhaar Document</label>
                 <img src={user.aadhaarPhoto} alt="Aadhaar"
-                  style={{ maxWidth: '100%', width: 'auto', maxHeight: '260px', borderRadius: '10px', border: '1px solid #e0d5c8', objectFit: 'contain', display: 'block' }} />
+                  style={{ maxWidth: '100%', width: 'auto', maxHeight: '260px', borderRadius: '10px', border: '1px solid #E5E7EB', objectFit: 'contain', display: 'block' }} />
               </div>
             )}
 
             {/* Dates */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', paddingTop: '24px', borderTop: '1px solid #ede5d8', marginBottom: isEditing ? '24px' : 0 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', paddingTop: '24px', borderTop: '1px solid #E5E7EB', marginBottom: isEditing ? '24px' : 0 }}>
               <div>
                 <label style={labelStyle}>Registered On</label>
                 <p style={valueStyle}>{user?.createdAt ? new Date(user.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' }) : '—'}</p>
@@ -196,7 +206,7 @@ export default function Profile() {
               <div style={{ display: 'flex', gap: '12px', marginTop: '32px' }}>
                 <button type="button" onClick={() => setIsEditing(false)} style={{
                   flex: 1, padding: '14px', borderRadius: '12px',
-                  backgroundColor: '#f0e8dc', border: '1px solid #e0d5c8',
+                  backgroundColor: '#F0F0F0', border: '1px solid #E5E7EB',
                   color: '#555', fontSize: '15px', fontWeight: '600',
                   cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                 }}>
@@ -231,6 +241,6 @@ const valueStyle = {
 
 const inputStyle = {
   width: '100%', padding: '12px 14px', fontSize: '15px',
-  border: '1.5px solid #e0d5c8', borderRadius: '10px',
-  backgroundColor: '#faf6f0', outline: 'none', boxSizing: 'border-box'
+  border: '1.5px solid #E5E7EB', borderRadius: '10px',
+  backgroundColor: '#F8F9FA', outline: 'none', boxSizing: 'border-box'
 }

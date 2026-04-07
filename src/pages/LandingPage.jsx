@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { MdPhone, MdArrowForward, MdOutlineLock, MdOutlineTrackChanges, MdPerson, MdCreditCard, MdHome, MdCameraAlt, MdImage } from 'react-icons/md'
+import { MdPhone, MdArrowForward, MdOutlineLock, MdOutlineTrackChanges, MdPerson, MdCreditCard, MdHome, MdCameraAlt, MdImage, MdPinDrop } from 'react-icons/md'
 import { HiCheckBadge } from 'react-icons/hi2'
 import { MdOutlineSpeed } from 'react-icons/md'
 import { RiCustomerService2Line } from 'react-icons/ri'
@@ -9,9 +9,9 @@ import Navbar from '../components/Navbar'
 import { authAPI } from '../utils/secureApi'
 
 const stats = [
-  { value: '12K+', label: 'Complaints Resolved', color: '#2596be', icon: <HiCheckBadge size={22} />, bg: '#fef0e6' },
+  { value: '12K+', label: 'Complaints Resolved', color: '#151A40', icon: <HiCheckBadge size={22} />, bg: '#EEF2FF' },
   { value: '98%',  label: 'Satisfaction Rate',   color: '#41A465', icon: <MdOutlineSpeed size={22} />, bg: '#edf7f1' },
-  { value: '24/7', label: 'Support Available',   color: '#2596be', icon: <RiCustomerService2Line size={22} />, bg: '#fef0e6' },
+  { value: '24/7', label: 'Support Available',   color: '#151A40', icon: <RiCustomerService2Line size={22} />, bg: '#EEF2FF' },
 ]
 
 export default function LandingPage() {
@@ -28,6 +28,7 @@ export default function LandingPage() {
     phone: '',
     aadhaar: '',
     address: '',
+    pincode: '',
     photo: null,
     aadhaarPhoto: null
   })
@@ -198,6 +199,7 @@ export default function LandingPage() {
         phone: formData.phone,
         aadhaar: formData.aadhaar,
         address: formData.address,
+        pincode: formData.pincode,
         photo: formData.photo ? await convertToBase64(formData.photo) : null,
         aadhaarPhoto: formData.aadhaarPhoto ? await convertToBase64(formData.aadhaarPhoto) : null
       })
@@ -294,7 +296,7 @@ export default function LandingPage() {
       style={{
       minHeight: '100vh',
       width: '100%',
-      backgroundColor: '#FFF7EC',
+      backgroundColor: '#FFFFFF',
       display: 'flex',
       flexDirection: 'column',
       fontFamily: "system-ui, 'Segoe UI', Roboto, sans-serif",
@@ -545,7 +547,7 @@ export default function LandingPage() {
       <motion.div
         animate={{
           x: ['-100%', '100%'],
-          opacity: [0.1, 0.3, 0.1],
+          opacity: [0.05, 0.15, 0.05],
         }}
         transition={{
           duration: 30,
@@ -566,7 +568,7 @@ export default function LandingPage() {
       <motion.div
         animate={{
           x: ['100%', '-100%'],
-          opacity: [0.1, 0.25, 0.1],
+          opacity: [0.05, 0.12, 0.05],
         }}
         transition={{
           duration: 35,
@@ -636,8 +638,8 @@ export default function LandingPage() {
                 placeholder="IGMS-2024-001234"
                 style={{
                   width: '100%', padding: '14px 16px', fontSize: '15px',
-                  border: '1.5px solid #e0d5c8', borderRadius: '12px',
-                  backgroundColor: '#faf6f0', outline: 'none', marginBottom: '8px',
+                  border: '1.5px solid #E5E7EB', borderRadius: '12px',
+                  backgroundColor: '#F8F9FA', outline: 'none', marginBottom: '8px',
                   fontWeight: '600', letterSpacing: '0.5px',
                 }}
               />
@@ -651,7 +653,7 @@ export default function LandingPage() {
                   onClick={() => setShowTrackModal(false)}
                   style={{
                     flex: 1, padding: '13px', borderRadius: '12px',
-                    backgroundColor: '#f0e8dc', border: '1px solid #e0d5c8',
+                    backgroundColor: '#F0F0F0', border: '1px solid #E5E7EB',
                     color: '#555', fontSize: '15px', fontWeight: '600',
                     cursor: 'pointer',
                   }}
@@ -685,7 +687,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            style={{ flex: 1, paddingTop: '20px' }}
+            style={{ flex: 1, paddingTop: '0px', marginTop: '-40px' }}
           >
             {/* Badge */}
             <motion.div 
@@ -721,7 +723,7 @@ export default function LandingPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
                 >
-                  Resolution is a <span style={{ color: '#2596be' }}>promise,</span> not just a process.
+                  Resolution is a <span style={{ color: '#151A40' }}>promise,</span> not just a process.
                 </motion.span>
               ) : (
                 // Word-by-word on desktop
@@ -738,7 +740,7 @@ export default function LandingPage() {
                     style={{ 
                       display: 'inline-block',
                       marginRight: word === 'promise,' ? '0' : '0.3em',
-                      color: word === 'promise,' ? '#2596be' : '#1a1a1a'
+                      color: word === 'promise,' ? '#151A40' : '#1a1a1a'
                     }}
                   >
                     {word === 'promise,' ? (
@@ -816,7 +818,7 @@ export default function LandingPage() {
                   style={{ display: 'flex', alignItems: 'center' }}
                 >
                   {i > 0 && (
-                    <div className="stats-divider" style={{ width: '1px', height: '48px', backgroundColor: '#e0d5c8', margin: '0 28px' }} />
+                    <div className="stats-divider" style={{ width: '1px', height: '48px', backgroundColor: '#E5E7EB', margin: '0 28px' }} />
                   )}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <motion.div 
@@ -863,7 +865,7 @@ export default function LandingPage() {
             style={{ width: '100%', maxWidth: '420px', flexShrink: 0, marginTop: '20px' }}
           >
             <div style={{
-              backgroundColor: '#fff', border: '1px solid #ede5d8',
+              backgroundColor: '#fff', border: '1px solid #E5E7EB',
               borderRadius: '20px', padding: '32px',
               boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
             }}>
@@ -876,7 +878,7 @@ export default function LandingPage() {
                 <motion.div 
                   animate={{ scaleY: [1, 1.2, 1] }}
                   transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                  style={{ width: '4px', height: '24px', borderRadius: '4px', backgroundColor: '#2596be' }}
+                  style={{ width: '4px', height: '24px', borderRadius: '4px', backgroundColor: '#151A40' }}
                 />
                 <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', margin: 0 }}>
                   Citizen Login
@@ -906,18 +908,18 @@ export default function LandingPage() {
                   display: 'flex', alignItems: 'center', gap: '6px',
                   fontSize: '14px', fontWeight: '500', color: '#3a3a3a', marginBottom: '8px',
                 }}>
-                  <MdPhone size={16} color="#2596be" /> Mobile Number
+                  <MdPhone size={16} color="#151A40" /> Mobile Number
                 </label>
 
                 <div style={{
                   display: 'flex', alignItems: 'center',
-                  border: '1.5px solid #e0d5c8', borderRadius: '12px',
-                  overflow: 'hidden', backgroundColor: '#faf6f0', marginBottom: '8px',
+                  border: '1.5px solid #E5E7EB', borderRadius: '12px',
+                  overflow: 'hidden', backgroundColor: '#F8F9FA', marginBottom: '8px',
                 }}>
                   <span style={{
                     padding: '12px 16px', fontSize: '14px', fontWeight: '600',
-                    color: '#555', backgroundColor: '#f0e8dc',
-                    borderRight: '1px solid #e0d5c8', whiteSpace: 'nowrap',
+                    color: '#555', backgroundColor: '#F0F0F0',
+                    borderRight: '1px solid #E5E7EB', whiteSpace: 'nowrap',
                   }}>
                     +91
                   </span>
@@ -948,7 +950,7 @@ export default function LandingPage() {
                   whileTap={{ scale: loading ? 1 : 0.98 }}
                   style={{
                     width: '100%', padding: '14px', borderRadius: '12px',
-                    backgroundColor: loading ? '#9e8e80' : '#2596be', 
+                    backgroundColor: loading ? '#9e8e80' : '#151A40', 
                     color: '#fff',
                     fontSize: '16px', fontWeight: '600', border: 'none',
                     cursor: loading ? 'not-allowed' : 'pointer', 
@@ -965,7 +967,7 @@ export default function LandingPage() {
                   <button 
                     type="button" 
                     onClick={() => { setStep('register'); setFormData({...formData, phone: mobile}); setError(''); }}
-                    style={{ background: 'none', border: 'none', color: '#2596be', fontWeight: '600', cursor: 'pointer', fontSize: '13px', textDecoration: 'underline' }}
+                    style={{ background: 'none', border: 'none', color: '#151A40', fontWeight: '600', cursor: 'pointer', fontSize: '13px', textDecoration: 'underline' }}
                   >
                     Register Here
                   </button>
@@ -1001,13 +1003,13 @@ export default function LandingPage() {
                   <div style={{ 
                     padding: '12px 16px', 
                     borderRadius: '10px', 
-                    backgroundColor: '#fef0e6', 
+                    backgroundColor: '#EEF2FF', 
                     border: '1px solid #fcd9c0',
                     marginBottom: '16px',
                     textAlign: 'center'
                   }}>
                     <p style={{ fontSize: '12px', color: '#9e8e80', margin: '0 0 4px' }}>Dev OTP (for testing)</p>
-                    <p style={{ fontSize: '20px', fontWeight: '700', color: '#2596be', margin: 0, letterSpacing: '4px' }}>{devOTP}</p>
+                    <p style={{ fontSize: '20px', fontWeight: '700', color: '#151A40', margin: 0, letterSpacing: '4px' }}>{devOTP}</p>
                   </div>
                 )}
 
@@ -1019,15 +1021,15 @@ export default function LandingPage() {
                       initial={{ opacity: 0, y: -20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.1 }}
-                      whileFocus={{ scale: 1.1, borderColor: '#2596be' }}
+                      whileFocus={{ scale: 1.1, borderColor: '#151A40' }}
                       type="text" inputMode="numeric" maxLength={1} value={d}
                       onChange={e => handleOtpChange(e.target.value, i)}
                       disabled={loading}
                       style={{
                         width: '44px', height: '52px', textAlign: 'center',
                         fontSize: '22px', fontWeight: '700', borderRadius: '10px',
-                        border: d ? '2px solid #2596be' : '1.5px solid #e0d5c8',
-                        backgroundColor: d ? '#fef0e6' : '#faf6f0',
+                        border: d ? '2px solid #151A40' : '1.5px solid #E5E7EB',
+                        backgroundColor: d ? '#EEF2FF' : '#F8F9FA',
                         color: '#1a1a1a', outline: 'none',
                       }}
                     />
@@ -1040,7 +1042,7 @@ export default function LandingPage() {
                   whileTap={{ scale: loading ? 1 : 0.98 }}
                   style={{
                   width: '100%', padding: '14px', borderRadius: '12px',
-                  backgroundColor: loading ? '#9e8e80' : '#2596be', 
+                  backgroundColor: loading ? '#9e8e80' : '#151A40', 
                   color: '#fff', fontSize: '16px',
                   fontWeight: '600', border: 'none', 
                   cursor: loading ? 'not-allowed' : 'pointer',
@@ -1050,7 +1052,7 @@ export default function LandingPage() {
                 </motion.button>
                 <p style={{ textAlign: 'center', fontSize: '12px', color: '#9e8e80', marginTop: '12px' }}>
                   Didn't receive?{' '}
-                  <button type="button" onClick={handleResendOTP} disabled={loading} style={{ background: 'none', border: 'none', color: '#2596be', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer', fontSize: '12px' }}>Resend OTP</button>
+                  <button type="button" onClick={handleResendOTP} disabled={loading} style={{ background: 'none', border: 'none', color: '#151A40', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer', fontSize: '12px' }}>Resend OTP</button>
                 </p>
               </motion.form>
               ) : step === 'register' ? (
@@ -1060,116 +1062,109 @@ export default function LandingPage() {
                 transition={{ duration: 0.5 }}
                 onSubmit={handleRegister}
               >
-                <div style={{ marginBottom: '20px' }}>
-                  <button type="button" onClick={() => { setStep('mobile'); setError(''); }} style={{ background: 'none', border: 'none', color: '#6b5e52', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', padding: 0, marginBottom: '12px' }}>
+                <div style={{ marginBottom: '10px' }}>
+                  <button type="button" onClick={() => { setStep('mobile'); setError(''); }} style={{ background: 'none', border: 'none', color: '#6b5e52', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', padding: 0, marginBottom: '8px' }}>
                     ← Back
                   </button>
-                  <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', margin: '0 0 6px' }}>New User Registration</h3>
-                  <p style={{ fontSize: '13px', color: '#6b5e52', margin: 0 }}>Complete your profile to continue</p>
+                  <h3 style={{ fontSize: '17px', fontWeight: '700', color: '#1a1a1a', margin: '0 0 4px' }}>New User Registration</h3>
+                  <p style={{ fontSize: '12px', color: '#6b5e52', margin: 0 }}>Complete your profile to continue</p>
                 </div>
 
                 {error && (
                   <div style={{
-                    padding: '12px', borderRadius: '10px',
+                    padding: '8px 12px', borderRadius: '8px',
                     backgroundColor: '#fef2f2', border: '1px solid #fecaca',
-                    marginBottom: '16px'
+                    marginBottom: '10px'
                   }}>
-                    <p style={{ fontSize: '13px', color: '#dc2626', margin: 0 }}>
-                      ⚠️ {error}
-                    </p>
+                    <p style={{ fontSize: '12px', color: '#dc2626', margin: 0 }}>⚠️ {error}</p>
                   </div>
                 )}
 
-                <div style={{ marginBottom: '16px' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '600', color: '#3a3a3a', marginBottom: '6px' }}>
-                    <MdPerson size={16} color="#2596be" /> Full Name *
+                <div style={{ marginBottom: '10px' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: '600', color: '#3a3a3a', marginBottom: '4px' }}>
+                    <MdPerson size={14} color="#151A40" /> Full Name (As Per Aadhaar)*
                   </label>
                   <input type="text" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
                     placeholder="Enter your full name"
                     disabled={loading}
-                    style={{ width: '100%', padding: '12px 14px', fontSize: '14px', border: '1.5px solid #e0d5c8', borderRadius: '10px', backgroundColor: '#faf6f0', outline: 'none' }}
+                    style={{ width: '100%', padding: '9px 12px', fontSize: '13px', border: '1.5px solid #E5E7EB', borderRadius: '9px', backgroundColor: '#F8F9FA', outline: 'none', boxSizing: 'border-box' }}
                   />
                 </div>
 
-                <div style={{ marginBottom: '16px' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '600', color: '#3a3a3a', marginBottom: '6px' }}>
-                    <MdPhone size={16} color="#2596be" /> Phone Number *
+                <div style={{ marginBottom: '10px' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: '600', color: '#3a3a3a', marginBottom: '4px' }}>
+                    <MdPhone size={14} color="#151A40" /> Phone Number *
                   </label>
-                  <div style={{ display: 'flex', alignItems: 'center', border: '1.5px solid #e0d5c8', borderRadius: '10px', overflow: 'hidden', backgroundColor: '#faf6f0' }}>
-                    <span style={{ padding: '12px 14px', fontSize: '14px', fontWeight: '600', color: '#555', backgroundColor: '#f0e8dc', borderRight: '1px solid #e0d5c8', whiteSpace: 'nowrap' }}>+91</span>
+                  <div style={{ display: 'flex', alignItems: 'center', border: '1.5px solid #E5E7EB', borderRadius: '9px', overflow: 'hidden', backgroundColor: '#F8F9FA' }}>
+                    <span style={{ padding: '9px 12px', fontSize: '13px', fontWeight: '600', color: '#555', backgroundColor: '#F0F0F0', borderRight: '1px solid #E5E7EB', whiteSpace: 'nowrap' }}>+91</span>
                     <input type="tel" required maxLength={10} value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value.replace(/\D/g, '')})}
                       placeholder="Enter 10 digit number"
                       disabled={loading}
-                      style={{ flex: 1, padding: '12px 14px', fontSize: '14px', border: 'none', backgroundColor: 'transparent', outline: 'none', color: '#1a1a1a' }}
+                      style={{ flex: 1, padding: '9px 12px', fontSize: '13px', border: 'none', backgroundColor: 'transparent', outline: 'none', color: '#1a1a1a' }}
                     />
                   </div>
                 </div>
 
-                <div style={{ marginBottom: '16px' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '600', color: '#3a3a3a', marginBottom: '6px' }}>
-                    <MdCreditCard size={16} color="#2596be" /> Aadhaar Number *
+                <div style={{ marginBottom: '10px' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: '600', color: '#3a3a3a', marginBottom: '4px' }}>
+                    <MdCreditCard size={14} color="#151A40" /> Aadhaar Number *
                   </label>
                   <input type="text" required maxLength={12} value={formData.aadhaar} onChange={e => setFormData({...formData, aadhaar: e.target.value.replace(/\D/g, '')})}
                     placeholder="Enter 12 digit Aadhaar"
                     disabled={loading}
-                    style={{ width: '100%', padding: '12px 14px', fontSize: '14px', border: '1.5px solid #e0d5c8', borderRadius: '10px', backgroundColor: '#faf6f0', outline: 'none' }}
+                    style={{ width: '100%', padding: '9px 12px', fontSize: '13px', border: '1.5px solid #E5E7EB', borderRadius: '9px', backgroundColor: '#F8F9FA', outline: 'none', boxSizing: 'border-box' }}
                   />
                 </div>
 
-                <div style={{ marginBottom: '16px' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '600', color: '#3a3a3a', marginBottom: '6px' }}>
-                    <MdHome size={16} color="#2596be" /> Address *
+                <div style={{ marginBottom: '10px' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: '600', color: '#3a3a3a', marginBottom: '4px' }}>
+                    <MdHome size={14} color="#151A40" /> Address
                   </label>
-                  <textarea required value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})}
+                  <textarea value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})}
                     placeholder="Enter your address"
                     rows={2}
                     disabled={loading}
-                    style={{ width: '100%', padding: '12px 14px', fontSize: '14px', border: '1.5px solid #e0d5c8', borderRadius: '10px', backgroundColor: '#faf6f0', outline: 'none', fontFamily: 'inherit', resize: 'none' }}
+                    style={{ width: '100%', padding: '9px 12px', fontSize: '13px', border: '1.5px solid #E5E7EB', borderRadius: '9px', backgroundColor: '#F8F9FA', outline: 'none', fontFamily: 'inherit', resize: 'none', boxSizing: 'border-box' }}
                   />
                 </div>
 
+                {/* Pincode */}
+                <PincodeField
+                  value={formData.pincode}
+                  disabled={loading}
+                  onChange={val => setFormData(p => ({ ...p, pincode: val }))}
+                />
+
                 {/* Profile Picture - Required */}
-                <div style={{ marginBottom: '16px' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '600', color: '#3a3a3a', marginBottom: '8px' }}>
-                    <MdCameraAlt size={16} color="#2596be" /> Profile Picture *
+                <div style={{ marginBottom: '10px' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: '600', color: '#3a3a3a', marginBottom: '4px' }}>
+                    <MdCameraAlt size={14} color="#151A40" /> Profile Picture *
                   </label>
-                  <div style={{ display: 'flex', gap: '10px' }}>
+                  <div style={{ display: 'flex', gap: '8px' }}>
                     <button
                       type="button"
                       onClick={() => openCamera('photo')}
                       disabled={loading}
                       style={{ 
-                        flex: 1, padding: '14px', fontSize: '13px', fontWeight: '600', 
-                        border: '1.5px solid #e0d5c8', borderRadius: '10px', 
-                        backgroundColor: formData.photo ? '#edf7f1' : '#faf6f0', 
+                        flex: 1, padding: '9px', fontSize: '12px', fontWeight: '600', 
+                        border: '1.5px solid #E5E7EB', borderRadius: '9px', 
+                        backgroundColor: formData.photo ? '#edf7f1' : '#F8F9FA', 
                         cursor: loading ? 'not-allowed' : 'pointer', 
-                        textAlign: 'center', 
                         color: formData.photo ? '#41A465' : '#555', 
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-                        transition: 'all 0.2s'
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px',
                       }}>
-                      <MdCameraAlt size={18} /> 
-                      {formData.photo ? '✓ Camera' : 'Camera'}
+                      <MdCameraAlt size={15} /> {formData.photo ? '✓ Camera' : 'Camera'}
                     </button>
                     <label style={{ 
-                      flex: 1, padding: '14px', fontSize: '13px', fontWeight: '600', 
-                      border: '1.5px solid #e0d5c8', borderRadius: '10px', 
-                      backgroundColor: formData.photo ? '#edf7f1' : '#faf6f0', 
+                      flex: 1, padding: '9px', fontSize: '12px', fontWeight: '600', 
+                      border: '1.5px solid #E5E7EB', borderRadius: '9px', 
+                      backgroundColor: formData.photo ? '#edf7f1' : '#F8F9FA', 
                       cursor: loading ? 'not-allowed' : 'pointer', 
-                      textAlign: 'center', 
                       color: formData.photo ? '#41A465' : '#555', 
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-                      transition: 'all 0.2s'
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px',
                     }}>
-                      <MdImage size={18} /> 
-                      {formData.photo ? '✓ Gallery' : 'Gallery'}
-                      <input 
-                        type="file" 
-                        accept="image/*"
-                        onChange={e => setFormData({...formData, photo: e.target.files[0]})}
-                        disabled={loading}
-                        style={{ display: 'none' }}
-                      />
+                      <MdImage size={15} /> {formData.photo ? '✓ Gallery' : 'Gallery'}
+                      <input type="file" accept="image/*" onChange={e => setFormData({...formData, photo: e.target.files[0]})} disabled={loading} style={{ display: 'none' }} />
                     </label>
                   </div>
                   {formData.photo && (
@@ -1233,7 +1228,7 @@ export default function LandingPage() {
                 {/* Aadhaar Card Image - Optional */}
                 <div style={{ marginBottom: '20px' }}>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '600', color: '#3a3a3a', marginBottom: '8px' }}>
-                    <MdCreditCard size={16} color="#2596be" /> Aadhaar Card Photo (Optional)
+                    <MdCreditCard size={16} color="#151A40" /> Aadhaar Card Photo (Optional)
                   </label>
                   <div style={{ display: 'flex', gap: '10px' }}>
                     <button
@@ -1242,11 +1237,11 @@ export default function LandingPage() {
                       disabled={loading}
                       style={{ 
                         flex: 1, padding: '14px', fontSize: '13px', fontWeight: '600', 
-                        border: '1.5px dashed #e0d5c8', borderRadius: '10px', 
-                        backgroundColor: formData.aadhaarPhoto ? '#fef0e6' : '#faf6f0', 
+                        border: '1.5px dashed #E5E7EB', borderRadius: '10px', 
+                        backgroundColor: formData.aadhaarPhoto ? '#EEF2FF' : '#F8F9FA', 
                         cursor: loading ? 'not-allowed' : 'pointer', 
                         textAlign: 'center', 
-                        color: formData.aadhaarPhoto ? '#2596be' : '#9e8e80', 
+                        color: formData.aadhaarPhoto ? '#151A40' : '#9e8e80', 
                         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                         transition: 'all 0.2s'
                       }}>
@@ -1255,11 +1250,11 @@ export default function LandingPage() {
                     </button>
                     <label style={{ 
                       flex: 1, padding: '14px', fontSize: '13px', fontWeight: '600', 
-                      border: '1.5px dashed #e0d5c8', borderRadius: '10px', 
-                      backgroundColor: formData.aadhaarPhoto ? '#fef0e6' : '#faf6f0', 
+                      border: '1.5px dashed #E5E7EB', borderRadius: '10px', 
+                      backgroundColor: formData.aadhaarPhoto ? '#EEF2FF' : '#F8F9FA', 
                       cursor: loading ? 'not-allowed' : 'pointer', 
                       textAlign: 'center', 
-                      color: formData.aadhaarPhoto ? '#2596be' : '#9e8e80', 
+                      color: formData.aadhaarPhoto ? '#151A40' : '#9e8e80', 
                       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                       transition: 'all 0.2s'
                     }}>
@@ -1279,7 +1274,7 @@ export default function LandingPage() {
                       marginTop: '10px', 
                       padding: '10px', 
                       borderRadius: '8px', 
-                      backgroundColor: '#fef0e6', 
+                      backgroundColor: '#EEF2FF', 
                       border: '1px solid #fcd9c0',
                       display: 'flex',
                       alignItems: 'center',
@@ -1289,7 +1284,7 @@ export default function LandingPage() {
                         width: '40px',
                         height: '40px',
                         borderRadius: '8px',
-                        backgroundColor: '#2596be',
+                        backgroundColor: '#151A40',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -1300,7 +1295,7 @@ export default function LandingPage() {
                         ✓
                       </div>
                       <div style={{ flex: 1 }}>
-                        <p style={{ fontSize: '12px', fontWeight: '600', color: '#2596be', margin: '0 0 2px' }}>
+                        <p style={{ fontSize: '12px', fontWeight: '600', color: '#151A40', margin: '0 0 2px' }}>
                           Aadhaar Photo Selected
                         </p>
                         <p style={{ fontSize: '11px', color: '#6b5e52', margin: 0 }}>
@@ -1337,7 +1332,7 @@ export default function LandingPage() {
                   whileTap={{ scale: (loading || !formData.photo) ? 1 : 0.98 }}
                   style={{
                   width: '100%', padding: '14px', borderRadius: '12px',
-                  backgroundColor: (loading || !formData.photo) ? '#9e8e80' : '#2596be', 
+                  backgroundColor: (loading || !formData.photo) ? '#9e8e80' : '#151A40', 
                   color: '#fff', fontSize: '16px',
                   fontWeight: '600', border: 'none', 
                   cursor: (loading || !formData.photo) ? 'not-allowed' : 'pointer',
@@ -1351,7 +1346,7 @@ export default function LandingPage() {
                   <button 
                     type="button" 
                     onClick={() => { setStep('mobile'); setError(''); }}
-                    style={{ background: 'none', border: 'none', color: '#2596be', fontWeight: '600', cursor: 'pointer', fontSize: '13px', textDecoration: 'underline' }}
+                    style={{ background: 'none', border: 'none', color: '#151A40', fontWeight: '600', cursor: 'pointer', fontSize: '13px', textDecoration: 'underline' }}
                   >
                     Back to Login
                   </button>
@@ -1413,8 +1408,8 @@ export default function LandingPage() {
                       style={{
                         width: '44px', height: '52px', textAlign: 'center',
                         fontSize: '22px', fontWeight: '700', borderRadius: '10px',
-                        border: d ? '2px solid #2596be' : '1.5px solid #e0d5c8',
-                        backgroundColor: d ? '#fef0e6' : '#faf6f0',
+                        border: d ? '2px solid #151A40' : '1.5px solid #E5E7EB',
+                        backgroundColor: d ? '#EEF2FF' : '#F8F9FA',
                         color: '#1a1a1a', outline: 'none',
                       }}
                     />
@@ -1427,7 +1422,7 @@ export default function LandingPage() {
                   whileTap={{ scale: loading ? 1 : 0.98 }}
                   style={{
                   width: '100%', padding: '14px', borderRadius: '12px',
-                  backgroundColor: loading ? '#9e8e80' : '#2596be', 
+                  backgroundColor: loading ? '#9e8e80' : '#151A40', 
                   color: '#fff', fontSize: '16px',
                   fontWeight: '600', border: 'none', 
                   cursor: loading ? 'not-allowed' : 'pointer',
@@ -1437,7 +1432,7 @@ export default function LandingPage() {
                 </motion.button>
                 <p style={{ textAlign: 'center', fontSize: '12px', color: '#9e8e80', marginTop: '12px' }}>
                   Didn't receive?{' '}
-                  <button type="button" onClick={handleResendOTP} disabled={loading} style={{ background: 'none', border: 'none', color: '#2596be', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer', fontSize: '12px' }}>Resend OTP</button>
+                  <button type="button" onClick={handleResendOTP} disabled={loading} style={{ background: 'none', border: 'none', color: '#151A40', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer', fontSize: '12px' }}>Resend OTP</button>
                 </p>
               </motion.form>
               ) : null}
@@ -1452,20 +1447,20 @@ export default function LandingPage() {
                 <motion.div 
                   whileHover={{ y: -5, scale: 1.05 }}
                   transition={{ type: "spring", stiffness: 300 }}
-                  style={{ backgroundColor: '#faf6f0', border: '1px solid #ede5d8', borderRadius: '12px', padding: '16px' }}
+                  style={{ backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '16px' }}
                 >
                   <motion.div
                     animate={{ rotate: [0, -10, 10, 0] }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                   >
-                    <MdOutlineLock size={24} color="#2596be" style={{ marginBottom: '8px', display: 'block' }} />
+                    <MdOutlineLock size={24} color="#151A40" style={{ marginBottom: '8px', display: 'block' }} />
                   </motion.div>
                   <p style={{ fontSize: '13px', fontWeight: '600', color: '#1a1a1a', margin: 0 }}>Secure &amp; Encrypted</p>
                 </motion.div>
                 <motion.div 
                   whileHover={{ y: -5, scale: 1.05 }}
                   transition={{ type: "spring", stiffness: 300 }}
-                  style={{ backgroundColor: '#faf6f0', border: '1px solid #ede5d8', borderRadius: '12px', padding: '16px' }}
+                  style={{ backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '16px' }}
                 >
                   <motion.div
                     animate={{ rotate: 360 }}
@@ -1488,8 +1483,8 @@ export default function LandingPage() {
         animate={{ opacity: 1 }}
         transition={{ delay: 4, duration: 0.8 }}
         style={{
-        width: '100%', borderTop: '1px solid #e0d5c8',
-        padding: '20px 32px', backgroundColor: '#FFF7EC',
+        width: '100%', borderTop: '1px solid #E5E7EB',
+        padding: '20px 32px', backgroundColor: '#FFFFFF',
         position: 'relative', zIndex: 1,
        }}>
         <div style={{
@@ -1498,7 +1493,7 @@ export default function LandingPage() {
           justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-            <span style={{ fontSize: '12px', color: '#9e8e80' }}>© 2024 JanaSpandana. All rights reserved.</span>
+            <span style={{ fontSize: '12px', color: '#9e8e80' }}>© 2024 Janoni. All rights reserved.</span>
             <span style={{ fontSize: '12px', color: '#d0c5b8' }}>•</span>
             <span style={{ fontSize: '12px', color: '#9e8e80' }}>
               Developed by{' '}
@@ -1506,26 +1501,42 @@ export default function LandingPage() {
                 href="https://parnetsgroup.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                style={{ color: '#2596be', fontWeight: '600', textDecoration: 'none' }}
+                style={{ color: '#151A40', fontWeight: '600', textDecoration: 'none' }}
               >
                 Parnets Software India Pvt Ltd
               </a>
             </span>
           </div>
-          <motion.a 
-            href="#" 
-            onClick={e => { e.preventDefault(); navigate('/admin-login'); }}
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-            style={{
-              fontSize: '12px', color: '#6b5e52', fontWeight: '600',
-              textDecoration: 'none', padding: '6px 12px',
-              borderRadius: '6px', backgroundColor: '#f0e8dc',
-              border: '1px solid #e0d5c8',
-            }}
-          >
-            🔐 Admin Login
-          </motion.a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+            <motion.a 
+              href="#" 
+              onClick={e => { e.preventDefault(); navigate('/officer-login'); }}
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              style={{
+                fontSize: '12px', color: '#6b5e52', fontWeight: '600',
+                textDecoration: 'none', padding: '6px 12px',
+                borderRadius: '6px', backgroundColor: '#F0F0F0',
+                border: '1px solid #E5E7EB',
+              }}
+            >
+              � Officer Login
+            </motion.a>
+            <motion.a 
+              href="#" 
+              onClick={e => { e.preventDefault(); navigate('/admin-login'); }}
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              style={{
+                fontSize: '12px', color: '#6b5e52', fontWeight: '600',
+                textDecoration: 'none', padding: '6px 12px',
+                borderRadius: '6px', backgroundColor: '#F0F0F0',
+                border: '1px solid #E5E7EB',
+              }}
+            >
+              🔐 Admin Login
+            </motion.a>
+          </div>
         </div>
       </motion.footer>
 
@@ -1552,7 +1563,7 @@ export default function LandingPage() {
               onClick={capturePhoto}
               style={{
                 padding: '12px 28px', borderRadius: '50px', border: 'none',
-                backgroundColor: '#2596be', color: '#fff', fontSize: '15px',
+                backgroundColor: '#151A40', color: '#fff', fontSize: '15px',
                 fontWeight: '700', cursor: 'pointer', display: 'flex',
                 alignItems: 'center', gap: '8px'
               }}
@@ -1574,6 +1585,67 @@ export default function LandingPage() {
         </div>
       )}
 
+    </div>
+  )
+}
+
+// Pincode field with India Post API lookup
+function PincodeField({ value, onChange, disabled }) {
+  const [info, setInfo] = useState(null)   // { city, state }
+  const [status, setStatus] = useState('') // 'loading' | 'found' | 'invalid' | ''
+
+  const lookup = async (pin) => {
+    if (pin.length !== 6) { setInfo(null); setStatus(''); return }
+    setStatus('loading')
+    try {
+      const res = await fetch(`https://api.postalpincode.in/pincode/${pin}`)
+      const data = await res.json()
+      if (data[0]?.Status === 'Success' && data[0]?.PostOffice?.length > 0) {
+        const po = data[0].PostOffice[0]
+        setInfo({ city: po.District, state: po.State })
+        setStatus('found')
+      } else {
+        setInfo(null)
+        setStatus('invalid')
+      }
+    } catch {
+      setInfo(null)
+      setStatus('invalid')
+    }
+  }
+
+  const handleChange = (e) => {
+    const val = e.target.value.replace(/\D/g, '').slice(0, 6)
+    onChange(val)
+    lookup(val)
+  }
+
+  return (
+    <div style={{ marginBottom: '10px' }}>
+      <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: '600', color: '#3a3a3a', marginBottom: '4px' }}>
+        <MdPinDrop size={14} color="#151A40" /> Pincode
+      </label>
+      <input
+        type="text" inputMode="numeric" maxLength={6}
+        value={value} onChange={handleChange} disabled={disabled}
+        placeholder="Enter 6-digit pincode"
+        style={{
+          width: '100%', padding: '9px 12px', fontSize: '13px',
+          border: `1.5px solid ${status === 'found' ? '#41A465' : status === 'invalid' ? '#ef4444' : '#E5E7EB'}`,
+          borderRadius: '9px', backgroundColor: '#F8F9FA', outline: 'none', boxSizing: 'border-box',
+        }}
+      />
+      {status === 'loading' && (
+        <p style={{ fontSize: '11px', color: '#9e8e80', margin: '3px 0 0' }}>Looking up pincode...</p>
+      )}
+      {status === 'found' && info && (
+        <p style={{ fontSize: '11px', color: '#41A465', margin: '3px 0 0', fontWeight: '600' }}>
+          ✓ {info.city}, {info.state}
+        </p>
+      )}
+      {status === 'invalid' && (
+        <p style={{ fontSize: '11px', color: '#ef4444', margin: '3px 0 0' }}>Invalid pincode</p>
+      )}
     </div>
   )
 }

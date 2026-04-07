@@ -68,7 +68,7 @@ export default function ComplaintDetail() {
           {complaint.priority === 'High' && (
             <span style={{
               padding: '5px 14px', borderRadius: '999px',
-              backgroundColor: '#fef0e6', color: '#2596be',
+              backgroundColor: '#fef0e6', color: '#151A40',
               fontSize: '11px', fontWeight: '800', letterSpacing: '0.5px',
             }}>
               HIGH PRIORITY
@@ -128,7 +128,7 @@ export default function ComplaintDetail() {
           {/* Issue Description */}
           <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '28px', border: '1px solid #ede5d8' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-              <div style={{ width: '4px', height: '20px', borderRadius: '4px', backgroundColor: '#2596be' }} />
+              <div style={{ width: '4px', height: '20px', borderRadius: '4px', backgroundColor: '#151A40' }} />
               <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', margin: 0 }}>
                 Issue Description
               </h2>
@@ -319,7 +319,7 @@ export default function ComplaintDetail() {
               whileTap={{ scale: 0.98 }}
               style={{
                 width: '100%', padding: '12px', borderRadius: '10px',
-                backgroundColor: '#2596be', border: 'none',
+                backgroundColor: '#151A40', border: 'none',
                 color: '#fff', fontSize: '14px', fontWeight: '700',
                 cursor: 'pointer',
               }}

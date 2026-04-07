@@ -177,7 +177,7 @@ export default function TrackComplaint() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
                     <div style={{
                       width: '48px', height: '48px', borderRadius: '50%',
-                      backgroundColor: '#2596be', display: 'flex',
+                      backgroundColor: '#151A40', display: 'flex',
                       alignItems: 'center', justifyContent: 'center',
                       fontSize: '24px',
                     }}>
@@ -284,7 +284,7 @@ export default function TrackComplaint() {
                   style={{
                     flex: '0 0 auto',
                     padding: '16px 32px', borderRadius: '12px',
-                    backgroundColor: '#2596be', border: 'none',
+                    backgroundColor: '#151A40', border: 'none',
                     color: '#fff', fontSize: '16px', fontWeight: '700',
                     cursor: 'pointer', whiteSpace: 'nowrap',
                     boxShadow: '0 4px 14px rgba(231,83,0,0.3)',
@@ -305,7 +305,7 @@ export default function TrackComplaint() {
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           gap: '8px', flexWrap: 'wrap', fontSize: '12px', color: '#9e8e80',
         }}>
-          <RiGovernmentLine size={14} color="#2596be" />
+          <RiGovernmentLine size={14} color="#151A40" />
           <span>© 2024 Integrated Grievance Management System, Government of Digital Excellence.</span>
         </div>
       </footer>

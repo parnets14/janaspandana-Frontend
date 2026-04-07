@@ -211,7 +211,7 @@ export default function UserManagement() {
                               width: '40px',
                               height: '40px',
                               borderRadius: '50%',
-                              background: 'linear-gradient(135deg, #2596be, #1a7a9e)',
+                              background: 'linear-gradient(135deg, #151A40, #1a7a9e)',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
@@ -363,7 +363,7 @@ export default function UserManagement() {
 
               {/* Header */}
               <div style={{
-                background: 'linear-gradient(135deg, #2596be 0%, #1a7a9e 100%)',
+                background: 'linear-gradient(135deg, #151A40 0%, #1a7a9e 100%)',
                 padding: '16px 16px 28px',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -421,16 +421,16 @@ export default function UserManagement() {
                   overflow: 'hidden'
                 }}>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: '1px solid #f3f4f6' }}>
-                    <MiniField icon={<MdPhone size={13} color="#2596be" />} label="Phone" value={selectedUser.phone} />
-                    <MiniField icon={<MdBadge size={13} color="#2596be" />} label="Aadhaar" value={selectedUser.maskedAadhaar || 'XXXX-XXXX-' + (selectedUser.aadhaar?.slice(-4) || '****')} border />
+                    <MiniField icon={<MdPhone size={13} color="#151A40" />} label="Phone" value={selectedUser.phone} />
+                    <MiniField icon={<MdBadge size={13} color="#151A40" />} label="Aadhaar" value={selectedUser.maskedAadhaar || 'XXXX-XXXX-' + (selectedUser.aadhaar?.slice(-4) || '****')} border />
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: '1px solid #f3f4f6' }}>
-                    <MiniField icon={<MdCalendarToday size={13} color="#2596be" />} label="Registered" value={new Date(selectedUser.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })} />
-                    <MiniField icon={<MdCalendarToday size={13} color="#2596be" />} label="Last Login" value={selectedUser.lastLogin ? new Date(selectedUser.lastLogin).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Never'} border />
+                    <MiniField icon={<MdCalendarToday size={13} color="#151A40" />} label="Registered" value={new Date(selectedUser.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })} />
+                    <MiniField icon={<MdCalendarToday size={13} color="#151A40" />} label="Last Login" value={selectedUser.lastLogin ? new Date(selectedUser.lastLogin).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Never'} border />
                   </div>
                   <div style={{ padding: '10px 14px', display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
                     <div style={{ width: '26px', height: '26px', borderRadius: '6px', background: '#eff9fd', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <MdLocationOn size={13} color="#2596be" />
+                      <MdLocationOn size={13} color="#151A40" />
                     </div>
                     <div>
                       <div style={{ fontSize: '10px', fontWeight: '700', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '2px' }}>Address</div>

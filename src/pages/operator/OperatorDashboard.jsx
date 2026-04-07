@@ -5,16 +5,16 @@ import OperatorLayout from './OperatorLayout'
 
 const stats = [
   { label: 'Total Complaints', value: '156', icon: <MdTrendingUp size={24} />, color: '#1a1a1a', bg: '#f0f0ee' },
-  { label: 'Pending', value: '24', icon: <MdPending size={24} />, color: '#2596be', bg: '#fef0e6' },
+  { label: 'Pending', value: '24', icon: <MdPending size={24} />, color: '#151A40', bg: '#fef0e6' },
   { label: 'In Progress', value: '48', icon: <MdTrendingUp size={24} />, color: '#2563eb', bg: '#eff6ff' },
   { label: 'Resolved', value: '78', icon: <MdCheckCircle size={24} />, color: '#41A465', bg: '#edf7f1' },
   { label: 'Escalated', value: '06', icon: <MdWarning size={24} />, color: '#dc2626', bg: '#fef2f2' },
 ]
 
 const recentComplaints = [
-  { id: '#IGMS-2024-9234', title: 'Water Supply Disruption - Ward 12', sector: 'Infrastructure', status: 'Pending', statusColor: '#2596be', statusBg: '#fef0e6', time: '15 mins ago', priority: 'High' },
+  { id: '#IGMS-2024-9234', title: 'Water Supply Disruption - Ward 12', sector: 'Infrastructure', status: 'Pending', statusColor: '#151A40', statusBg: '#fef0e6', time: '15 mins ago', priority: 'High' },
   { id: '#IGMS-2024-9233', title: 'Street Light Not Working - MG Road', sector: 'Public Utilities', status: 'In Progress', statusColor: '#2563eb', statusBg: '#eff6ff', time: '1 hour ago', priority: 'Medium' },
-  { id: '#IGMS-2024-9232', title: 'Garbage Collection Delay', sector: 'Sanitation', status: 'Pending', statusColor: '#2596be', statusBg: '#fef0e6', time: '2 hours ago', priority: 'Low' },
+  { id: '#IGMS-2024-9232', title: 'Garbage Collection Delay', sector: 'Sanitation', status: 'Pending', statusColor: '#151A40', statusBg: '#fef0e6', time: '2 hours ago', priority: 'Low' },
   { id: '#IGMS-2024-9231', title: 'Road Pothole Repair Request', sector: 'Infrastructure', status: 'Resolved', statusColor: '#41A465', statusBg: '#edf7f1', time: '3 hours ago', priority: 'Medium' },
 ]
 
@@ -126,7 +126,7 @@ export default function OperatorDashboard() {
                     {complaint.priority === 'High' && (
                       <span style={{
                         padding: '3px 10px', borderRadius: '999px',
-                        backgroundColor: '#fef0e6', color: '#2596be',
+                        backgroundColor: '#fef0e6', color: '#151A40',
                         fontSize: '10px', fontWeight: '800', letterSpacing: '0.5px',
                       }}>
                         HIGH PRIORITY

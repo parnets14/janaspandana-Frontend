@@ -8,7 +8,7 @@ import { complaintAPI } from '../../utils/secureApi'
 
 const STATUS_CONFIG = {
   'Awaiting Review':           { label: 'Awaiting Review',           color: '#6b7280', bg: '#f3f4f6' },
-  'Complaint Registered':      { label: 'Complaint Registered',      color: '#2596be', bg: '#e0f2fe' },
+  'Complaint Registered':      { label: 'Complaint Registered',      color: '#151A40', bg: '#e0f2fe' },
   'Assigned to Field Officer': { label: 'Assigned to Field Officer', color: '#1d4ed8', bg: '#dbeafe' },
   'Inspection Completed':      { label: 'Inspection Completed',      color: '#b45309', bg: '#fef3c7' },
   'Work in Progress':          { label: 'Work in Progress',          color: '#7c3aed', bg: '#ede9fe' },
@@ -16,10 +16,8 @@ const STATUS_CONFIG = {
   'Rejected':                  { label: 'Rejected',                  color: '#dc2626', bg: '#fee2e2' },
   'Pending':                   { label: 'Awaiting Review',           color: '#6b7280', bg: '#f3f4f6' },
 }
-
 const DEFAULT_STATUS = { label: 'Awaiting Review', color: '#6b7280', bg: '#f3f4f6' }
-
-const FILTERS = ['ALL', 'Complaint Registered', 'Assigned to Field Officer', 'Inspection Completed', 'Work in Progress', 'Issue Resolved', 'Rejected']
+const FILTERS = ['ALL', 'Awaiting Review', 'Complaint Registered', 'Assigned to Field Officer', 'Inspection Completed', 'Work in Progress', 'Issue Resolved', 'Rejected']
 
 export default function MyComplaints() {
   const navigate = useNavigate()
@@ -30,12 +28,8 @@ export default function MyComplaints() {
 
   useEffect(() => {
     complaintAPI.getMy()
-      .then(res => {
-        // Only show complaints that have been accepted (not awaiting review)
-        const visible = res.data.filter(c => c.status !== 'Awaiting Review' && c.status !== 'Pending')
-        setComplaints(visible)
-      })
-      .catch(() => {})
+      .then(res => setComplaints(res.data || []))
+      .catch(err => console.error('MyComplaints fetch error:', err))
       .finally(() => setLoading(false))
   }, [])
 
@@ -59,7 +53,7 @@ export default function MyComplaints() {
         <button onClick={() => navigate('/user/submit')} style={{
           display: 'flex', alignItems: 'center', gap: '8px',
           padding: '12px 24px', borderRadius: '12px',
-          backgroundColor: '#2596be', color: '#fff', border: 'none',
+          backgroundColor: '#151A40', color: '#fff', border: 'none',
           fontSize: '15px', fontWeight: '700', cursor: 'pointer',
           boxShadow: '0 4px 14px rgba(231,83,0,0.3)',
         }}>
@@ -72,7 +66,7 @@ export default function MyComplaints() {
         <div style={{
           display: 'flex', alignItems: 'center', gap: '10px',
           padding: '12px 18px', borderRadius: '12px',
-          backgroundColor: '#fff', border: '1.5px solid #e0d5c8',
+          backgroundColor: '#fff', border: '1.5px solid #E5E7EB',
           flex: '1', minWidth: '240px', maxWidth: '360px',
         }}>
           <MdSearch size={18} color="#9e8e80" />
@@ -84,8 +78,8 @@ export default function MyComplaints() {
           {FILTERS.map(f => (
             <button key={f} onClick={() => setActiveFilter(f)} style={{
               padding: '9px 18px', borderRadius: '999px', border: '1.5px solid',
-              borderColor: activeFilter === f ? '#2596be' : '#e0d5c8',
-              backgroundColor: activeFilter === f ? '#2596be' : '#fff',
+              borderColor: activeFilter === f ? '#151A40' : '#E5E7EB',
+              backgroundColor: activeFilter === f ? '#151A40' : '#fff',
               color: activeFilter === f ? '#fff' : '#555',
               fontSize: '13px', fontWeight: '700', cursor: 'pointer', whiteSpace: 'nowrap',
             }}>
@@ -99,7 +93,7 @@ export default function MyComplaints() {
       {loading ? (
         <div style={{ textAlign: 'center', padding: '60px', color: '#9ca3af' }}>Loading...</div>
       ) : filtered.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '60px', color: '#6b5e52', backgroundColor: '#fff', borderRadius: '16px', border: '1px solid #ede5d8' }}>
+        <div style={{ textAlign: 'center', padding: '60px', color: '#6b5e52', backgroundColor: '#fff', borderRadius: '16px', border: '1px solid #E5E7EB' }}>
           No complaints found.
         </div>
       ) : (
@@ -111,7 +105,7 @@ export default function MyComplaints() {
                 onClick={() => navigate(`/user/complaint/${c._id}`)}
                 style={{
                   backgroundColor: '#fff', borderRadius: '16px',
-                  padding: '22px', border: '1px solid #ede5d8',
+                  padding: '22px', border: '1px solid #E5E7EB',
                   cursor: 'pointer', transition: 'box-shadow 0.2s',
                 }}
                 onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)'}

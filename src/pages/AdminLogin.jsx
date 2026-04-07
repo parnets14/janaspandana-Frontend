@@ -25,7 +25,10 @@ export default function AdminLogin() {
       console.log('Login response:', response)
       
       if (response.success) {
-        // Store tokens using secureApi keys
+        // Clear any existing session first
+        api.clearTokens()
+        localStorage.removeItem('userRole')
+        // Store admin tokens
         api.setTokens(response.data.accessToken, response.data.refreshToken)
         localStorage.setItem('userRole', 'admin')
         
@@ -152,12 +155,12 @@ export default function AdminLogin() {
               fontSize: '24px', 
               fontWeight: '800', 
               margin: 0, 
-              background: 'linear-gradient(135deg, #2596be, #1a7a9e)',
+              background: 'linear-gradient(135deg, #151A40, #1a7a9e)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text'
             }}>
-              JanaSpandana
+              Janoni
             </h1>
             <p style={{ fontSize: '12px', color: '#666', margin: 0 }}>
               Integrated Grievance Management System
@@ -202,7 +205,7 @@ export default function AdminLogin() {
                   height: '80px',
                   margin: '0 auto 20px',
                   borderRadius: '20px',
-                  background: 'linear-gradient(135deg, #2596be, #1a7a9e)',
+                  background: 'linear-gradient(135deg, #151A40, #1a7a9e)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -250,7 +253,7 @@ export default function AdminLogin() {
                   display: 'flex', alignItems: 'center', gap: '6px',
                   fontSize: '14px', fontWeight: '600', color: '#1a1a1a', marginBottom: '8px',
                 }}>
-                  <MdEmail size={18} color="#2596be" /> Email Address
+                  <MdEmail size={18} color="#151A40" /> Email Address
                 </label>
                 <input
                   type="email"
@@ -273,7 +276,7 @@ export default function AdminLogin() {
                   display: 'flex', alignItems: 'center', gap: '6px',
                   fontSize: '14px', fontWeight: '600', color: '#1a1a1a', marginBottom: '8px',
                 }}>
-                  <MdLockOutline size={18} color="#2596be" /> Password
+                  <MdLockOutline size={18} color="#151A40" /> Password
                 </label>
                 <input
                   type="password"
@@ -298,7 +301,7 @@ export default function AdminLogin() {
                 whileTap={{ scale: loading ? 1 : 0.98 }}
                 style={{
                   width: '100%', padding: '16px', borderRadius: '12px',
-                  backgroundColor: loading ? '#9ca3af' : '#2596be',
+                  backgroundColor: loading ? '#9ca3af' : '#151A40',
                   color: '#fff',
                   fontSize: '16px', fontWeight: '600', border: 'none',
                   cursor: loading ? 'not-allowed' : 'pointer',
@@ -335,7 +338,7 @@ export default function AdminLogin() {
                   animate={{ rotate: [0, -10, 10, 0] }}
                   transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 >
-                  <MdLockOutline size={24} color="#2596be" style={{ marginBottom: '8px', display: 'inline-block' }} />
+                  <MdLockOutline size={24} color="#151A40" style={{ marginBottom: '8px', display: 'inline-block' }} />
                 </motion.div>
                 <p style={{ fontSize: '13px', fontWeight: '600', color: '#1a1a1a', margin: 0 }}>Secure & Encrypted</p>
               </motion.div>
@@ -352,7 +355,7 @@ export default function AdminLogin() {
                   animate={{ rotate: 360 }}
                   transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
                 >
-                  <MdOutlineShield size={24} color="#2596be" style={{ marginBottom: '8px', display: 'inline-block' }} />
+                  <MdOutlineShield size={24} color="#151A40" style={{ marginBottom: '8px', display: 'inline-block' }} />
                 </motion.div>
                 <p style={{ fontSize: '13px', fontWeight: '600', color: '#1a1a1a', margin: 0 }}>Monitored Access</p>
               </motion.div>
@@ -361,9 +364,9 @@ export default function AdminLogin() {
             {/* Footer Note */}
             <p style={{ fontSize: '11px', color: '#9e8e80', marginTop: '24px', lineHeight: '1.6', textAlign: 'center' }}>
               By logging in, you agree to the{' '}
-              <a href="#" style={{ color: '#2596be', fontWeight: '600', textDecoration: 'none' }}>Official Security Policy</a>
+              <a href="#" style={{ color: '#151A40', fontWeight: '600', textDecoration: 'none' }}>Official Security Policy</a>
               {' '}and{' '}
-              <a href="#" style={{ color: '#2596be', fontWeight: '600', textDecoration: 'none' }}>Terms of Service</a>.
+              <a href="#" style={{ color: '#151A40', fontWeight: '600', textDecoration: 'none' }}>Terms of Service</a>.
               Your IP address is being logged.
             </p>
           </div>
@@ -386,9 +389,9 @@ export default function AdminLogin() {
           display: 'flex', alignItems: 'center',
           justifyContent: 'center', gap: '8px', flexWrap: 'wrap',
         }}>
-          <MdOutlineVerifiedUser size={15} color="#2596be" />
+          <MdOutlineVerifiedUser size={15} color="#151A40" />
           <span style={{ fontSize: '12px', color: '#9e8e80' }}>Protected by National Informatics Centre.</span>
-          <RiGovernmentLine size={15} color="#2596be" />
+          <RiGovernmentLine size={15} color="#151A40" />
           <span style={{ fontSize: '12px', color: '#9e8e80' }}>© 2024 IGMS.</span>
         </div>
       </motion.footer>

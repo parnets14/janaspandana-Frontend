@@ -55,7 +55,7 @@ export default function Updates() {
   }
 
   const priorityConfig = {
-    high: { bg: '#fef0e6', color: '#2596be', label: 'High Priority' },
+    high: { bg: '#fef0e6', color: '#151A40', label: 'High Priority' },
     medium: { bg: '#fff7ed', color: '#f59e0b', label: 'Medium Priority' },
     low: { bg: '#edf7f1', color: '#41A465', label: 'Low Priority' },
   }
@@ -81,7 +81,7 @@ export default function Updates() {
             style={{
               display: 'flex', alignItems: 'center', gap: '8px',
               padding: '12px 24px', borderRadius: '12px',
-              backgroundColor: '#2596be', color: '#fff',
+              backgroundColor: '#151A40', color: '#fff',
               border: 'none', fontSize: '15px', fontWeight: '700',
               cursor: 'pointer', boxShadow: '0 4px 14px rgba(231, 83, 0, 0.3)',
             }}
@@ -103,7 +103,7 @@ export default function Updates() {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
-              <div style={{ width: '4px', height: '24px', borderRadius: '4px', backgroundColor: '#2596be' }} />
+              <div style={{ width: '4px', height: '24px', borderRadius: '4px', backgroundColor: '#151A40' }} />
               <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#1a1a1a', margin: 0 }}>
                 Create New Update
               </h2>
@@ -208,7 +208,7 @@ export default function Updates() {
                   whileTap={{ scale: 0.98 }}
                   style={{
                     flex: 1, padding: '14px', borderRadius: '12px',
-                    backgroundColor: '#2596be', border: 'none',
+                    backgroundColor: '#151A40', border: 'none',
                     color: '#fff', fontSize: '15px', fontWeight: '600',
                     cursor: 'pointer', display: 'flex', alignItems: 'center',
                     justifyContent: 'center', gap: '8px',
@@ -300,7 +300,7 @@ export default function Updates() {
                         cursor: 'pointer',
                       }}
                     >
-                      <MdDelete size={18} color="#2596be" />
+                      <MdDelete size={18} color="#151A40" />
                     </button>
                   </div>
                 </div>

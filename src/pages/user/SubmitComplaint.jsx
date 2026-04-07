@@ -13,10 +13,25 @@ const ICON_MAP = {
   MdHomeWork, MdForest, MdSecurity
 }
 
+const CITIES = [
+  'Raichur City Municipal Council (CMC)',
+  'Sindhanur (CMC)',
+  'Manvi (TMC)',
+  'Lingasugur (TMC)',
+  'Devadurga (TMC)',
+  'Maski (TMC)',
+  'Sirwar (Town Panchayat)',
+  'Kavital (Town Panchayat)',
+]
+
+const WARDS = Array.from({ length: 35 }, (_, i) => `Ward ${i + 1}`)
+
 export default function SubmitComplaint() {
   const navigate = useNavigate()
   const [departments, setDepartments] = useState([])
   const [dept, setDept] = useState('')
+  const [city, setCity] = useState('')
+  const [ward, setWard] = useState('')
   const [title, setTitle] = useState('')
   const [desc, setDesc] = useState('')
   const [proofFiles, setProofFiles] = useState([])
@@ -189,16 +204,24 @@ export default function SubmitComplaint() {
     setSubmitError('')
     setSubmitting(true)
     try {
-      await complaintAPI.submit({
+      const res = await complaintAPI.submit({
         department: dept,
         title,
         description: desc,
         location: {
           address: location,
+          city,
+          ward,
           lat: locationCoords?.lat || null,
           lng: locationCoords?.lng || null
         }
       })
+
+      // Upload proof files if any
+      if (proofFiles.length > 0 && res.data?._id) {
+        await complaintAPI.uploadPhotos(res.data._id, proofFiles)
+      }
+
       navigate('/user/complaints')
     } catch (err) {
       setSubmitError(err.message || 'Failed to submit complaint. Please try again.')
@@ -213,6 +236,14 @@ export default function SubmitComplaint() {
 
         {/* Page title */}
         <div style={{ marginBottom: '36px' }}>
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'none', border: 'none', cursor: 'pointer', color: '#6b5e52', fontSize: '15px', fontWeight: '600', padding: '0 0 14px', marginLeft: '-4px' }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+            Back
+          </button>
           <h1 style={{ fontSize: 'clamp(24px, 5vw, 36px)', fontWeight: '900', color: '#1a1a1a', margin: '0 0 10px', lineHeight: 1.2 }}>
             New Resolution
           </h1>
@@ -221,13 +252,13 @@ export default function SubmitComplaint() {
           </p>
         </div>
 
-        <div className="submit-form-card" style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '40px', border: '1px solid #ede5d8', boxShadow: '0 4px 24px rgba(0,0,0,0.05)' }}>
+        <div className="submit-form-card" style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '40px', border: '1px solid #E5E7EB', boxShadow: '0 4px 24px rgba(0,0,0,0.05)' }}>
           <form onSubmit={handleSubmit}>
 
             {/* Department */}
             <div style={{ marginBottom: '32px' }}>
               <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '15px', fontWeight: '700', color: '#1a1a1a', marginBottom: '14px' }}>
-                <RiGovernmentLine size={18} color="#2596be" /> Select Department
+                <RiGovernmentLine size={18} color="#151A40" /> Select Department
               </label>
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                 {departments.map(d => {
@@ -235,8 +266,8 @@ export default function SubmitComplaint() {
                   return (
                     <button key={d._id || d.name} type="button" onClick={() => setDept(d.name)} style={{
                       padding: '9px 16px', borderRadius: '999px', border: '1.5px solid',
-                      borderColor: dept === d.name ? '#2596be' : '#e0d5c8',
-                      backgroundColor: dept === d.name ? '#2596be' : '#fff',
+                      borderColor: dept === d.name ? '#151A40' : '#E5E7EB',
+                      backgroundColor: dept === d.name ? '#151A40' : '#fff',
                       color: dept === d.name ? '#fff' : '#555',
                       fontSize: '14px', fontWeight: '600', cursor: 'pointer',
                       transition: 'all 0.15s',
@@ -250,11 +281,35 @@ export default function SubmitComplaint() {
               </div>
             </div>
 
+            {/* City + Ward */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '32px' }}>
+              <div>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '15px', fontWeight: '700', color: '#1a1a1a', marginBottom: '10px' }}>
+                  <MdLocationOn size={18} color="#151A40" /> City / Town
+                </label>
+                <select value={city} onChange={e => setCity(e.target.value)} required
+                  style={{ width: '100%', padding: '13px 14px', borderRadius: '12px', border: '1.5px solid #E5E7EB', backgroundColor: '#F8F9FA', fontSize: '14px', color: city ? '#1a1a1a' : '#9ca3af', outline: 'none', cursor: 'pointer', boxSizing: 'border-box' }}>
+                  <option value="">Select city / town</option>
+                  {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+              <div>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '15px', fontWeight: '700', color: '#1a1a1a', marginBottom: '10px' }}>
+                  <MdHomeWork size={18} color="#151A40" /> Ward
+                </label>
+                <select value={ward} onChange={e => setWard(e.target.value)} required
+                  style={{ width: '100%', padding: '13px 14px', borderRadius: '12px', border: '1.5px solid #E5E7EB', backgroundColor: '#F8F9FA', fontSize: '14px', color: ward ? '#1a1a1a' : '#9ca3af', outline: 'none', cursor: 'pointer', boxSizing: 'border-box' }}>
+                  <option value="">Select ward</option>
+                  {WARDS.map(w => <option key={w} value={w}>{w}</option>)}
+                </select>
+              </div>
+            </div>
+
             {/* Two column: title + description */}
             <div className="submit-two-col">
               <div>
                 <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '15px', fontWeight: '700', color: '#1a1a1a', marginBottom: '10px' }}>
-                  <MdTitle size={18} color="#2596be" /> Complaint Title
+                  <MdTitle size={18} color="#151A40" /> Complaint Title
                 </label>
                 <input
                   type="text" value={title}
@@ -263,14 +318,14 @@ export default function SubmitComplaint() {
                   required
                   style={{
                     width: '100%', padding: '14px 16px', borderRadius: '12px',
-                    border: '1.5px solid #e0d5c8', backgroundColor: '#faf6f0',
+                    border: '1.5px solid #E5E7EB', backgroundColor: '#F8F9FA',
                     fontSize: '14px', color: '#1a1a1a', outline: 'none', boxSizing: 'border-box',
                   }}
                 />
               </div>
               <div>
                 <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '15px', fontWeight: '700', color: '#1a1a1a', marginBottom: '10px' }}>
-                  <MdDescription size={18} color="#2596be" /> Detailed Description
+                  <MdDescription size={18} color="#151A40" /> Detailed Description
                 </label>
                 <textarea
                   value={desc}
@@ -280,7 +335,7 @@ export default function SubmitComplaint() {
                   required
                   style={{
                     width: '100%', padding: '14px 16px', borderRadius: '12px',
-                    border: '1.5px solid #e0d5c8', backgroundColor: '#faf6f0',
+                    border: '1.5px solid #E5E7EB', backgroundColor: '#F8F9FA',
                     fontSize: '14px', color: '#1a1a1a', outline: 'none',
                     resize: 'none', boxSizing: 'border-box', lineHeight: 1.6,
                   }}
@@ -301,12 +356,12 @@ export default function SubmitComplaint() {
                   onClick={() => setShowUploadMenu(prev => !prev)}
                   style={{
                     width: '100%', padding: '28px 16px', borderRadius: '14px',
-                    border: proofFiles.length ? '1.5px solid #2596be' : '1.5px dashed #e0d5c8',
-                    backgroundColor: proofFiles.length ? '#eff9fd' : '#faf6f0',
+                    border: proofFiles.length ? '1.5px solid #151A40' : '1.5px dashed #E5E7EB',
+                    backgroundColor: proofFiles.length ? '#eff9fd' : '#F8F9FA',
                     display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px',
                     cursor: 'pointer',
                   }}>
-                  <MdUpload size={32} color="#2596be" />
+                  <MdUpload size={32} color="#151A40" />
                   <span style={{ fontSize: '12px', fontWeight: '700', color: '#555', letterSpacing: '0.5px' }}>
                     {proofFiles.length ? `${proofFiles.length} FILE${proofFiles.length > 1 ? 'S' : ''} SELECTED` : 'UPLOAD PROOF'}
                   </span>
@@ -377,15 +432,15 @@ export default function SubmitComplaint() {
                 onClick={detectLocation}
                 style={{
                   padding: '28px 16px', borderRadius: '14px',
-                  border: location ? '1.5px solid #2596be' : '1.5px dashed #e0d5c8',
-                  backgroundColor: location ? '#eff9fd' : '#faf6f0',
+                  border: location ? '1.5px solid #151A40' : '1.5px dashed #E5E7EB',
+                  backgroundColor: location ? '#eff9fd' : '#F8F9FA',
                   display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px',
                   cursor: locationLoading ? 'wait' : 'pointer',
                   width: '100%'
                 }}>
                 {locationLoading
-                  ? <div style={{ width: '32px', height: '32px', border: '3px solid #e5e7eb', borderTop: '3px solid #2596be', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-                  : <MdLocationOn size={32} color={location ? '#2596be' : '#2563eb'} />
+                  ? <div style={{ width: '32px', height: '32px', border: '3px solid #e5e7eb', borderTop: '3px solid #151A40', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                  : <MdLocationOn size={32} color={location ? '#151A40' : '#2563eb'} />
                 }
                 <span style={{ fontSize: '12px', fontWeight: '700', color: '#555', letterSpacing: '0.5px' }}>
                   {locationLoading ? 'DETECTING...' : location ? 'LOCATION SET' : 'GPS DETECT'}
@@ -395,11 +450,11 @@ export default function SubmitComplaint() {
               <div style={{
                 display: 'flex', alignItems: 'center', gap: '14px',
                 padding: '20px', borderRadius: '14px',
-                backgroundColor: '#fff', border: `1px solid ${location ? '#2596be' : '#ede5d8'}`,
+                backgroundColor: '#fff', border: `1px solid ${location ? '#151A40' : '#E5E7EB'}`,
               }}>
                 <div style={{
                   width: '52px', height: '52px', borderRadius: '12px', flexShrink: 0,
-                  background: location ? 'linear-gradient(135deg, #2596be, #1a7a9e)' : 'linear-gradient(135deg, #c8b89a 0%, #a89070 100%)',
+                  background: location ? 'linear-gradient(135deg, #151A40, #1a7a9e)' : 'linear-gradient(135deg, #c8b89a 0%, #a89070 100%)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
                   <MdLocationOn size={26} color="#fff" />
@@ -436,7 +491,7 @@ export default function SubmitComplaint() {
               )}
               <button type="submit" disabled={submitting} style={{
                 padding: '15px 40px', borderRadius: '14px',
-                backgroundColor: submitting ? '#93c5fd' : '#2596be', color: '#fff', border: 'none',
+                backgroundColor: submitting ? '#93c5fd' : '#151A40', color: '#fff', border: 'none',
                 fontSize: '16px', fontWeight: '700', cursor: submitting ? 'wait' : 'pointer',
                 display: 'flex', alignItems: 'center', gap: '8px',
                 boxShadow: '0 4px 14px rgba(231,83,0,0.3)',
@@ -494,7 +549,7 @@ export default function SubmitComplaint() {
 
             <button onClick={capturePhoto} disabled={!!cameraError} style={{
               width: '72px', height: '72px', borderRadius: '50%',
-              background: cameraError ? '#e5e7eb' : '#2596be',
+              background: cameraError ? '#e5e7eb' : '#151A40',
               border: '4px solid rgba(37,150,190,0.25)',
               cursor: cameraError ? 'not-allowed' : 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',

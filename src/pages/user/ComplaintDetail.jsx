@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { MdArrowBack, MdLocationOn, MdMessage, MdRefresh, MdClose } from 'react-icons/md'
+import { MdArrowBack, MdLocationOn, MdRefresh, MdClose } from 'react-icons/md'
 import { motion } from 'framer-motion'
 import UserLayout from './UserLayout'
 import { complaintAPI } from '../../utils/secureApi'
@@ -28,7 +28,6 @@ export default function ComplaintDetail() {
   const navigate = useNavigate()
   const [complaint, setComplaint] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [chatMessage, setChatMessage] = useState('')
   const [showReopen, setShowReopen] = useState(false)
   const [reopenReason, setReopenReason] = useState('')
   const [lightbox, setLightbox] = useState(null)
@@ -95,7 +94,6 @@ export default function ComplaintDetail() {
                 const historyEntry = complaint.statusHistory?.find(h => h.status === stage)
                 const currentStageIndex = TIMELINE_STAGES.indexOf(complaint.status)
                 const isDone = !!historyEntry || i <= currentStageIndex
-                // For skipped stages, use the next available history entry's data
                 const displayEntry = historyEntry || (isDone
                   ? complaint.statusHistory?.find(h => TIMELINE_STAGES.indexOf(h.status) > i)
                   : null)
@@ -118,29 +116,78 @@ export default function ComplaintDetail() {
                         {(displayEntry.assignedTo && displayEntry.assignedTo !== 'Unassigned') ? ` • by ${displayEntry.assignedTo}` : displayEntry.changedBy ? ` • by ${displayEntry.changedBy}` : ''}
                       </p>
                     )}
-                    {isDone && historyEntry && historyEntry.note && null}
                   </motion.div>
                 )
               })}
             </div>
           </div>
 
-          {/* Chat
-          <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '28px', border: '1px solid #E5E7EB' }}>
-            <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', margin: '0 0 16px' }}>Chat with Department</h2>
-            <form onSubmit={e => { e.preventDefault(); setChatMessage('') }}>
-              <div style={{ display: 'flex', gap: '12px', alignItems: 'center', padding: '12px 16px', borderRadius: '12px', backgroundColor: '#F8F9FA', border: '1.5px solid #E5E7EB' }}>
-                <MdMessage size={18} color="#9e8e80" />
-                <input type="text" value={chatMessage} onChange={e => setChatMessage(e.target.value)}
-                  placeholder="Type your message or query..."
-                  style={{ flex: 1, border: 'none', outline: 'none', fontSize: '14px', color: '#1a1a1a', backgroundColor: 'transparent' }} />
-                <motion.button type="submit" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-                  style={{ width: '36px', height: '36px', borderRadius: '8px', backgroundColor: '#151A40', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                  <MdMessage size={18} color="#fff" />
-                </motion.button>
+          {/* Citizen Documents Card */}
+          {complaint.proofFiles?.length > 0 && (
+            <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '24px', border: '1px solid #E5E7EB' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a', margin: '0 0 16px' }}>Your Documents</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(90px, 1fr))', gap: '10px' }}>
+                {complaint.proofFiles.map((f, i) => (
+                  <div key={i} onClick={() => setLightbox(`${API_BASE}${f}`)}
+                    style={{ cursor: 'pointer', borderRadius: '10px', overflow: 'hidden', border: '1px solid #E5E7EB', aspectRatio: '1', backgroundColor: '#f9fafb' }}>
+                    <img src={`${API_BASE}${f}`} alt={`citizen-doc-${i + 1}`}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                      onError={e => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:24px">📄</div>' }} />
+                  </div>
+                ))}
               </div>
-            </form>
-          </div> */}
+            </div>
+          )}
+
+          {/* Officer Photos Card */}
+          {complaint.officerAttachments?.length > 0 && (
+            <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '24px', border: '1px solid #E5E7EB' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a', margin: '0 0 16px' }}>Officer Photos</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(90px, 1fr))', gap: '10px' }}>
+                {complaint.officerAttachments.map((f, i) => (
+                  <div key={i} onClick={() => setLightbox(`${API_BASE}${f}`)}
+                    style={{ cursor: 'pointer', borderRadius: '10px', overflow: 'hidden', border: '1px solid #E5E7EB', aspectRatio: '1', backgroundColor: '#f9fafb' }}>
+                    <img src={`${API_BASE}${f}`} alt={`officer-photo-${i + 1}`}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                      onError={e => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:24px">📸</div>' }} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Admin Photos Card */}
+          {complaint.adminAttachments?.length > 0 && (
+            <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '24px', border: '1px solid #E5E7EB' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a', margin: '0 0 16px' }}>Admin Photos</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(90px, 1fr))', gap: '10px' }}>
+                {complaint.adminAttachments.map((f, i) => (
+                  <div key={i} onClick={() => setLightbox(`${API_BASE}${f}`)}
+                    style={{ cursor: 'pointer', borderRadius: '10px', overflow: 'hidden', border: '1px solid #E5E7EB', aspectRatio: '1', backgroundColor: '#f9fafb' }}>
+                    <img src={`${API_BASE}${f}`} alt={`admin-photo-${i + 1}`}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                      onError={e => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:24px">👨‍💼</div>' }} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Officer/Admin Notes Card */}
+          {complaint.officerNotes?.length > 0 && (
+            <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '24px', border: '1px solid #E5E7EB' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a', margin: '0 0 16px' }}>Officer/Admin Notes</h3>
+              {complaint.officerNotes.map((note, i) => (
+                <div key={i} style={{ padding: '12px 14px', borderRadius: '10px', backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB', marginBottom: '10px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                    <span style={{ fontSize: '11px', fontWeight: '700', color: '#9e8e80' }}>{note.status}</span>
+                    <span style={{ fontSize: '10px', color: '#9ca3af' }}>by {note.uploadedBy}</span>
+                  </div>
+                  <p style={{ margin: 0, fontSize: '14px', color: '#374151', lineHeight: 1.5 }}>{note.note}</p>
+                </div>
+              ))}
+            </div>
+          )}
 
         </div>
 
@@ -189,35 +236,6 @@ export default function ComplaintDetail() {
             </div>
           )}
 
-          {/* Attachments */}
-          {(complaint.proofFiles?.length > 0 || complaint.statusHistory?.some(h => h.note && h.status !== 'Awaiting Review' && h.status !== 'Pending')) && (
-            <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '24px', border: '1px solid #E5E7EB' }}>
-              <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a', margin: '0 0 16px' }}>Attachments</h3>
-
-              {/* Notes */}
-              {complaint.statusHistory?.filter(h => h.note && h.status !== 'Awaiting Review' && h.status !== 'Pending').map((h, i) => (
-                <div key={i} style={{ padding: '10px 14px', borderRadius: '10px', backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB', marginBottom: '10px' }}>
-                  <span style={{ fontSize: '11px', fontWeight: '700', color: '#9e8e80', display: 'block', marginBottom: '4px' }}>{h.status}</span>
-                  <p style={{ margin: 0, fontSize: '14px', color: '#374151', lineHeight: 1.5 }}>{h.note}</p>
-                </div>
-              ))}
-
-              {/* Photos */}
-              {complaint.proofFiles?.length > 0 && (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(90px, 1fr))', gap: '10px', marginTop: complaint.statusHistory?.some(h => h.note) ? '12px' : 0 }}>
-                  {complaint.proofFiles.map((f, i) => (
-                    <div key={i} onClick={() => setLightbox(`${API_BASE}${f}`)}
-                      style={{ cursor: 'pointer', borderRadius: '10px', overflow: 'hidden', border: '1px solid #E5E7EB', aspectRatio: '1', backgroundColor: '#f9fafb' }}>
-                      <img src={`${API_BASE}${f}`} alt={`attachment-${i + 1}`}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                        onError={e => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:24px">📷</div>' }} />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
           {/* Not Satisfied / Reopen */}
           {complaint.status === 'Issue Resolved' && (
             <div style={{ backgroundColor: '#fff', borderRadius: '20px', padding: '24px', border: '1px solid #E5E7EB' }}>
@@ -235,7 +253,6 @@ export default function ComplaintDetail() {
                     await complaintAPI.reopen(complaint._id, reopenReason)
                     setShowReopen(false)
                     setReopenReason('')
-                    // Refresh complaint data
                     const res = await complaintAPI.getOne(id)
                     setComplaint(res.data)
                   } catch { /* silent */ }

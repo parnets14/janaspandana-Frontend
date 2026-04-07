@@ -306,7 +306,7 @@ export default function TrackComplaint() {
           gap: '8px', flexWrap: 'wrap', fontSize: '12px', color: '#9e8e80',
         }}>
           <RiGovernmentLine size={14} color="#151A40" />
-          <span>© 2024 Integrated Grievance Management System, Government of Digital Excellence.</span>
+          <span>© {new Date().getFullYear()} Integrated Grievance Management System, Government of Digital Excellence.</span>
         </div>
       </footer>
 

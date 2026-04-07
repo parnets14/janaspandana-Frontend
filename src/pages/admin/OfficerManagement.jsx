@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   MdOutlineEngineering, MdAdd, MdDelete, MdEmail,
   MdLockOutline, MdPerson, MdBusiness, MdClose, MdCheck,
-  MdPhone, MdRemoveRedEye, MdEdit
+  MdPhone, MdRemoveRedEye, MdEdit, MdVisibility, MdVisibilityOff
 } from 'react-icons/md'
 import AdminLayout from './AdminLayout'
 import api from '../../utils/secureApi'
@@ -16,6 +16,7 @@ export default function OfficerManagement() {
   const [loading, setLoading] = useState(false)
   const [fetching, setFetching] = useState(true)
   const [form, setForm] = useState({ name: '', email: '', password: '', phone: '', departmentId: '' })
+  const [showPassword, setShowPassword] = useState(false)
 
   const [viewOfficer, setViewOfficer] = useState(null)
   const [editOfficer, setEditOfficer] = useState(null)
@@ -53,6 +54,7 @@ export default function OfficerManagement() {
         toast.success('Officer created successfully')
         setShowModal(false)
         setForm({ name: '', email: '', password: '', phone: '', departmentId: '' })
+        setShowPassword(false)
         fetchOfficers()
       }
     } catch (err) {
@@ -282,20 +284,27 @@ export default function OfficerManagement() {
               </div>
               <form onSubmit={handleCreate}>
                 <FieldLabel icon={<MdPerson size={14} />} label="Full Name" />
-                <input type="text" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} placeholder="Officer full name" required style={inputStyle} />
+                <input autoComplete="off" type="text" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} placeholder="Officer full name" required style={inputStyle} />
 
                 <FieldLabel icon={<MdEmail size={14} />} label="Email Address" />
-                <input type="email" value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} placeholder="officer@example.com" required style={inputStyle} />
+                <input autoComplete="off" type="email" value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} placeholder="officer@example.com" required style={inputStyle} />
 
                 <FieldLabel icon={<MdPhone size={14} />} label="Phone Number" />
                 <div style={{ display: 'flex', alignItems: 'center', border: '1.5px solid #e0d5c8', borderRadius: '10px', overflow: 'hidden', backgroundColor: '#faf6f0', marginBottom: '10px' }}>
                   <span style={{ padding: '9px 12px', fontSize: '13px', fontWeight: '600', color: '#555', backgroundColor: '#f0e8dc', borderRight: '1px solid #e0d5c8', whiteSpace: 'nowrap' }}>+91</span>
-                  <input type="tel" maxLength={10} value={form.phone} onChange={e => setForm(p => ({ ...p, phone: e.target.value.replace(/\D/g, '') }))} placeholder="10 digit mobile number" required
+                  <input autoComplete="off" type="tel" maxLength={10} value={form.phone} onChange={e => setForm(p => ({ ...p, phone: e.target.value.replace(/\D/g, '') }))} placeholder="10 digit mobile number" required
                     style={{ flex: 1, padding: '9px 12px', fontSize: '13px', color: '#1a1a1a', backgroundColor: 'transparent', border: 'none', outline: 'none' }} />
                 </div>
 
                 <FieldLabel icon={<MdLockOutline size={14} />} label="Password" />
-                <input type="password" value={form.password} onChange={e => setForm(p => ({ ...p, password: e.target.value }))} placeholder="Min 6 characters" required minLength={6} style={inputStyle} />
+                <div style={{ position: 'relative', marginBottom: '10px' }}>
+                  <input autoComplete="new-password" type={showPassword ? 'text' : 'password'} value={form.password} onChange={e => setForm(p => ({ ...p, password: e.target.value }))} placeholder="Min 6 characters" required minLength={6}
+                    style={{ ...inputStyle, marginBottom: 0, paddingRight: '40px' }} />
+                  <button type="button" onClick={() => setShowPassword(p => !p)}
+                    style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#9e8e80', display: 'flex', alignItems: 'center' }}>
+                    {showPassword ? <MdVisibilityOff size={18} /> : <MdVisibility size={18} />}
+                  </button>
+                </div>
 
                 <FieldLabel icon={<MdBusiness size={14} />} label="Department" />
                 <select value={form.departmentId} onChange={e => setForm(p => ({ ...p, departmentId: e.target.value }))} required style={{ ...inputStyle, cursor: 'pointer' }}>

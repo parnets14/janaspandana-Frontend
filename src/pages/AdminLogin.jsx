@@ -25,11 +25,7 @@ export default function AdminLogin() {
       console.log('Login response:', response)
       
       if (response.success) {
-        // Clear any existing session first
-        api.clearTokens()
         localStorage.removeItem('userRole')
-        // Store admin tokens
-        api.setTokens(response.data.accessToken, response.data.refreshToken)
         localStorage.setItem('userRole', 'admin')
         
         // Show success toast
@@ -65,109 +61,9 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-[#FFF7EC] flex flex-col relative overflow-hidden font-[system-ui,'Segoe_UI',Roboto,sans-serif]">
+    <div className="min-h-screen w-full flex flex-col relative overflow-hidden font-[system-ui,'Segoe_UI',Roboto,sans-serif]" style={{ backgroundColor: '#ffffff' }}>
       <Toaster />
 
-      {/* Floating Background Elements */}
-      <motion.div
-        animate={{
-          y: [0, -80, 0],
-          rotate: [0, 180, 360],
-          scale: [1, 1.3, 1],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-        style={{
-          position: 'absolute',
-          top: '5%',
-          left: '8%',
-          width: '200px',
-          height: '200px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(37, 150, 190, 0.2), rgba(37, 150, 190, 0.05))',
-          filter: 'blur(60px)',
-          zIndex: 0,
-        }}
-      />
-      <motion.div
-        animate={{
-          y: [0, 60, 0],
-          rotate: [0, -180, -360],
-          scale: [1, 1.4, 1],
-        }}
-        transition={{
-          duration: 18,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 2
-        }}
-        style={{
-          position: 'absolute',
-          top: '50%',
-          right: '5%',
-          width: '250px',
-          height: '250px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(37, 150, 190, 0.25), rgba(37, 150, 190, 0.05))',
-          filter: 'blur(70px)',
-          zIndex: 0,
-        }}
-      />
-
-      {/* Logo at Top */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        style={{
-          position: 'relative',
-          zIndex: 1,
-          padding: '32px 32px 0',
-          display: 'flex',
-          justifyContent: 'center'
-        }}
-      >
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '16px',
-          padding: '16px 32px',
-          backgroundColor: '#fff',
-          borderRadius: '16px',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-          border: '1px solid #ede5d8'
-        }}>
-          <img 
-            src="/logo.jpeg" 
-            alt="JanaSpandana Logo" 
-            style={{
-              width: '50px',
-              height: '50px',
-              borderRadius: '12px',
-              objectFit: 'cover'
-            }}
-          />
-          <div>
-            <h1 style={{ 
-              fontSize: '24px', 
-              fontWeight: '800', 
-              margin: 0, 
-              background: 'linear-gradient(135deg, #151A40, #1a7a9e)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}>
-              Janoni
-            </h1>
-            <p style={{ fontSize: '12px', color: '#666', margin: 0 }}>
-              Integrated Grievance Management System
-            </p>
-          </div>
-        </div>
-      </motion.div>
 
       {/* MAIN CONTENT */}
       <main style={{ flex: 1, width: '100%', maxWidth: '1152px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', zIndex: 1, padding: '32px' }}>
@@ -200,19 +96,9 @@ export default function AdminLogin() {
               <motion.div
                 animate={{ rotate: [0, 5, -5, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                style={{
-                  width: '80px',
-                  height: '80px',
-                  margin: '0 auto 20px',
-                  borderRadius: '20px',
-                  background: 'linear-gradient(135deg, #151A40, #1a7a9e)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#fff'
-                }}
+                style={{ margin: '0 auto 20px', width: 'fit-content' }}
               >
-                <RiGovernmentLine size={40} />
+                <img src="/logo.jpeg" alt="JaNoNi" style={{ width: '80px', height: '80px', borderRadius: '20px', objectFit: 'cover', display: 'block' }} />
               </motion.div>
               
               <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#1a1a1a', margin: '0 0 8px 0' }}>
@@ -392,7 +278,7 @@ export default function AdminLogin() {
           <MdOutlineVerifiedUser size={15} color="#151A40" />
           <span style={{ fontSize: '12px', color: '#9e8e80' }}>Protected by National Informatics Centre.</span>
           <RiGovernmentLine size={15} color="#151A40" />
-          <span style={{ fontSize: '12px', color: '#9e8e80' }}>© 2024 IGMS.</span>
+          <span style={{ fontSize: '12px', color: '#9e8e80' }}>© {new Date().getFullYear()} IGMS.</span>
         </div>
       </motion.footer>
     </div>

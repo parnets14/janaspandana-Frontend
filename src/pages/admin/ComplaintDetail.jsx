@@ -6,11 +6,13 @@ import AdminLayout from './AdminLayout'
 import { complaintAPI } from '../../utils/secureApi'
 
 const STATUS_STYLES = {
-  'Pending':     { color: '#b45309', bg: '#fef3c7' },
-  'In Progress': { color: '#1d4ed8', bg: '#dbeafe' },
-  'Resolved':    { color: '#15803d', bg: '#dcfce7' },
-  'Escalated':   { color: '#dc2626', bg: '#fee2e2' },
-  'Rejected':    { color: '#6b7280', bg: '#f3f4f6' },
+  'Awaiting Review':           { color: '#6b7280', bg: '#f3f4f6' },
+  'Complaint Registered':      { color: '#151A40', bg: '#e0f2fe' },
+  'Assigned to Field Officer': { color: '#1d4ed8', bg: '#dbeafe' },
+  'Inspection Completed':      { color: '#b45309', bg: '#fef3c7' },
+  'Work in Progress':          { color: '#7c3aed', bg: '#ede9fe' },
+  'Issue Resolved':            { color: '#15803d', bg: '#dcfce7' },
+  'Rejected':                  { color: '#dc2626', bg: '#fee2e2' },
 }
 
 const PRIORITY_STYLES = {
@@ -18,6 +20,12 @@ const PRIORITY_STYLES = {
   'Medium': { color: '#b45309', bg: '#fef3c7' },
   'Low':    { color: '#15803d', bg: '#dcfce7' },
 }
+
+const STATUS_OPTIONS = [
+  'Awaiting Review',
+  'Complaint Registered',
+  'Assigned to Field Officer',
+]
 
 export default function AdminComplaintDetail() {
   const { id } = useParams()
@@ -71,7 +79,7 @@ export default function AdminComplaintDetail() {
     </AdminLayout>
   )
 
-  const statusStyle = STATUS_STYLES[complaint.status] || STATUS_STYLES['Pending']
+  const statusStyle = STATUS_STYLES[complaint.status] || { color: '#6b7280', bg: '#f3f4f6' }
   const priorityStyle = PRIORITY_STYLES[complaint.priority] || PRIORITY_STYLES['Medium']
 
   return (
@@ -146,7 +154,7 @@ export default function AdminComplaintDetail() {
               <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#6b7280', letterSpacing: '0.5px', margin: '0 0 16px' }}>ACTIVITY HISTORY</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {[...complaint.statusHistory].reverse().map((h, i) => {
-                  const s = STATUS_STYLES[h.status] || STATUS_STYLES['Pending']
+                  const s = STATUS_STYLES[h.status] || { color: '#6b7280', bg: '#f3f4f6' }
                   return (
                     <div key={i} style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
                       <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: s.color, marginTop: '5px', flexShrink: 0 }} />
@@ -164,6 +172,87 @@ export default function AdminComplaintDetail() {
               </div>
             </motion.div>
           )}
+
+          {/* Citizen Documents Card */}
+          {complaint.proofFiles?.length > 0 && (
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 }}
+              style={{ backgroundColor: '#fff', borderRadius: '14px', padding: '24px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+              <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#6b7280', letterSpacing: '0.5px', margin: '0 0 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '16px' }}>📄</span> CITIZEN DOCUMENTS
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '12px' }}>
+                {complaint.proofFiles.map((f, i) => (
+                  <a key={i} href={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${f}`} target="_blank" rel="noopener noreferrer"
+                    style={{ borderRadius: '10px', overflow: 'hidden', aspectRatio: '1', border: '1px solid #e5e7eb', backgroundColor: '#f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}>
+                    <img src={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${f}`} alt={`doc-${i}`}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                      onError={e => { e.target.style.display = 'none' }} />
+                  </a>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Officer Photos Card */}
+          {complaint.officerAttachments?.length > 0 && (
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.14 }}
+              style={{ backgroundColor: '#fff', borderRadius: '14px', padding: '24px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+              <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#6b7280', letterSpacing: '0.5px', margin: '0 0 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '16px' }}>📸</span> OFFICER PHOTOS
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '12px' }}>
+                {complaint.officerAttachments.map((f, i) => (
+                  <a key={i} href={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${f}`} target="_blank" rel="noopener noreferrer"
+                    style={{ borderRadius: '10px', overflow: 'hidden', aspectRatio: '1', border: '1px solid #e5e7eb', backgroundColor: '#f9fafb', display: 'block', textDecoration: 'none' }}>
+                    <img src={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${f}`} alt={`officer-photo-${i}`}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                      onError={e => { e.target.style.display = 'none' }} />
+                  </a>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Admin Photos Card */}
+          {complaint.adminAttachments?.length > 0 && (
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
+              style={{ backgroundColor: '#fff', borderRadius: '14px', padding: '24px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+              <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#6b7280', letterSpacing: '0.5px', margin: '0 0 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '16px' }}>👨‍💼</span> ADMIN PHOTOS
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '12px' }}>
+                {complaint.adminAttachments.map((f, i) => (
+                  <a key={i} href={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${f}`} target="_blank" rel="noopener noreferrer"
+                    style={{ borderRadius: '10px', overflow: 'hidden', aspectRatio: '1', border: '1px solid #e5e7eb', backgroundColor: '#f9fafb', display: 'block', textDecoration: 'none' }}>
+                    <img src={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${f}`} alt={`admin-photo-${i}`}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                      onError={e => { e.target.style.display = 'none' }} />
+                  </a>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Officer/Admin Notes Card */}
+          {complaint.officerNotes?.length > 0 && (
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16 }}
+              style={{ backgroundColor: '#fff', borderRadius: '14px', padding: '24px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+              <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#6b7280', letterSpacing: '0.5px', margin: '0 0 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '16px' }}>📝</span> OFFICER/ADMIN NOTES
+              </h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {complaint.officerNotes.map((note, i) => (
+                  <div key={i} style={{ padding: '12px 14px', borderRadius: '10px', backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                      <span style={{ fontSize: '12px', fontWeight: '700', color: '#151A40' }}>{note.status}</span>
+                      <span style={{ fontSize: '11px', color: '#9ca3af' }}>by {note.uploadedBy}</span>
+                    </div>
+                    <p style={{ margin: 0, fontSize: '13px', color: '#374151', lineHeight: 1.5 }}>{note.note}</p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
         </div>
 
         {/* Right — Update Panel */}
@@ -176,7 +265,7 @@ export default function AdminComplaintDetail() {
               <label style={{ fontSize: '12px', fontWeight: '700', color: '#6b7280', display: 'block', marginBottom: '6px' }}>STATUS</label>
               <select value={status} onChange={e => setStatus(e.target.value)}
                 style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #e5e7eb', fontSize: '13px', outline: 'none' }}>
-                {['Pending', 'In Progress', 'Resolved', 'Escalated', 'Rejected'].map(s => <option key={s}>{s}</option>)}
+                {STATUS_OPTIONS.map(s => <option key={s}>{s}</option>)}
               </select>
             </div>
 

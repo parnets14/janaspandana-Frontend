@@ -66,7 +66,7 @@ export default function AdminLayout({ children, active }) {
         }}>
           <img src="/logo.jpeg" alt="JanaSpandana" style={{ width: '40px', height: '40px', borderRadius: '10px', objectFit: 'cover' }} />
           <div>
-            <h1 style={{ fontSize: '18px', fontWeight: '800', margin: 0, color: '#1a1a1a' }}>Janoni</h1>
+            <h1 style={{ fontSize: '18px', fontWeight: '800', margin: 0, color: '#1a1a1a' }}>JaNoNi</h1>
             <p style={{ fontSize: '11px', color: '#666', margin: 0 }}>Admin Portal</p>
           </div>
         </div>
@@ -184,7 +184,7 @@ export default function AdminLayout({ children, active }) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <img src="/logo.jpeg" alt="JanaSpandana" style={{ width: '40px', height: '40px', borderRadius: '10px', objectFit: 'cover' }} />
                   <div>
-                    <h1 style={{ fontSize: '18px', fontWeight: '800', margin: 0, color: '#1a1a1a' }}>Janoni</h1>
+                    <h1 style={{ fontSize: '18px', fontWeight: '800', margin: 0, color: '#1a1a1a' }}>JaNoNi</h1>
                     <p style={{ fontSize: '11px', color: '#666', margin: 0 }}>Admin Portal</p>
                   </div>
                 </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { MdHome, MdNotifications, MdEdit, MdLogout, MdKeyboardArrowDown, MdHelp, MdLanguage, MdInfo } from 'react-icons/md'
+import { MdHome, MdEdit, MdLogout, MdKeyboardArrowDown, MdHelp, MdInfo, MdMenu, MdClose } from 'react-icons/md'
 import { RiFileList3Line } from 'react-icons/ri'
 import api from '../../utils/secureApi'
 
@@ -15,12 +15,17 @@ const navItems = [
 export default function UserLayout({ children, active, user: userProp }) {
   const navigate = useNavigate()
   const [showDropdown, setShowDropdown] = useState(false)
+  const [showMobileMenu, setShowMobileMenu] = useState(false)
 
   // Cache user in sessionStorage to avoid flicker on navigation
   const getCachedUser = () => {
     try {
-      const cached = sessionStorage.getItem('_usr')
-      return cached ? JSON.parse(cached) : null
+      // Try sessionStorage first, then localStorage profile
+      const session = sessionStorage.getItem('_usr')
+      if (session) return JSON.parse(session)
+      const local = localStorage.getItem('_userProfile')
+      if (local) return JSON.parse(local)
+      return null
     } catch { return null }
   }
 
@@ -32,14 +37,11 @@ export default function UserLayout({ children, active, user: userProp }) {
       try { sessionStorage.setItem('_usr', JSON.stringify(userProp)) } catch {}
       return
     }
-    // Only fetch if no cached data
-    if (!getCachedUser()) {
-      api.get('/auth/me').then(res => {
-        if (res.success) {
-          setUser(res.data)
-          try { sessionStorage.setItem('_usr', JSON.stringify(res.data)) } catch {}
-        }
-      }).catch(() => {})
+    // Use cached data — no API call needed
+    const cached = getCachedUser()
+    if (cached) {
+      setUser(cached)
+      try { sessionStorage.setItem('_usr', JSON.stringify(cached)) } catch {}
     }
   }, [userProp])
 
@@ -48,6 +50,7 @@ export default function UserLayout({ children, active, user: userProp }) {
   const handleLogout = () => {
     api.clearTokens()
     try { sessionStorage.removeItem('_usr') } catch {}
+    try { localStorage.removeItem('_userProfile') } catch {}
     navigate('/')
   }
 
@@ -95,7 +98,16 @@ export default function UserLayout({ children, active, user: userProp }) {
           </div>
 
           {/* Right actions */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', position: 'relative' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', position: 'relative' }}>
+
+            {/* Hamburger — mobile only */}
+            <button onClick={() => setShowMobileMenu(v => !v)}
+              className="mobile-menu-btn"
+              style={{ background: 'none', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 8px', cursor: 'pointer', display: 'none', alignItems: 'center', justifyContent: 'center' }}>
+              {showMobileMenu ? <MdClose size={22} color="#151A40" /> : <MdMenu size={22} color="#151A40" />}
+            </button>
+
+            {/* Profile button */}
             <button 
               onClick={() => setShowDropdown(!showDropdown)}
               style={{
@@ -119,13 +131,11 @@ export default function UserLayout({ children, active, user: userProp }) {
               <MdKeyboardArrowDown size={18} color="#6b5e52" />
             </button>
 
-            {/* Dropdown Menu */}
+            {/* Profile Dropdown */}
             {showDropdown && (
               <>
-                <div 
-                  onClick={() => setShowDropdown(false)}
-                  style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 999 }}
-                />
+                <div onClick={() => setShowDropdown(false)}
+                  style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 999 }} />
                 <div style={{
                   position: 'absolute', top: '50px', right: 0,
                   backgroundColor: '#fff', borderRadius: '12px',
@@ -136,30 +146,16 @@ export default function UserLayout({ children, active, user: userProp }) {
                     <p style={{ fontSize: '14px', fontWeight: '700', color: '#1a1a1a', margin: 0 }}>{user?.name || 'User'}</p>
                     <p style={{ fontSize: '12px', color: '#6b5e52', margin: '2px 0 0' }}>+91 {user?.phone || ''}</p>
                   </div>
-                  <button 
-                    onClick={() => { setShowDropdown(false); navigate('/user/profile'); }}
-                    style={{
-                      width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
-                      padding: '12px 16px', border: 'none', backgroundColor: 'transparent',
-                      cursor: 'pointer', fontSize: '14px', color: '#1a1a1a',
-                      textAlign: 'left',
-                    }}
+                  <button onClick={() => { setShowDropdown(false); navigate('/user/profile'); }}
+                    style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 16px', border: 'none', backgroundColor: 'transparent', cursor: 'pointer', fontSize: '14px', color: '#1a1a1a', textAlign: 'left' }}
                     onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F8F9FA'}
-                    onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
-                  >
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}>
                     <MdEdit size={18} color="#151A40" /> Edit Profile
                   </button>
-                  <button 
-                    onClick={() => { setShowDropdown(false); handleLogout(); }}
-                    style={{
-                      width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
-                      padding: '12px 16px', border: 'none', backgroundColor: 'transparent',
-                      cursor: 'pointer', fontSize: '14px', color: '#1a1a1a',
-                      textAlign: 'left', borderTop: '1px solid #E5E7EB',
-                    }}
+                  <button onClick={() => { setShowDropdown(false); handleLogout(); }}
+                    style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 16px', border: 'none', backgroundColor: 'transparent', cursor: 'pointer', fontSize: '14px', color: '#1a1a1a', textAlign: 'left', borderTop: '1px solid #E5E7EB' }}
                     onMouseEnter={e => e.currentTarget.style.backgroundColor = '#EEF2FF'}
-                    onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
-                  >
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}>
                     <MdLogout size={18} color="#151A40" /> Logout
                   </button>
                 </div>
@@ -167,6 +163,34 @@ export default function UserLayout({ children, active, user: userProp }) {
             )}
           </div>
         </div>
+
+        {/* Mobile nav dropdown */}
+        {showMobileMenu && (
+          <>
+            <div onClick={() => setShowMobileMenu(false)}
+              style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 98 }} />
+            <div style={{
+              position: 'absolute', top: '68px', left: 0, right: 0,
+              backgroundColor: '#fff', borderBottom: '1px solid #E5E7EB',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.08)', zIndex: 99,
+              padding: '8px 16px 12px',
+            }}>
+              {navItems.map(item => (
+                <button key={item.key} onClick={() => { navigate(item.path); setShowMobileMenu(false) }}
+                  style={{
+                    width: '100%', display: 'flex', alignItems: 'center', gap: '12px',
+                    padding: '12px 16px', borderRadius: '10px', border: 'none',
+                    backgroundColor: active === item.key ? '#EEF2FF' : 'transparent',
+                    color: active === item.key ? '#151A40' : '#6b5e52',
+                    fontSize: '15px', fontWeight: active === item.key ? '700' : '500',
+                    cursor: 'pointer', textAlign: 'left',
+                  }}>
+                  {item.icon} {item.label}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
       </nav>
 
       {/* Page Content */}
@@ -176,7 +200,7 @@ export default function UserLayout({ children, active, user: userProp }) {
 
       {/* Footer */}
       <footer style={{ borderTop: '1px solid #E5E7EB', padding: '16px 32px', backgroundColor: '#FFFFFF', textAlign: 'center' }}>
-        <span style={{ fontSize: '12px', color: '#9e8e80' }}>Protected by National Informatics Centre. © 2024 IGMS.</span>
+        <span style={{ fontSize: '12px', color: '#9e8e80' }}>Protected by National Informatics Centre. © {new Date().getFullYear()} IGMS.</span>
       </footer>
     </div>
   )

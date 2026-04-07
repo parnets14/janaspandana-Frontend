@@ -40,7 +40,7 @@ export default function OfficerLogin() {
 
   return (
     <div style={{
-      minHeight: '100vh', width: '100%', backgroundColor: '#FFF7EC',
+      minHeight: '100vh', width: '100%', backgroundColor: '#ffffff',
       display: 'flex', flexDirection: 'column',
       fontFamily: "system-ui, 'Segoe UI', Roboto, sans-serif",
     }}>
@@ -88,7 +88,7 @@ export default function OfficerLogin() {
         </div>
 
         {/* Right panel */}
-        <div className="login-right">
+        <div className="login-right" style={{ backgroundColor: '#ffffff' }}>
           <div style={{ width: '100%', maxWidth: '420px' }}>
 
             <div style={{ marginBottom: '32px' }}>
@@ -107,7 +107,7 @@ export default function OfficerLogin() {
                 placeholder="Enter your official email" required
                 style={{
                   width: '100%', padding: '13px 16px', fontSize: '14px', color: '#1a1a1a',
-                  border: '1.5px solid #e0d5c8', borderRadius: '12px', backgroundColor: '#faf6f0',
+                  border: '1.5px solid #e5e7eb', borderRadius: '12px', backgroundColor: '#f9fafb',
                   outline: 'none', marginBottom: '16px', boxSizing: 'border-box',
                 }}
               />
@@ -120,7 +120,7 @@ export default function OfficerLogin() {
                 placeholder="Enter your password" required
                 style={{
                   width: '100%', padding: '13px 16px', fontSize: '14px', color: '#1a1a1a',
-                  border: '1.5px solid #e0d5c8', borderRadius: '12px', backgroundColor: '#faf6f0',
+                  border: '1.5px solid #e5e7eb', borderRadius: '12px', backgroundColor: '#f9fafb',
                   outline: 'none', marginBottom: '24px', boxSizing: 'border-box',
                 }}
               />
@@ -148,12 +148,12 @@ export default function OfficerLogin() {
         </div>
       </main>
 
-      <footer style={{ borderTop: '1px solid #e0d5c8', padding: '16px 40px', backgroundColor: '#FFF7EC', textAlign: 'center' }}>
+      <footer style={{ borderTop: '1px solid #e5e7eb', padding: '16px 40px', backgroundColor: '#ffffff', textAlign: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', flexWrap: 'wrap' }}>
           <MdOutlineVerifiedUser size={14} color="#41A465" />
           <span style={{ fontSize: '12px', color: '#9e8e80' }}>Protected by National Informatics Centre.</span>
           <RiGovernmentLine size={14} color="#151A40" />
-          <span style={{ fontSize: '12px', color: '#9e8e80' }}>© 2024 IGMS.</span>
+          <span style={{ fontSize: '12px', color: '#9e8e80' }}>© {new Date().getFullYear()} IGMS.</span>
         </div>
       </footer>
     </div>

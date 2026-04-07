@@ -1493,7 +1493,7 @@ export default function LandingPage() {
           justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-            <span style={{ fontSize: '12px', color: '#9e8e80' }}>© 2024 Janoni. All rights reserved.</span>
+            <span style={{ fontSize: '12px', color: '#9e8e80' }}>© {new Date().getFullYear()} JaNoNi. All rights reserved.</span>
             <span style={{ fontSize: '12px', color: '#d0c5b8' }}>•</span>
             <span style={{ fontSize: '12px', color: '#9e8e80' }}>
               Developed by{' '}

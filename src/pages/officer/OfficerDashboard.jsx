@@ -113,7 +113,7 @@ export default function OfficerDashboard() {
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '700px' }}>
               <thead>
                 <tr style={{ backgroundColor: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
-                  {['Complaint ID', 'Title', 'Department', 'City / Ward', 'Status', 'Date', 'Action'].map(h => (
+                  {['Complaint ID', 'Title', 'Citizen', 'Department', 'City / Ward', 'Status', 'Date', 'Action'].map(h => (
                     <th key={h} style={{ padding: '13px 16px', textAlign: 'left', fontSize: '11px', fontWeight: '700', color: '#6b7280', letterSpacing: '0.6px', whiteSpace: 'nowrap' }}>
                       {h.toUpperCase()}
                     </th>
@@ -133,7 +133,10 @@ export default function OfficerDashboard() {
                       </td>
                       <td style={{ padding: '14px 16px', maxWidth: '200px' }}>
                         <p style={{ margin: 0, fontSize: '13px', fontWeight: '600', color: '#1a1a1a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.title}</p>
-                        <p style={{ margin: '2px 0 0', fontSize: '11px', color: '#9ca3af' }}>{c.user?.name || 'Citizen'}</p>
+                      </td>
+                      <td style={{ padding: '14px 16px', whiteSpace: 'nowrap' }}>
+                        <p style={{ margin: 0, fontSize: '13px', fontWeight: '600', color: '#1a1a1a' }}>{c.user?.name || '—'}</p>
+                        <p style={{ margin: '2px 0 0', fontSize: '11px', color: '#9ca3af' }}>{c.user?.phone ? '+91 ' + c.user.phone : ''}</p>
                       </td>
                       <td style={{ padding: '14px 16px', fontSize: '13px', color: '#374151', whiteSpace: 'nowrap' }}>{c.department}</td>
                       <td style={{ padding: '14px 16px', fontSize: '12px', color: '#6b7280', whiteSpace: 'nowrap' }}>

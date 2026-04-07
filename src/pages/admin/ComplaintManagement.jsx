@@ -8,9 +8,7 @@ const STATUS_STYLES = {
   'Awaiting Review':           { color: '#6b7280', bg: '#f3f4f6' },
   'Complaint Registered':      { color: '#151A40', bg: '#e0f2fe' },
   'Assigned to Field Officer': { color: '#1d4ed8', bg: '#dbeafe' },
-  'Inspection Completed':      { color: '#b45309', bg: '#fef3c7' },
-  'Work in Progress':          { color: '#7c3aed', bg: '#ede9fe' },
-  'Issue Resolved':            { color: '#15803d', bg: '#dcfce7' },
+ 
   // legacy fallbacks
   'Pending':     { color: '#6b7280', bg: '#f3f4f6' },
   'In Progress': { color: '#7c3aed', bg: '#ede9fe' },
@@ -23,7 +21,7 @@ const PRIORITY_STYLES = {
   'Medium': { color: '#b45309', bg: '#fef3c7' },
   'Low':    { color: '#15803d', bg: '#dcfce7' },
 }
-const statuses = ['All Status', 'Awaiting Review', 'Complaint Registered', 'Assigned to Field Officer', 'Issue Resolved', 'Rejected']
+const statuses = ['All Status', 'Awaiting Review', 'Complaint Registered', 'Assigned to Field Officer']
 
 const DEFAULT_STATUS_STYLE = { color: '#6b7280', bg: '#f3f4f6' }
 const DEFAULT_PRIORITY_STYLE = { color: '#b45309', bg: '#fef3c7' }
@@ -150,7 +148,8 @@ export default function ComplaintManagement() {
     try {
       await complaintAPI.updateStatus(id, {
         status: action === 'accept' ? 'Complaint Registered' : 'Rejected',
-        note: action === 'accept' ? 'Complaint accepted and registered by admin' : 'Complaint rejected by admin'
+        note: action === 'accept' ? 'Complaint accepted and registered by admin' : 'Complaint rejected by admin',
+        isAdmin: true
       })
       if (action === 'accept') setAcceptedComplaint(complaint)
       fetchComplaints()
@@ -163,7 +162,7 @@ export default function ComplaintManagement() {
     try {
       const res = await complaintAPI.updateStatus(selected._id, {
         status: editStatus, priority: editPriority,
-        assignedTo: editAssigned, note: editNote
+        assignedTo: editAssigned, note: editNote, isAdmin: true
       })
       // Upload photos if any
       if (editPhotos.length > 0) {
@@ -201,7 +200,7 @@ export default function ComplaintManagement() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '16px', marginBottom: '28px' }}>
         {[
           { label: 'Total', value: stats.total, color: '#151A40', border: '#151A40' },
-          { label: 'Registered', value: stats.pending, color: '#6b7280', border: '#9ca3af' },
+          { label: 'Awaiting Review', value: stats.pending, color: '#6b7280', border: '#9ca3af' },
           { label: 'In Progress', value: stats.inProgress, color: '#7c3aed', border: '#8b5cf6' },
           { label: 'Resolved', value: stats.resolved, color: '#15803d', border: '#22c55e' },
         ].map(s => (
@@ -258,7 +257,7 @@ export default function ComplaintManagement() {
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '900px' }}>
               <thead>
                 <tr style={{ backgroundColor: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
-                  {['Complaint ID', 'Title', 'Department', 'Location', 'Status', 'Date', 'Action'].map(h => (
+                  {['Complaint ID', 'Title', 'Citizen', 'Department', 'Location', 'Status', 'Date', 'Action'].map(h => (
                     <th key={h} style={{ padding: '13px 16px', textAlign: 'left', fontSize: '11px', fontWeight: '700', color: '#6b7280', letterSpacing: '0.6px', whiteSpace: 'nowrap' }}>
                       {h.toUpperCase()}
                     </th>
@@ -267,7 +266,7 @@ export default function ComplaintManagement() {
               </thead>
               <tbody>
                 {complaints.map((c, i) => {
-                  const ss = STATUS_STYLES[c.status] || DEFAULT_STATUS_STYLE
+                  const ss = STATUS_STYLES[c.adminStatus || c.status] || DEFAULT_STATUS_STYLE
                   const ps = PRIORITY_STYLES[c.priority] || DEFAULT_PRIORITY_STYLE
                   return (
                     <motion.tr key={c._id}
@@ -282,6 +281,10 @@ export default function ComplaintManagement() {
                         <p style={{ margin: 0, fontSize: '13px', fontWeight: '600', color: '#1a1a1a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.title}</p>
                         <p style={{ margin: '3px 0 0', fontSize: '11px', color: '#9ca3af', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '180px' }}>{c.description}</p>
                       </td>
+                      <td style={{ padding: '14px 16px', whiteSpace: 'nowrap' }}>
+                        <p style={{ margin: 0, fontSize: '13px', fontWeight: '600', color: '#1a1a1a' }}>{c.user?.name || '—'}</p>
+                        <p style={{ margin: '2px 0 0', fontSize: '11px', color: '#9ca3af' }}>{c.user?.phone ? '+91 ' + c.user.phone : ''}</p>
+                      </td>
                       <td style={{ padding: '14px 16px', whiteSpace: 'nowrap', fontSize: '13px', color: '#374151', fontWeight: '500' }}>{c.department}</td>
                       <td style={{ padding: '14px 16px', maxWidth: '160px' }}>
                         <span style={{ fontSize: '12px', color: '#6b7280', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>
@@ -290,7 +293,7 @@ export default function ComplaintManagement() {
                       </td>
                       <td style={{ padding: '14px 16px', whiteSpace: 'nowrap' }}>
                         <span style={{ padding: '4px 12px', borderRadius: '999px', fontSize: '11px', fontWeight: '700', backgroundColor: ss.bg, color: ss.color }}>
-                          {c.status === 'Pending' ? 'Awaiting Review' : c.status}
+                          {c.adminStatus || (c.status === 'Pending' ? 'Awaiting Review' : c.status)}
                         </span>
                       </td>
                       <td style={{ padding: '14px 16px', whiteSpace: 'nowrap', fontSize: '12px', color: '#6b7280' }}>

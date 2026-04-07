@@ -295,3 +295,16 @@ body { margin: 0; }
     gap: 6px !important;
   }
 }
+
+/* ── Mobile Bottom Navigation ── */
+.mobile-bottom-nav {
+  display: none;
+}
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+  }
+  .hide-on-mobile {
+    display: none !important;
+  }
+}

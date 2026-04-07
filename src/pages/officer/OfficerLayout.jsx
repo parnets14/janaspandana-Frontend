@@ -26,7 +26,7 @@ export default function OfficerLayout({ children, active }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }} onClick={() => navigate('/')}>
             <img src="/logo.jpeg" alt="logo" style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover' }} />
             <div>
-              <div style={{ fontSize: '16px', fontWeight: '800', color: '#151A40', lineHeight: 1.2 }}>Janoni</div>
+              <div style={{ fontSize: '16px', fontWeight: '800', color: '#151A40', lineHeight: 1.2 }}>JaNoNi</div>
               <div style={{ fontSize: '10px', fontWeight: '600', color: '#41A465' }}>Officer Portal</div>
             </div>
           </div>
@@ -149,7 +149,7 @@ export default function OfficerLayout({ children, active }) {
       </main>
 
       <footer style={{ borderTop: '1px solid #e5e7eb', padding: '16px 32px', backgroundColor: '#ffffff', textAlign: 'center' }}>
-        <span style={{ fontSize: '12px', color: '#9e8e80' }}>© 2024 Janoni. All rights reserved.</span>
+        <span style={{ fontSize: '12px', color: '#9e8e80' }}>© {new Date().getFullYear()} JaNoNi. All rights reserved.</span>
       </footer>
     </div>
   )

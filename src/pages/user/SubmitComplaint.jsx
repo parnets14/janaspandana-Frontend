@@ -204,10 +204,18 @@ export default function SubmitComplaint() {
     setSubmitError('')
     setSubmitting(true)
     try {
+      // Get userId from cached profile
+      let userId = null
+      try {
+        const profile = localStorage.getItem('_userProfile')
+        if (profile) userId = JSON.parse(profile)?._id
+      } catch {}
+
       const res = await complaintAPI.submit({
         department: dept,
         title,
         description: desc,
+        userId,
         location: {
           address: location,
           city,

@@ -85,20 +85,26 @@ export default function CaseDetail() {
     try {
       await api.patch(`/complaints/${id}/status`, { status, note })
       if (photo) {
-        const token = api.getToken()
         const formData = new FormData()
         formData.append('photos', photo)
-        await fetch(`${API_BASE}/api/complaints/${id}/photos`, {
+        const uploadRes = await fetch(`${API_BASE}/api/complaints/${id}/photos?type=officer`, {
           method: 'POST',
-          headers: { ...(token && { Authorization: `Bearer ${token}` }) },
           body: formData,
         })
+        if (!uploadRes.ok) {
+          const error = await uploadRes.json()
+          throw new Error(error.message || 'Photo upload failed')
+        }
       }
       setSaveMsg('Updated successfully')
       setNote(''); setPhoto(null)
+      closeCamera()
       await fetchComplaint()
       setTimeout(() => setSaveMsg(''), 3000)
-    } catch { setSaveMsg('Failed to update') }
+    } catch (err) { 
+      console.error('Save error:', err)
+      setSaveMsg(err.message || 'Failed to update') 
+    }
     finally { setSaving(false) }
   }
 
@@ -153,8 +159,8 @@ export default function CaseDetail() {
             <p style={{ fontSize: '15px', color: '#374151', lineHeight: 1.7, margin: 0 }}>{complaint.description}</p>
           </motion.div>
 
-          {/* Map + Citizen Photos side by side */}
-          {(complaint.location?.lat || complaint.proofFiles?.length > 0) && (
+          {/* Map + Citizen Photos + Officer Photos side by side */}
+          {(complaint.location?.lat || complaint.proofFiles?.length > 0 || complaint.officerAttachments?.length > 0 || photo) && (
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.07 }}
               style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
 
@@ -175,15 +181,15 @@ export default function CaseDetail() {
                 </div>
               )}
 
-              {/* Citizen Photos */}
+              {/* Citizen Documents Card */}
               {complaint.proofFiles?.length > 0 && (
                 <div style={{ backgroundColor: '#fff', borderRadius: '14px', padding: '20px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
-                  <h3 style={{ fontSize: '13px', fontWeight: '700', color: '#9ca3af', letterSpacing: '0.5px', margin: '0 0 12px' }}>CITIZEN UPLOADS</h3>
+                  <h3 style={{ fontSize: '13px', fontWeight: '700', color: '#9ca3af', letterSpacing: '0.5px', margin: '0 0 12px' }}>📄 CITIZEN DOCUMENTS</h3>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', gap: '8px', maxWidth: '280px' }}>
                     {complaint.proofFiles.map((f, i) => (
                       <div key={i} onClick={() => window.open(`${API_BASE}${f}`, '_blank')}
                         style={{ borderRadius: '8px', overflow: 'hidden', aspectRatio: '1', cursor: 'pointer', border: '1px solid #e5e7eb', backgroundColor: '#f9fafb' }}>
-                        <img src={`${API_BASE}${f}`} alt={`proof-${i}`}
+                        <img src={`${API_BASE}${f}`} alt={`citizen-doc-${i}`}
                           style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                           onError={e => { e.target.style.display = 'none' }} />
                       </div>
@@ -191,6 +197,61 @@ export default function CaseDetail() {
                   </div>
                 </div>
               )}
+
+              {/* Officer Photos Card - Saved */}
+              {complaint.officerAttachments?.length > 0 && (
+                <div style={{ backgroundColor: '#fff', borderRadius: '14px', padding: '20px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+                  <h3 style={{ fontSize: '13px', fontWeight: '700', color: '#9ca3af', letterSpacing: '0.5px', margin: '0 0 12px' }}>📸 OFFICER PHOTOS</h3>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', gap: '8px', maxWidth: '280px' }}>
+                    {complaint.officerAttachments.map((f, i) => (
+                      <div key={i} onClick={() => window.open(`${API_BASE}${f}`, '_blank')}
+                        style={{ borderRadius: '8px', overflow: 'hidden', aspectRatio: '1', cursor: 'pointer', border: '1px solid #e5e7eb', backgroundColor: '#f9fafb' }}>
+                        <img src={`${API_BASE}${f}`} alt={`officer-photo-${i}`}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                          onError={e => { e.target.style.display = 'none' }} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Officer Photos Card - Preview (Before Save) */}
+              {photo && (
+                <div style={{ backgroundColor: '#fff', borderRadius: '14px', padding: '20px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', border: '2px solid #fbbf24' }}>
+                  <h3 style={{ fontSize: '13px', fontWeight: '700', color: '#b45309', letterSpacing: '0.5px', margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    ⏳ PENDING UPLOAD
+                  </h3>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', gap: '8px', maxWidth: '280px' }}>
+                    <div style={{ borderRadius: '8px', overflow: 'hidden', aspectRatio: '1', border: '2px dashed #fbbf24', backgroundColor: '#fffbeb', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                      <img src={URL.createObjectURL(photo)} alt="pending-upload"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                      <div style={{ position: 'absolute', top: '4px', right: '4px', backgroundColor: '#fbbf24', color: '#fff', fontSize: '10px', padding: '2px 6px', borderRadius: '4px', fontWeight: '700' }}>
+                        NEW
+                      </div>
+                    </div>
+                  </div>
+                  <p style={{ fontSize: '11px', color: '#b45309', margin: '8px 0 0', fontWeight: '600' }}>Click "Save Changes" to upload</p>
+                </div>
+              )}
+            </motion.div>
+          )}
+
+          {/* Officer Notes Section */}
+          {complaint.officerNotes?.length > 0 && (
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }}
+              style={{ backgroundColor: '#fff', borderRadius: '14px', padding: '24px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+              <h3 style={{ fontSize: '13px', fontWeight: '700', color: '#9ca3af', letterSpacing: '0.5px', margin: '0 0 16px' }}>📝 OFFICER/ADMIN NOTES</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {complaint.officerNotes.map((note, i) => (
+                  <div key={i} style={{ padding: '12px 14px', borderRadius: '10px', backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                      <span style={{ fontSize: '12px', fontWeight: '700', color: '#151A40' }}>{note.status}</span>
+                      <span style={{ fontSize: '11px', color: '#9ca3af' }}>by {note.uploadedBy}</span>
+                    </div>
+                    <p style={{ margin: 0, fontSize: '13px', color: '#374151', lineHeight: 1.5 }}>{note.note}</p>
+                  </div>
+                ))}
+              </div>
             </motion.div>
           )}
 
@@ -254,9 +315,14 @@ export default function CaseDetail() {
                 </label>
               </div>
               {photo && (
-                <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', borderRadius: '8px', backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0' }}>
-                  <span style={{ fontSize: '12px', color: '#15803d', fontWeight: '600' }}>✓ {photo.name.slice(0, 22)}{photo.name.length > 22 ? '…' : ''}</span>
-                  <button type="button" onClick={() => setPhoto(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontSize: '16px' }}>✕</button>
+                <div style={{ marginTop: '12px', padding: '12px', borderRadius: '10px', backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                    <span style={{ fontSize: '12px', color: '#15803d', fontWeight: '600' }}>✓ {photo.name.slice(0, 22)}{photo.name.length > 22 ? '…' : ''}</span>
+                    <button type="button" onClick={() => setPhoto(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontSize: '16px' }}>✕</button>
+                  </div>
+                  <div style={{ width: '100%', height: '120px', borderRadius: '8px', overflow: 'hidden', border: '1px solid #bbf7d0', backgroundColor: '#fff' }}>
+                    <img src={URL.createObjectURL(photo)} alt="preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
                 </div>
               )}
             </div>
@@ -277,26 +343,26 @@ export default function CaseDetail() {
 
       {/* Camera Modal */}
       {showCamera && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.85)', zIndex: 9999, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '20px' }}>
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'transparent', zIndex: 9999, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '20px' }}>
           <div style={{ width: '100%', maxWidth: '520px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ color: '#fff', fontWeight: '700', fontSize: '16px' }}>Take Photo</span>
-            <button onClick={closeCamera} style={{ background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '50%', width: '36px', height: '36px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <MdClose size={20} color="#fff" />
+            <span style={{ color: '#1a1a1a', fontWeight: '700', fontSize: '16px' }}>Take Photo</span>
+            <button onClick={closeCamera} style={{ background: '#f3f4f6', border: 'none', borderRadius: '50%', width: '36px', height: '36px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <MdClose size={20} color="#1a1a1a" />
             </button>
           </div>
-          <div style={{ width: '100%', maxWidth: '520px', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.2)' }}>
+          <div style={{ width: '100%', maxWidth: '520px', borderRadius: '16px', overflow: 'hidden', border: '1px solid #e5e7eb', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
             {camError
-              ? <div style={{ padding: '60px', textAlign: 'center', color: '#9ca3af', background: '#1a1a1a' }}><p style={{ margin: 0 }}>{camError}</p></div>
+              ? <div style={{ padding: '60px', textAlign: 'center', color: '#9ca3af', background: '#f9fafb' }}><p style={{ margin: 0 }}>{camError}</p></div>
               : <video ref={videoRef} autoPlay playsInline muted style={{ width: '100%', display: 'block', maxHeight: '60vh', objectFit: 'cover' }} />
             }
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
             <button onClick={() => { const next = facingMode === 'environment' ? 'user' : 'environment'; setFacingMode(next); startCamera(next) }}
-              style={{ width: '44px', height: '44px', borderRadius: '50%', border: '1px solid rgba(255,255,255,0.3)', backgroundColor: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-              <MdFlipCameraAndroid size={22} color="#fff" />
+              style={{ width: '44px', height: '44px', borderRadius: '50%', border: '1px solid #e5e7eb', backgroundColor: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+              <MdFlipCameraAndroid size={22} color="#151A40" />
             </button>
             <button onClick={capturePhoto} disabled={!!camError}
-              style={{ width: '68px', height: '68px', borderRadius: '50%', border: '4px solid rgba(255,255,255,0.3)', backgroundColor: camError ? '#555' : '#151A40', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: camError ? 'not-allowed' : 'pointer' }}>
+              style={{ width: '68px', height: '68px', borderRadius: '50%', border: '4px solid #e5e7eb', backgroundColor: camError ? '#d1d5db' : '#151A40', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: camError ? 'not-allowed' : 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
               <MdCameraAlt size={30} color="#fff" />
             </button>
             <div style={{ width: '44px' }} />

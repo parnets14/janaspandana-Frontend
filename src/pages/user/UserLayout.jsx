@@ -74,9 +74,9 @@ export default function UserLayout({ children, active, user: userProp }) {
         }} className="nav-pad">
           {/* Logo */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }} onClick={() => navigate('/')}>
-            <img src="/logo.jpeg" alt="logo" style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover' }} />
+            <img src="/logo.jpeg" alt="JaNoNi" style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover' }} />
             <div>
-              <div style={{ fontSize: '16px', fontWeight: '800', color: '#151A40', lineHeight: 1.2 }}>Janoni</div>
+              <div style={{ fontSize: '16px', fontWeight: '800', color: '#151A40', lineHeight: 1.2 }}>JaNoNi</div>
               <div style={{ fontSize: '10px', fontWeight: '600', color: '#41A465' }}>ಜನೋನಿ</div>
             </div>
           </div>

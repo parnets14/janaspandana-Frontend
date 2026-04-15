@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { MdArrowForward, MdEmail, MdLockOutline, MdOutlineVerifiedUser, MdOutlineShield } from 'react-icons/md'
@@ -13,6 +13,25 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const navigate = useNavigate()
+
+  // Clear any existing admin session when component mounts
+  useEffect(() => {
+    const userRole = localStorage.getItem('userRole')
+    if (userRole === 'admin') {
+      // Clear all authentication data
+      localStorage.removeItem('userRole')
+      localStorage.removeItem('token')
+      localStorage.removeItem('refreshToken')
+      localStorage.removeItem('_at')
+      localStorage.removeItem('_rt')
+      localStorage.removeItem('_userProfile')
+      try {
+        sessionStorage.clear()
+      } catch (e) {
+        console.log('Session storage clear failed:', e)
+      }
+    }
+  }, [])
 
   const handleLogin = async (e) => {
     e.preventDefault()

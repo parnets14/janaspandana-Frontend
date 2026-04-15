@@ -241,6 +241,6 @@ const valueStyle = {
 
 const inputStyle = {
   width: '100%', padding: '12px 14px', fontSize: '15px',
-  border: '1.5px solid #E5E7EB', borderRadius: '10px',
+  border: '1.5px solid #374151', borderRadius: '10px',
   backgroundColor: '#F8F9FA', outline: 'none', boxSizing: 'border-box'
 }

@@ -296,7 +296,7 @@ export default function SubmitComplaint() {
                   <MdLocationOn size={18} color="#151A40" /> City / Town
                 </label>
                 <select value={city} onChange={e => setCity(e.target.value)} required
-                  style={{ width: '100%', padding: '13px 14px', borderRadius: '12px', border: '1.5px solid #E5E7EB', backgroundColor: '#F8F9FA', fontSize: '14px', color: city ? '#1a1a1a' : '#9ca3af', outline: 'none', cursor: 'pointer', boxSizing: 'border-box' }}>
+                  style={{ width: '100%', padding: '13px 14px', borderRadius: '12px', border: '1.5px solid #374151', backgroundColor: '#F8F9FA', fontSize: '14px', color: city ? '#1a1a1a' : '#9ca3af', outline: 'none', cursor: 'pointer', boxSizing: 'border-box' }}>
                   <option value="">Select city / town</option>
                   {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
@@ -306,7 +306,7 @@ export default function SubmitComplaint() {
                   <MdHomeWork size={18} color="#151A40" /> Ward
                 </label>
                 <select value={ward} onChange={e => setWard(e.target.value)} required
-                  style={{ width: '100%', padding: '13px 14px', borderRadius: '12px', border: '1.5px solid #E5E7EB', backgroundColor: '#F8F9FA', fontSize: '14px', color: ward ? '#1a1a1a' : '#9ca3af', outline: 'none', cursor: 'pointer', boxSizing: 'border-box' }}>
+                  style={{ width: '100%', padding: '13px 14px', borderRadius: '12px', border: '1.5px solid #374151', backgroundColor: '#F8F9FA', fontSize: '14px', color: ward ? '#1a1a1a' : '#9ca3af', outline: 'none', cursor: 'pointer', boxSizing: 'border-box' }}>
                   <option value="">Select ward</option>
                   {WARDS.map(w => <option key={w} value={w}>{w}</option>)}
                 </select>
@@ -326,7 +326,7 @@ export default function SubmitComplaint() {
                   required
                   style={{
                     width: '100%', padding: '14px 16px', borderRadius: '12px',
-                    border: '1.5px solid #E5E7EB', backgroundColor: '#F8F9FA',
+                    border: '1.5px solid #374151', backgroundColor: '#F8F9FA',
                     fontSize: '14px', color: '#1a1a1a', outline: 'none', boxSizing: 'border-box',
                   }}
                 />
@@ -343,7 +343,7 @@ export default function SubmitComplaint() {
                   required
                   style={{
                     width: '100%', padding: '14px 16px', borderRadius: '12px',
-                    border: '1.5px solid #E5E7EB', backgroundColor: '#F8F9FA',
+                    border: '1.5px solid #374151', backgroundColor: '#F8F9FA',
                     fontSize: '14px', color: '#1a1a1a', outline: 'none',
                     resize: 'none', boxSizing: 'border-box', lineHeight: 1.6,
                   }}

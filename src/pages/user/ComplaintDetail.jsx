@@ -32,7 +32,7 @@ export default function ComplaintDetail() {
   const [reopenReason, setReopenReason] = useState('')
   const [lightbox, setLightbox] = useState(null)
 
-  const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'
+  const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://janoni.in'
 
   useEffect(() => {
     complaintAPI.getOne(id)

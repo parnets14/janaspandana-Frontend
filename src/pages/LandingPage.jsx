@@ -32,6 +32,37 @@ export default function LandingPage() {
     photo: null,
     aadhaarPhoto: null
   })
+  const [validationErrors, setValidationErrors] = useState({
+    phone: '',
+    aadhaar: ''
+  })
+
+  // Validation functions
+  const validatePhone = (phone) => {
+    if (phone.length === 0) return ''
+    if (phone.length < 10) return 'Phone number must be 10 digits'
+    return ''
+  }
+
+  const validateAadhaar = (aadhaar) => {
+    if (aadhaar.length === 0) return ''
+    if (aadhaar.length < 12) return 'Aadhaar number must be 12 digits'
+    return ''
+  }
+
+  // Handle phone number change with validation
+  const handlePhoneChange = (value) => {
+    const cleanValue = value.replace(/\D/g, '')
+    setFormData({...formData, phone: cleanValue})
+    setValidationErrors({...validationErrors, phone: validatePhone(cleanValue)})
+  }
+
+  // Handle Aadhaar change with validation
+  const handleAadhaarChange = (value) => {
+    const cleanValue = value.replace(/\D/g, '')
+    setFormData({...formData, aadhaar: cleanValue})
+    setValidationErrors({...validationErrors, aadhaar: validateAadhaar(cleanValue)})
+  }
   const navigate = useNavigate()
 
   // const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -180,6 +211,20 @@ export default function LandingPage() {
     setLoading(true)
     
     try {
+      // Check for validation errors
+      const phoneError = validatePhone(formData.phone)
+      const aadhaarError = validateAadhaar(formData.aadhaar)
+      
+      if (phoneError || aadhaarError) {
+        setValidationErrors({
+          phone: phoneError,
+          aadhaar: aadhaarError
+        })
+        setError('Please fix the validation errors above')
+        setLoading(false)
+        return
+      }
+      
       // Validate phone
       if (formData.phone.length !== 10) {
         setError('Phone number must be 10 digits')
@@ -638,7 +683,7 @@ export default function LandingPage() {
                 placeholder="IGMS-2024-001234"
                 style={{
                   width: '100%', padding: '14px 16px', fontSize: '15px',
-                  border: '1.5px solid #E5E7EB', borderRadius: '12px',
+                  border: '1.5px solid #374151', borderRadius: '12px',
                   backgroundColor: '#F8F9FA', outline: 'none', marginBottom: '8px',
                   fontWeight: '600', letterSpacing: '0.5px',
                 }}
@@ -822,15 +867,6 @@ export default function LandingPage() {
                   )}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <motion.div 
-                      animate={!isMobile ? { 
-                        rotate: [0, 5, -5, 0],
-                      } : {}}
-                      transition={{ 
-                        duration: 4,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: i * 0.5
-                      }}
                       style={{
                       width: '44px', height: '44px', borderRadius: '12px',
                       backgroundColor: stat.bg, display: 'flex',
@@ -913,13 +949,13 @@ export default function LandingPage() {
 
                 <div style={{
                   display: 'flex', alignItems: 'center',
-                  border: '1.5px solid #E5E7EB', borderRadius: '12px',
+                  border: '1.5px solid #374151', borderRadius: '12px',
                   overflow: 'hidden', backgroundColor: '#F8F9FA', marginBottom: '8px',
                 }}>
                   <span style={{
                     padding: '12px 16px', fontSize: '14px', fontWeight: '600',
                     color: '#555', backgroundColor: '#F0F0F0',
-                    borderRight: '1px solid #E5E7EB', whiteSpace: 'nowrap',
+                    borderRight: '1px solid #374151', whiteSpace: 'nowrap',
                   }}>
                     +91
                   </span>
@@ -1028,7 +1064,7 @@ export default function LandingPage() {
                       style={{
                         width: '44px', height: '52px', textAlign: 'center',
                         fontSize: '22px', fontWeight: '700', borderRadius: '10px',
-                        border: d ? '2px solid #151A40' : '1.5px solid #E5E7EB',
+                        border: d ? '2px solid #151A40' : '1.5px solid #374151',
                         backgroundColor: d ? '#EEF2FF' : '#F8F9FA',
                         color: '#1a1a1a', outline: 'none',
                       }}
@@ -1087,7 +1123,7 @@ export default function LandingPage() {
                   <input type="text" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
                     placeholder="Enter your full name"
                     disabled={loading}
-                    style={{ width: '100%', padding: '9px 12px', fontSize: '13px', border: '1.5px solid #E5E7EB', borderRadius: '9px', backgroundColor: '#F8F9FA', outline: 'none', boxSizing: 'border-box' }}
+                    style={{ width: '100%', padding: '9px 12px', fontSize: '13px', border: '1.5px solid #374151', borderRadius: '9px', backgroundColor: '#F8F9FA', outline: 'none', boxSizing: 'border-box' }}
                   />
                 </div>
 
@@ -1095,25 +1131,35 @@ export default function LandingPage() {
                   <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: '600', color: '#3a3a3a', marginBottom: '4px' }}>
                     <MdPhone size={14} color="#151A40" /> Phone Number *
                   </label>
-                  <div style={{ display: 'flex', alignItems: 'center', border: '1.5px solid #E5E7EB', borderRadius: '9px', overflow: 'hidden', backgroundColor: '#F8F9FA' }}>
-                    <span style={{ padding: '9px 12px', fontSize: '13px', fontWeight: '600', color: '#555', backgroundColor: '#F0F0F0', borderRight: '1px solid #E5E7EB', whiteSpace: 'nowrap' }}>+91</span>
-                    <input type="tel" required maxLength={10} value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value.replace(/\D/g, '')})}
+                  <div style={{ display: 'flex', alignItems: 'center', border: `1.5px solid ${validationErrors.phone ? '#ef4444' : '#374151'}`, borderRadius: '9px', overflow: 'hidden', backgroundColor: '#F8F9FA' }}>
+                    <span style={{ padding: '9px 12px', fontSize: '13px', fontWeight: '600', color: '#555', backgroundColor: '#F0F0F0', borderRight: '1px solid #374151', whiteSpace: 'nowrap' }}>+91</span>
+                    <input type="tel" required maxLength={10} value={formData.phone} onChange={e => handlePhoneChange(e.target.value)}
                       placeholder="Enter 10 digit number"
                       disabled={loading}
                       style={{ flex: 1, padding: '9px 12px', fontSize: '13px', border: 'none', backgroundColor: 'transparent', outline: 'none', color: '#1a1a1a' }}
                     />
                   </div>
+                  {validationErrors.phone && (
+                    <p style={{ fontSize: '11px', color: '#ef4444', margin: '3px 0 0', fontWeight: '500' }}>
+                      ⚠️ {validationErrors.phone}
+                    </p>
+                  )}
                 </div>
 
                 <div style={{ marginBottom: '10px' }}>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: '600', color: '#3a3a3a', marginBottom: '4px' }}>
                     <MdCreditCard size={14} color="#151A40" /> Aadhaar Number *
                   </label>
-                  <input type="text" required maxLength={12} value={formData.aadhaar} onChange={e => setFormData({...formData, aadhaar: e.target.value.replace(/\D/g, '')})}
+                  <input type="text" required maxLength={12} value={formData.aadhaar} onChange={e => handleAadhaarChange(e.target.value)}
                     placeholder="Enter 12 digit Aadhaar"
                     disabled={loading}
-                    style={{ width: '100%', padding: '9px 12px', fontSize: '13px', border: '1.5px solid #E5E7EB', borderRadius: '9px', backgroundColor: '#F8F9FA', outline: 'none', boxSizing: 'border-box' }}
+                    style={{ width: '100%', padding: '9px 12px', fontSize: '13px', border: `1.5px solid ${validationErrors.aadhaar ? '#ef4444' : '#374151'}`, borderRadius: '9px', backgroundColor: '#F8F9FA', outline: 'none', boxSizing: 'border-box' }}
                   />
+                  {validationErrors.aadhaar && (
+                    <p style={{ fontSize: '11px', color: '#ef4444', margin: '3px 0 0', fontWeight: '500' }}>
+                      ⚠️ {validationErrors.aadhaar}
+                    </p>
+                  )}
                 </div>
 
                 <div style={{ marginBottom: '10px' }}>
@@ -1124,7 +1170,7 @@ export default function LandingPage() {
                     placeholder="Enter your address"
                     rows={2}
                     disabled={loading}
-                    style={{ width: '100%', padding: '9px 12px', fontSize: '13px', border: '1.5px solid #E5E7EB', borderRadius: '9px', backgroundColor: '#F8F9FA', outline: 'none', fontFamily: 'inherit', resize: 'none', boxSizing: 'border-box' }}
+                    style={{ width: '100%', padding: '9px 12px', fontSize: '13px', border: '1.5px solid #374151', borderRadius: '9px', backgroundColor: '#F8F9FA', outline: 'none', fontFamily: 'inherit', resize: 'none', boxSizing: 'border-box' }}
                   />
                 </div>
 
@@ -1147,7 +1193,7 @@ export default function LandingPage() {
                       disabled={loading}
                       style={{ 
                         flex: 1, padding: '9px', fontSize: '12px', fontWeight: '600', 
-                        border: '1.5px solid #E5E7EB', borderRadius: '9px', 
+                        border: '1.5px solid #374151', borderRadius: '9px', 
                         backgroundColor: formData.photo ? '#edf7f1' : '#F8F9FA', 
                         cursor: loading ? 'not-allowed' : 'pointer', 
                         color: formData.photo ? '#41A465' : '#555', 
@@ -1157,7 +1203,7 @@ export default function LandingPage() {
                     </button>
                     <label style={{ 
                       flex: 1, padding: '9px', fontSize: '12px', fontWeight: '600', 
-                      border: '1.5px solid #E5E7EB', borderRadius: '9px', 
+                      border: '1.5px solid #374151', borderRadius: '9px', 
                       backgroundColor: formData.photo ? '#edf7f1' : '#F8F9FA', 
                       cursor: loading ? 'not-allowed' : 'pointer', 
                       color: formData.photo ? '#41A465' : '#555', 
@@ -1237,7 +1283,7 @@ export default function LandingPage() {
                       disabled={loading}
                       style={{ 
                         flex: 1, padding: '14px', fontSize: '13px', fontWeight: '600', 
-                        border: '1.5px dashed #E5E7EB', borderRadius: '10px', 
+                        border: '1.5px dashed #374151', borderRadius: '10px', 
                         backgroundColor: formData.aadhaarPhoto ? '#EEF2FF' : '#F8F9FA', 
                         cursor: loading ? 'not-allowed' : 'pointer', 
                         textAlign: 'center', 
@@ -1250,7 +1296,7 @@ export default function LandingPage() {
                     </button>
                     <label style={{ 
                       flex: 1, padding: '14px', fontSize: '13px', fontWeight: '600', 
-                      border: '1.5px dashed #E5E7EB', borderRadius: '10px', 
+                      border: '1.5px dashed #374151', borderRadius: '10px', 
                       backgroundColor: formData.aadhaarPhoto ? '#EEF2FF' : '#F8F9FA', 
                       cursor: loading ? 'not-allowed' : 'pointer', 
                       textAlign: 'center', 
@@ -1327,18 +1373,18 @@ export default function LandingPage() {
 
                 <motion.button 
                   type="submit" 
-                  disabled={loading || !formData.photo}
-                  whileHover={{ scale: (loading || !formData.photo) ? 1 : 1.02, y: (loading || !formData.photo) ? 0 : -2 }}
-                  whileTap={{ scale: (loading || !formData.photo) ? 1 : 0.98 }}
+                  disabled={loading || !formData.photo || validationErrors.phone || validationErrors.aadhaar}
+                  whileHover={{ scale: (loading || !formData.photo || validationErrors.phone || validationErrors.aadhaar) ? 1 : 1.02, y: (loading || !formData.photo || validationErrors.phone || validationErrors.aadhaar) ? 0 : -2 }}
+                  whileTap={{ scale: (loading || !formData.photo || validationErrors.phone || validationErrors.aadhaar) ? 1 : 0.98 }}
                   style={{
                   width: '100%', padding: '14px', borderRadius: '12px',
-                  backgroundColor: (loading || !formData.photo) ? '#9e8e80' : '#151A40', 
+                  backgroundColor: (loading || !formData.photo || validationErrors.phone || validationErrors.aadhaar) ? '#9e8e80' : '#151A40', 
                   color: '#fff', fontSize: '16px',
                   fontWeight: '600', border: 'none', 
-                  cursor: (loading || !formData.photo) ? 'not-allowed' : 'pointer',
+                  cursor: (loading || !formData.photo || validationErrors.phone || validationErrors.aadhaar) ? 'not-allowed' : 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                 }}>
-                  {loading ? 'Registering...' : !formData.photo ? 'Upload Profile Picture' : 'Continue'} {!loading && formData.photo && <MdArrowForward size={20} />}
+                  {loading ? 'Registering...' : !formData.photo ? 'Upload Profile Picture' : (validationErrors.phone || validationErrors.aadhaar) ? 'Fix Validation Errors' : 'Continue'} {!loading && formData.photo && !validationErrors.phone && !validationErrors.aadhaar && <MdArrowForward size={20} />}
                 </motion.button>
 
                 <p style={{ textAlign: 'center', fontSize: '13px', color: '#6b5e52', marginTop: '16px' }}>
@@ -1408,7 +1454,7 @@ export default function LandingPage() {
                       style={{
                         width: '44px', height: '52px', textAlign: 'center',
                         fontSize: '22px', fontWeight: '700', borderRadius: '10px',
-                        border: d ? '2px solid #151A40' : '1.5px solid #E5E7EB',
+                        border: d ? '2px solid #151A40' : '1.5px solid #374151',
                         backgroundColor: d ? '#EEF2FF' : '#F8F9FA',
                         color: '#1a1a1a', outline: 'none',
                       }}
@@ -1449,10 +1495,7 @@ export default function LandingPage() {
                   transition={{ type: "spring", stiffness: 300 }}
                   style={{ backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '16px' }}
                 >
-                  <motion.div
-                    animate={{ rotate: [0, -10, 10, 0] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  >
+                  <motion.div>
                     <MdOutlineLock size={24} color="#151A40" style={{ marginBottom: '8px', display: 'block' }} />
                   </motion.div>
                   <p style={{ fontSize: '13px', fontWeight: '600', color: '#1a1a1a', margin: 0 }}>Secure &amp; Encrypted</p>
@@ -1462,10 +1505,7 @@ export default function LandingPage() {
                   transition={{ type: "spring", stiffness: 300 }}
                   style={{ backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '16px' }}
                 >
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                  >
+                  <motion.div>
                     <MdOutlineTrackChanges size={24} color="#41A465" style={{ marginBottom: '8px', display: 'block' }} />
                   </motion.div>
                   <p style={{ fontSize: '13px', fontWeight: '600', color: '#1a1a1a', margin: 0 }}>24/7 Status Tracking</p>
@@ -1631,7 +1671,7 @@ function PincodeField({ value, onChange, disabled }) {
         placeholder="Enter 6-digit pincode"
         style={{
           width: '100%', padding: '9px 12px', fontSize: '13px',
-          border: `1.5px solid ${status === 'found' ? '#41A465' : status === 'invalid' ? '#ef4444' : '#E5E7EB'}`,
+          border: `1.5px solid ${status === 'found' ? '#41A465' : status === 'invalid' ? '#ef4444' : '#374151'}`,
           borderRadius: '9px', backgroundColor: '#F8F9FA', outline: 'none', boxSizing: 'border-box',
         }}
       />

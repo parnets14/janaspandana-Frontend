@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import OfficerLayout from './OfficerLayout'
 import api from '../../utils/secureApi'
 
-const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'
+const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://janoni.in'
 
 const STATUS_STYLES = {
   'Awaiting Review':           { color: '#6b7280', bg: '#f3f4f6' },

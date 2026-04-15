@@ -46,7 +46,7 @@ export default function ComplaintManagement() {
   const [officers, setOfficers] = useState([])
 
   useEffect(() => {
-    fetch((import.meta.env.VITE_API_URL || 'http://localhost:5001/api') + '/admin/officers')
+    fetch((import.meta.env.VITE_API_URL || 'https://janoni.in/api') + '/admin/officers')
       .then(r => r.json())
       .then(res => { if (res.success) setOfficers(res.data) })
       .catch(() => {})
@@ -413,9 +413,9 @@ export default function ComplaintManagement() {
                           <p style={{ margin: '0 0 10px', fontSize: '11px', fontWeight: '700', color: '#9ca3af', letterSpacing: '0.6px' }}>CITIZEN UPLOADS</p>
                           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', gap: '8px' }}>
                             {selected.proofFiles.map((f, i) => (
-                              <div key={i} onClick={() => window.open(`${import.meta.env.VITE_API_URL?.replace('/api','')||'http://localhost:5001'}${f}`, '_blank')}
+                              <div key={i} onClick={() => window.open(`${import.meta.env.VITE_API_URL?.replace('/api','')||'https://janoni.in'}${f}`, '_blank')}
                                 style={{ cursor: 'pointer', borderRadius: '8px', overflow: 'hidden', border: '1px solid #e5e7eb', aspectRatio: '1', backgroundColor: '#f9fafb' }}>
-                                <img src={`${import.meta.env.VITE_API_URL?.replace('/api','')||'http://localhost:5001'}${f}`} alt={`proof-${i}`}
+                                <img src={`${import.meta.env.VITE_API_URL?.replace('/api','')||'https://janoni.in'}${f}`} alt={`proof-${i}`}
                                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                                   onError={e => { e.target.style.display = 'none' }} />
                               </div>

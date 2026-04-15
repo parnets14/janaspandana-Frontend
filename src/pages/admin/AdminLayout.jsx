@@ -31,9 +31,23 @@ export default function AdminLayout({ children, active }) {
   const navigate = useNavigate()
 
   const handleLogout = () => {
+    // Clear all authentication data
+    localStorage.removeItem('userRole')
     localStorage.removeItem('token')
     localStorage.removeItem('refreshToken')
-    navigate('/')
+    localStorage.removeItem('_at')
+    localStorage.removeItem('_rt')
+    localStorage.removeItem('_userProfile')
+    
+    // Clear any session storage
+    try {
+      sessionStorage.clear()
+    } catch (e) {
+      console.log('Session storage clear failed:', e)
+    }
+    
+    // Redirect to admin login
+    navigate('/admin-login')
   }
 
   return (
@@ -64,7 +78,7 @@ export default function AdminLayout({ children, active }) {
           alignItems: 'center',
           gap: '12px'
         }}>
-          <img src="/logo.jpeg" alt="JanaSpandana" style={{ width: '40px', height: '40px', borderRadius: '10px', objectFit: 'cover' }} />
+          <img src="/logo.jpeg" alt="JaNoNi" style={{ width: '40px', height: '40px', borderRadius: '10px', objectFit: 'cover' }} />
           <div>
             <h1 style={{ fontSize: '18px', fontWeight: '800', margin: 0, color: '#1a1a1a' }}>JaNoNi</h1>
             <p style={{ fontSize: '11px', color: '#666', margin: 0 }}>Admin Portal</p>
@@ -182,7 +196,7 @@ export default function AdminLayout({ children, active }) {
                 justifyContent: 'space-between'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <img src="/logo.jpeg" alt="JanaSpandana" style={{ width: '40px', height: '40px', borderRadius: '10px', objectFit: 'cover' }} />
+                  <img src="/logo.jpeg" alt="JaNoNi" style={{ width: '40px', height: '40px', borderRadius: '10px', objectFit: 'cover' }} />
                   <div>
                     <h1 style={{ fontSize: '18px', fontWeight: '800', margin: 0, color: '#1a1a1a' }}>JaNoNi</h1>
                     <p style={{ fontSize: '11px', color: '#666', margin: 0 }}>Admin Portal</p>

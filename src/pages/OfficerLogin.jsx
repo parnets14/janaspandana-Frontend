@@ -107,7 +107,7 @@ export default function OfficerLogin() {
                 placeholder="Enter your official email" required
                 style={{
                   width: '100%', padding: '13px 16px', fontSize: '14px', color: '#1a1a1a',
-                  border: '1.5px solid #e5e7eb', borderRadius: '12px', backgroundColor: '#f9fafb',
+                  border: '1.5px solid #374151', borderRadius: '12px', backgroundColor: '#f9fafb',
                   outline: 'none', marginBottom: '16px', boxSizing: 'border-box',
                 }}
               />
@@ -120,7 +120,7 @@ export default function OfficerLogin() {
                 placeholder="Enter your password" required
                 style={{
                   width: '100%', padding: '13px 16px', fontSize: '14px', color: '#1a1a1a',
-                  border: '1.5px solid #e5e7eb', borderRadius: '12px', backgroundColor: '#f9fafb',
+                  border: '1.5px solid #374151', borderRadius: '12px', backgroundColor: '#f9fafb',
                   outline: 'none', marginBottom: '24px', boxSizing: 'border-box',
                 }}
               />

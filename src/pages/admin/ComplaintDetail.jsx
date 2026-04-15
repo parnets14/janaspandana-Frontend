@@ -182,9 +182,9 @@ export default function AdminComplaintDetail() {
               </h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '12px' }}>
                 {complaint.proofFiles.map((f, i) => (
-                  <a key={i} href={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${f}`} target="_blank" rel="noopener noreferrer"
+                  <a key={i} href={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://janoni.in'}${f}`} target="_blank" rel="noopener noreferrer"
                     style={{ borderRadius: '10px', overflow: 'hidden', aspectRatio: '1', border: '1px solid #e5e7eb', backgroundColor: '#f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}>
-                    <img src={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${f}`} alt={`doc-${i}`}
+                    <img src={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://janoni.in'}${f}`} alt={`doc-${i}`}
                       style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                       onError={e => { e.target.style.display = 'none' }} />
                   </a>
@@ -202,9 +202,9 @@ export default function AdminComplaintDetail() {
               </h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '12px' }}>
                 {complaint.officerAttachments.map((f, i) => (
-                  <a key={i} href={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${f}`} target="_blank" rel="noopener noreferrer"
+                  <a key={i} href={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://janoni.in'}${f}`} target="_blank" rel="noopener noreferrer"
                     style={{ borderRadius: '10px', overflow: 'hidden', aspectRatio: '1', border: '1px solid #e5e7eb', backgroundColor: '#f9fafb', display: 'block', textDecoration: 'none' }}>
-                    <img src={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${f}`} alt={`officer-photo-${i}`}
+                    <img src={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://janoni.in'}${f}`} alt={`officer-photo-${i}`}
                       style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                       onError={e => { e.target.style.display = 'none' }} />
                   </a>
@@ -222,9 +222,9 @@ export default function AdminComplaintDetail() {
               </h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '12px' }}>
                 {complaint.adminAttachments.map((f, i) => (
-                  <a key={i} href={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${f}`} target="_blank" rel="noopener noreferrer"
+                  <a key={i} href={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://janoni.in'}${f}`} target="_blank" rel="noopener noreferrer"
                     style={{ borderRadius: '10px', overflow: 'hidden', aspectRatio: '1', border: '1px solid #e5e7eb', backgroundColor: '#f9fafb', display: 'block', textDecoration: 'none' }}>
-                    <img src={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001'}${f}`} alt={`admin-photo-${i}`}
+                    <img src={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://janoni.in'}${f}`} alt={`admin-photo-${i}`}
                       style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                       onError={e => { e.target.style.display = 'none' }} />
                   </a>
